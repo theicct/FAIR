@@ -144,3 +144,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.idea
+Archive
+*.twbx
+*.twb
+CMIP6/rcmip-emissions-annual-means-v5-1-0_long.csv

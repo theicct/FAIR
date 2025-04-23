@@ -203,6 +203,13 @@ def fill_from_csv(
                         )
                         data = interpolator(mode_options[mode]["time"])
 
+                        print(df.loc[
+                            (df["scenario"] == scenario)
+                            & (df["variable"] == specie)
+                            & (df["region"].str.lower() == "world"),
+                            "unit",
+                        ])
+
                         # Parse and possibly convert unit in input to what FaIR wants
                         unit = df.loc[
                             (df["scenario"] == scenario)
@@ -253,33 +260,36 @@ def fill_from_rcmip(self):
         if specie not in self.species:
             del species_to_rcmip[specie]
 
-    emissions_file = pooch.retrieve(
-        url=(
-            "https://zenodo.org/records/4589756/files/"
-            "rcmip-emissions-annual-means-v5-1-0.csv"
-        ),
-        known_hash="md5:4044106f55ca65b094670e7577eaf9b3",
-    )
+    # emissions_file = pooch.retrieve(
+    #     url=(
+    #         "https://zenodo.org/records/4589756/files/"
+    #         "rcmip-emissions-annual-means-v5-1-0.csv"
+    #     ),
+    #     known_hash="md5:4044106f55ca65b094670e7577eaf9b3",
+    # )
+    #
+    # concentration_file = pooch.retrieve(
+    #     url=(
+    #         "https://zenodo.org/records/4589756/files/"
+    #         "rcmip-concentrations-annual-means-v5-1-0.csv"
+    #     ),
+    #     known_hash="md5:0d82c3c3cdd4dd632b2bb9449a5c315f",
+    # )
+    #
+    # forcing_file = pooch.retrieve(
+    #     url=(
+    #         "https://zenodo.org/records/4589756/files/"
+    #         "rcmip-radiative-forcing-annual-means-v5-1-0.csv"
+    #     ),
+    #     known_hash="md5:87ef6cd4e12ae0b331f516ea7f82ccba",
+    # )
 
-    concentration_file = pooch.retrieve(
-        url=(
-            "https://zenodo.org/records/4589756/files/"
-            "rcmip-concentrations-annual-means-v5-1-0.csv"
-        ),
-        known_hash="md5:0d82c3c3cdd4dd632b2bb9449a5c315f",
-    )
-
-    forcing_file = pooch.retrieve(
-        url=(
-            "https://zenodo.org/records/4589756/files/"
-            "rcmip-radiative-forcing-annual-means-v5-1-0.csv"
-        ),
-        known_hash="md5:87ef6cd4e12ae0b331f516ea7f82ccba",
-    )
-
-    df_emis = pd.read_csv(emissions_file)
-    df_conc = pd.read_csv(concentration_file)
-    df_forc = pd.read_csv(forcing_file)
+    # df_emis = pd.read_csv('../CMIP6/off_road/off_road_rcmip-emissions-annual-means-v5-1-0.csv')
+    # df_conc = pd.read_csv('../CMIP6/off_road/off_road_rcmip-concentrations-annual-means-v5-1-0.csv')
+    # df_forc = pd.read_csv('../CMIP6/off_road/off_road_rcmip-radiative-forcing-annual-means-v5-1-0.csv')
+    df_emis = pd.read_csv('../CMIP6/rcmip-emissions-annual-means-v5-1-0.csv')
+    df_conc = pd.read_csv('../CMIP6/rcmip-concentrations-annual-means-v5-1-0.csv')
+    df_forc = pd.read_csv('../CMIP6/rcmip-radiative-forcing-annual-means-v5-1-0.csv')
 
     for scenario in self.scenarios:
         for specie, specie_rcmip_name in species_to_rcmip.items():

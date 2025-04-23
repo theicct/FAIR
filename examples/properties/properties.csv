@@ -1,0 +1,65 @@
+Variable,type,input_mode,greenhouse_gas,aerosol_chemistry_from_emissions,aerosol_chemistry_from_concentration
+CO2 FFI,co2 ffi,emissions,False,False,False
+CO2 AFOLU,co2 afolu,emissions,False,False,False
+CO2,co2,calculated,True,False,False
+CH4,ch4,emissions,True,False,True
+N2O,n2o,emissions,True,False,True
+Sulfur,sulfur,emissions,False,True,False
+BC,black carbon,emissions,False,True,False
+OC,organic carbon,emissions,False,True,False
+NH3,other slcf,emissions,False,True,False
+NOx,other slcf,emissions,False,True,False
+VOC,other slcf,emissions,False,True,False
+CO,other slcf,emissions,False,True,False
+CFC-11,cfc-11,emissions,True,False,False
+CFC-12,other halogen,emissions,True,False,False
+CFC-113,other halogen,emissions,True,False,False
+CFC-114,other halogen,emissions,True,False,False
+CFC-115,other halogen,emissions,True,False,False
+HCFC-22,other halogen,emissions,True,False,False
+HCFC-141b,other halogen,emissions,True,False,False
+HCFC-142b,other halogen,emissions,True,False,False
+CCl4,other halogen,emissions,True,False,False
+CHCl3,other halogen,emissions,True,False,False
+CH2Cl2,other halogen,emissions,True,False,False
+CH3Cl,other halogen,emissions,True,False,False
+CH3CCl3,other halogen,emissions,True,False,False
+CH3Br,other halogen,emissions,True,False,False
+Halon-1202,other halogen,emissions,True,False,False
+Halon-1211,other halogen,emissions,True,False,False
+Halon-1301,other halogen,emissions,True,False,False
+Halon-2402,other halogen,emissions,True,False,False
+CF4,f-gas,emissions,True,False,False
+C2F6,f-gas,emissions,True,False,False
+C3F8,f-gas,emissions,True,False,False
+c-C4F8,f-gas,emissions,True,False,False
+C4F10,f-gas,emissions,True,False,False
+C5F12,f-gas,emissions,True,False,False
+C6F14,f-gas,emissions,True,False,False
+C7F16,f-gas,emissions,True,False,False
+C8F18,f-gas,emissions,True,False,False
+NF3,f-gas,emissions,True,False,False
+SF6,f-gas,emissions,True,False,False
+SO2F2,f-gas,emissions,True,False,False
+HFC-125,f-gas,emissions,True,False,False
+HFC-134a,f-gas,emissions,True,False,False
+HFC-143a,f-gas,emissions,True,False,False
+HFC-152a,f-gas,emissions,True,False,False
+HFC-227ea,f-gas,emissions,True,False,False
+HFC-23,f-gas,emissions,True,False,False
+HFC-236fa,f-gas,emissions,True,False,False
+HFC-245fa,f-gas,emissions,True,False,False
+HFC-32,f-gas,emissions,True,False,False
+HFC-365mfc,f-gas,emissions,True,False,False
+HFC-4310mee,f-gas,emissions,True,False,False
+NOx aviation,nox aviation,emissions,False,False,False
+Solar,solar,forcing,False,False,False
+Volcanic,volcanic,forcing,False,False,False
+Aerosol-radiation interactions,ari,calculated,False,False,False
+Aerosol-cloud interactions,aci,calculated,False,False,False
+Ozone,ozone,calculated,False,False,False
+Contrails,contrails,forcing,False,False,False
+Light absorbing particles on snow and ice,lapsi,calculated,False,False,False
+Stratospheric water vapour,h2o stratospheric,calculated,False,False,False
+Land use,land use,calculated,False,False,False
+Equivalent effective stratospheric chlorine,eesc,calculated,False,False,True
