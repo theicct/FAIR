@@ -3,11 +3,19 @@
 import pandas as pd
 
 # Set wide display
-pd.set_option('display.width', 1000)
-pd.set_option('display.max_columns', 500)
+pd.set_option('display.width', 1000000)
+pd.set_option('display.max_columns', 100000)
+
+BASE_YR = 2023
+END_YR = 2050
+EMS_IN = 'preprocessing/final/SLCP_inventory_long.csv'
+STRIVING_SCEN = 'Striving'
 
 
 def clean_slcp_ems(slcp_ems):
+    # Convert all 'Species' names to lowercase
+    slcp_ems['Species'] = slcp_ems['Species'].str.lower()
+
     # Pivot 'Scenario' column wide
     slcp_ems = slcp_ems.pivot_table(index=['Year', 'Species', 'Units', 'Source', 'Sector'], columns='Scenario', values='ems').reset_index()
     # Filter out slcp_ems water vapour
@@ -15,8 +23,9 @@ def clean_slcp_ems(slcp_ems):
 
     # Rename 'ems' species columns to match expected names
     slcp_ems_conversion = {'bc':'BC', 'ch4':'CH4', 'co2':'CO2 FFI', 'h2o':'Stratospheric water vapour',
-                               'n2o':'N2O', 'nox':'NOx', 'sox':'Sulfur'}
+                               'n2o':'N2O', 'nox':'NOx', 'sox':'Sulfur', 'so2':'Sulfur'}
     slcp_ems = slcp_ems.replace(slcp_ems_conversion)
+
 
     return slcp_ems
 
@@ -91,18 +100,23 @@ def adjust_contrail_forc(slcp_ems, forc, SSPs):
 
     # Use ICCT estimates for contrail BAU and striving under SSP119
     for SSP in SSPs:
-        for yr in range(2020, 2051):
+        for yr in range(BASE_YR, END_YR+1):
             bau = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'contrails')]['BAU'].values[0]
-            striving = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'contrails')]['Striving'].values[0]
+            if STRIVING_SCEN is not None:
+                striving = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'contrails')][STRIVING_SCEN].values[0]
 
             for scen in forc['Scenario'].unique():
                 # Set default to BAU
                 forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == scen), str(yr)] = bau
 
             # Adjust the BAU for contrail scenarios
-            forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_striving'), str(yr)] = striving
+            if STRIVING_SCEN is not None:
+                # Set the striving scenario
+                forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_striving'), str(yr)] = striving
+                forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_contrails_Aviation_striving'), str(
+                    yr)] = striving
+
             forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_zero_tra'), str(yr)] = 0
-            forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_contrails_Aviation_striving'), str(yr)] = striving
 
             # Add zero contrails scenario
             forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_contrails_Aviation_zero'), str(
@@ -151,7 +165,7 @@ def align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, SSPs):
             expected_units = ems.loc[(ems["Scenario"] == SSP) & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) & (
                         ems["Region"] == "World")]['Unit'].values[0]
             expected_units = str(expected_units).split(' ')[0]
-            for yr in range(2020, 2051):
+            for yr in range(BASE_YR, END_YR+1):
 
                 ems_yr = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == specie)].copy()
 
@@ -166,14 +180,18 @@ def align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, SSPs):
 
                 factor = conversion_factors.get((icct_units, expected_units))
 
+                id_cols = ['Scenario', 'Year',  'Species', 'Units', 'Source', 'Sector']
+                scenarios = [col for col in ems_yr.columns if col not in id_cols]
+
                 if factor:
-                    ems_yr[['Striving', 'BAU']] *= factor
+                    ems_yr[scenarios] *= factor
 
-                ems_yr['Avoided'] = ems_yr['Striving'] - ems_yr['BAU']
+                for scen in scenarios:
+                    ems_yr['Avoided'] = ems_yr[scen] - ems_yr['BAU']
+                    scen_lower = scen.lower()
 
-
-                ems.loc[(ems["Scenario"] == f'{SSP}_striving') & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
-                        (ems["Region"] == "World"), str(yr)] += (ems_yr['Avoided']).sum()
+                    ems.loc[(ems["Scenario"] == f'{SSP}_{scen_lower}') & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
+                            (ems["Region"] == "World"), str(yr)] += (ems_yr['Avoided']).sum()
                 ems.loc[(ems["Scenario"] == f'{SSP}_zero_tra') & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
                         (ems["Region"] == "World"), str(yr)] += -1*ems_yr['BAU'].sum()
 
@@ -181,10 +199,12 @@ def align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, SSPs):
                     # for source in slcp_ems['Source'].unique():
                     if slcp_ems[(slcp_ems['Species'] == specie) & (slcp_ems['Sector'] == sector)].empty:
                         continue
-                    scenario_name = f'{SSP}_{specie}_{sector}_striving'
-                    avoided = ems_yr[(ems_yr['Sector'] == sector)]['Avoided'].values.sum()
-                    ems.loc[(ems["Scenario"] == scenario_name) & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
-                            (ems["Region"] == "World"), str(yr)] += avoided
+                    for scen in scenarios:
+                        scen_lower = scen.lower()
+                        scenario_name = f'{SSP}_{specie}_{sector}_{scen_lower}'
+                        avoided = ems_yr[(ems_yr['Sector'] == sector)]['Avoided'].values.sum()
+                        ems.loc[(ems["Scenario"] == scenario_name) & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
+                                (ems["Region"] == "World"), str(yr)] += avoided
 
                     # Add a zero_out_scenario
                     zero_scenario_name = f'{SSP}_{specie}_{sector}_zero'
@@ -205,7 +225,7 @@ def align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, SSPs):
 
 def main():
     SSPs = ['ssp119']
-    slcp_ems = pd.read_csv('preprocessing/final/SLCP_inventory_long.csv')
+    slcp_ems = pd.read_csv(EMS_IN)
 
     ems = pd.read_csv('CMIP6/rcmip-emissions-annual-means-v5-1-0_original.csv')
     conc = pd.read_csv('CMIP6/rcmip-concentrations-annual-means-v5-1-0_original.csv')
