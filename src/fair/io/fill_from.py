@@ -288,13 +288,13 @@ def fill_from_rcmip(self, batch=None, batch_size=None):
     # df_conc = pd.read_csv('../CMIP6/off_road/off_road_rcmip-concentrations-annual-means-v5-1-0.csv')
     # df_forc = pd.read_csv('../CMIP6/off_road/off_road_rcmip-radiative-forcing-annual-means-v5-1-0.csv')
     if batch is None:
-        df_emis = pd.read_csv('../CMIP6/rcmip-emissions-annual-means-v5-1-0.csv')
-        df_conc = pd.read_csv('../CMIP6/rcmip-concentrations-annual-means-v5-1-0.csv')
-        df_forc = pd.read_csv('../CMIP6/rcmip-radiative-forcing-annual-means-v5-1-0.csv')
+        df_emis = pd.read_csv('../inputs/final/rcmip-emissions-annual-means-v5-1-0.csv')
+        df_conc = pd.read_csv('../inputs/final/rcmip-concentrations-annual-means-v5-1-0.csv')
+        df_forc = pd.read_csv('../inputs/final/rcmip-radiative-forcing-annual-means-v5-1-0.csv')
     else:
-        df_emis = pd.read_csv(f'../CMIP6/batches/{batch_size}/rcmip-emissions-annual-means-v5-1-0_{batch}.csv')
-        df_conc = pd.read_csv(f'../CMIP6/batches/{batch_size}/rcmip-concentrations-annual-means-v5-1-0_{batch}.csv')
-        df_forc = pd.read_csv(f'../CMIP6/batches/{batch_size}/rcmip-radiative-forcing-annual-means-v5-1-0_{batch}.csv')
+        df_emis = pd.read_csv(f'../inputs/final/batches/{batch_size}/rcmip-emissions-annual-means-v5-1-0_{batch}.csv')
+        df_conc = pd.read_csv(f'../inputs/final/batches/{batch_size}/rcmip-concentrations-annual-means-v5-1-0_{batch}.csv')
+        df_forc = pd.read_csv(f'../inputs/final/batches/{batch_size}/rcmip-radiative-forcing-annual-means-v5-1-0_{batch}.csv')
 
     # filter to scenarios
     df_emis = df_emis[df_emis["Scenario"].isin(self.scenarios)]

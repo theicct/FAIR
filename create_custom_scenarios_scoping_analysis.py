@@ -240,15 +240,15 @@ def main():
     # Align inputs with FaIR
     ems, conc, forc = align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, SSPs)
 
-    forc.to_csv('CMIP6/rcmip-radiative-forcing-annual-means-v5-1-0.csv', index=False)
-    ems.to_csv('CMIP6/rcmip-emissions-annual-means-v5-1-0.csv', index=False)
-    conc.to_csv('CMIP6/rcmip-concentrations-annual-means-v5-1-0.csv', index=False)
+    forc.to_csv('inputs/final/rcmip-radiative-forcing-annual-means-v5-1-0.csv', index=False)
+    ems.to_csv('inputs/final/rcmip-emissions-annual-means-v5-1-0.csv', index=False)
+    conc.to_csv('inputs/final/rcmip-concentrations-annual-means-v5-1-0.csv', index=False)
 
     # Melt year columns into a single column
     ems_long = ems.melt(id_vars=['Model', 'Scenario', 'Region', 'Variable', 'Unit', 'Mip_Era', 'Activity_Id'], var_name='Year', value_name='ems')
-    ems_long.to_csv('CMIP6/rcmip-emissions-annual-means-v5-1-0_long.csv', index=False)
+    ems_long.to_csv('inputs/final/rcmip-emissions-annual-means-v5-1-0_long.csv', index=False)
     forc_long = forc.melt(id_vars=['Model', 'Scenario', 'Region', 'Variable', 'Unit', 'Mip_Era', 'Activity_Id'], var_name='Year', value_name='ems')
-    forc_long.to_csv('CMIP6/rcmip-forcing-annual-means-v5-1-0_long.csv', index=False)
+    forc_long.to_csv('inputs/final/rcmip-forcing-annual-means-v5-1-0_long.csv', index=False)
 
 if __name__ == "__main__":
     main()

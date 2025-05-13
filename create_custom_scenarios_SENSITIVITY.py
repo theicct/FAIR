@@ -196,18 +196,18 @@ def main():
         # Align inputs with FaIR
         ems, conc, forc = align_inputs_with_fair(ems_orig.copy(), conc_orig.copy(), forc_orig.copy(), slcp_ems_batch, species_to_rcmip, SSPs)
 
-        forc.to_csv(f'CMIP6/batches/{batch_size}/rcmip-radiative-forcing-annual-means-v5-1-0_{round(i/batch_size)}.csv', index=False)
-        ems.to_csv(f'CMIP6/batches/{batch_size}/rcmip-emissions-annual-means-v5-1-0_{round(i/batch_size)}.csv', index=False)
-        conc.to_csv(f'CMIP6/batches/{batch_size}/rcmip-concentrations-annual-means-v5-1-0_{round(i/batch_size)}.csv', index=False)
+        forc.to_csv(f'inputs/final/batches/{batch_size}/rcmip-radiative-forcing-annual-means-v5-1-0_{round(i/batch_size)}.csv', index=False)
+        ems.to_csv(f'inputs/final/batches/{batch_size}/rcmip-emissions-annual-means-v5-1-0_{round(i/batch_size)}.csv', index=False)
+        conc.to_csv(f'inputs/final/batches/{batch_size}/rcmip-concentrations-annual-means-v5-1-0_{round(i/batch_size)}.csv', index=False)
 
         print(f'Ran batch {i/batch_size} of {num_batches} ({i/batch_size/num_batches*100:.2f}%) in {time.time() - st:.2f} seconds')
 
 
     # Melt year columns into a single column
     # ems_long = ems.melt(id_vars=['Model', 'Scenario', 'Region', 'Variable', 'Unit', 'Mip_Era', 'Activity_Id'], var_name='Year', value_name='ems')
-    # ems_long.to_csv('CMIP6/rcmip-emissions-annual-means-v5-1-0_long.csv', index=False)
+    # ems_long.to_csv('inputs/final/rcmip-emissions-annual-means-v5-1-0_long.csv', index=False)
     # forc_long = forc.melt(id_vars=['Model', 'Scenario', 'Region', 'Variable', 'Unit', 'Mip_Era', 'Activity_Id'], var_name='Year', value_name='ems')
-    # forc_long.to_csv('CMIP6/rcmip-forcing-annual-means-v5-1-0_long.csv', index=False)
+    # forc_long.to_csv('inputs/final/rcmip-forcing-annual-means-v5-1-0_long.csv', index=False)
 
     print("Time taken to run the script: ", time.time() - st)
 
