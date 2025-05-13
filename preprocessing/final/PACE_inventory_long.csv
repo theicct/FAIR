@@ -1,225 +1,1121 @@
 Scenario,Sector,Year,Source,Species,ems,Units
-BAU,Aviation,2023,WTW,co2,1.030309796,Gt
-BAU,Aviation,2024,WTW,co2,1.046701695,Gt
-BAU,Aviation,2025,WTW,co2,1.06668462,Gt
-BAU,Aviation,2026,WTW,co2,1.0882338569999999,Gt
-BAU,Aviation,2027,WTW,co2,1.110852013,Gt
-BAU,Aviation,2028,WTW,co2,1.134405114,Gt
-BAU,Aviation,2029,WTW,co2,1.158840581,Gt
-BAU,Aviation,2030,WTW,co2,1.184099118,Gt
-BAU,Aviation,2031,WTW,co2,1.2101112470000002,Gt
-BAU,Aviation,2032,WTW,co2,1.23682229,Gt
-BAU,Aviation,2033,WTW,co2,1.2641911540000002,Gt
-BAU,Aviation,2034,WTW,co2,1.292211513,Gt
-BAU,Aviation,2035,WTW,co2,1.320910642,Gt
-BAU,Aviation,2036,WTW,co2,1.3503403550000002,Gt
-BAU,Aviation,2037,WTW,co2,1.3805767780000002,Gt
-BAU,Aviation,2038,WTW,co2,1.411695935,Gt
-BAU,Aviation,2039,WTW,co2,1.443794207,Gt
-BAU,Aviation,2040,WTW,co2,1.4769782560000002,Gt
-BAU,Aviation,2041,WTW,co2,1.511365589,Gt
-BAU,Aviation,2042,WTW,co2,1.547050474,Gt
-BAU,Aviation,2043,WTW,co2,1.58413255,Gt
-BAU,Aviation,2044,WTW,co2,1.622694073,Gt
-BAU,Aviation,2045,WTW,co2,1.662809715,Gt
-BAU,Aviation,2046,WTW,co2,1.70450839,Gt
-BAU,Aviation,2047,WTW,co2,1.747834673,Gt
-BAU,Aviation,2048,WTW,co2,1.792837034,Gt
-BAU,Aviation,2049,WTW,co2,1.839487094,Gt
-BAU,Aviation,2050,WTW,co2,1.8877928990000001,Gt
-BAU,Aviation,2023,WTW,h2o,331.8375985,Mt
-BAU,Aviation,2024,WTW,h2o,337.1173573,Mt
-BAU,Aviation,2025,WTW,h2o,343.5537277,Mt
-BAU,Aviation,2026,WTW,h2o,350.4946128,Mt
-BAU,Aviation,2027,WTW,h2o,357.7798048,Mt
-BAU,Aviation,2028,WTW,h2o,365.3661491,Mt
-BAU,Aviation,2029,WTW,h2o,373.2367112,Mt
-BAU,Aviation,2030,WTW,h2o,381.3723952,Mt
-BAU,Aviation,2031,WTW,h2o,389.750829,Mt
-BAU,Aviation,2032,WTW,h2o,398.3544076,Mt
-BAU,Aviation,2033,WTW,h2o,407.1698998,Mt
-BAU,Aviation,2034,WTW,h2o,416.1952721,Mt
-BAU,Aviation,2035,WTW,h2o,425.439312,Mt
-BAU,Aviation,2036,WTW,h2o,434.9187106,Mt
-BAU,Aviation,2037,WTW,h2o,444.6579915,Mt
-BAU,Aviation,2038,WTW,h2o,454.6816417,Mt
-BAU,Aviation,2039,WTW,h2o,465.020703,Mt
-BAU,Aviation,2040,WTW,h2o,475.7095311,Mt
-BAU,Aviation,2041,WTW,h2o,486.7859727,Mt
-BAU,Aviation,2042,WTW,h2o,498.2803891,Mt
-BAU,Aviation,2043,WTW,h2o,510.2248749,Mt
-BAU,Aviation,2044,WTW,h2o,522.6459237,Mt
-BAU,Aviation,2045,WTW,h2o,535.5675966,Mt
-BAU,Aviation,2046,WTW,h2o,548.9991982,Mt
-BAU,Aviation,2047,WTW,h2o,562.955095,Mt
-BAU,Aviation,2048,WTW,h2o,577.4509139,Mt
-BAU,Aviation,2049,WTW,h2o,592.4775009,Mt
-BAU,Aviation,2050,WTW,h2o,608.0374569,Mt
-BAU,Aviation,2023,WTW,sox,0.323484956,Mt
-BAU,Aviation,2024,WTW,sox,0.328631498,Mt
-BAU,Aviation,2025,WTW,sox,0.33490551,Mt
-BAU,Aviation,2026,WTW,sox,0.341671294,Mt
-BAU,Aviation,2027,WTW,sox,0.348772686,Mt
-BAU,Aviation,2028,WTW,sox,0.356167621,Mt
-BAU,Aviation,2029,WTW,sox,0.363839591,Mt
-BAU,Aviation,2030,WTW,sox,0.371769979,Mt
-BAU,Aviation,2031,WTW,sox,0.379936972,Mt
-BAU,Aviation,2032,WTW,sox,0.388323401,Mt
-BAU,Aviation,2033,WTW,sox,0.396916366,Mt
-BAU,Aviation,2034,WTW,sox,0.40571388,Mt
-BAU,Aviation,2035,WTW,sox,0.414724506,Mt
-BAU,Aviation,2036,WTW,sox,0.423964513,Mt
-BAU,Aviation,2037,WTW,sox,0.433457801,Mt
-BAU,Aviation,2038,WTW,sox,0.44322824,Mt
-BAU,Aviation,2039,WTW,sox,0.45330609,Mt
-BAU,Aviation,2040,WTW,sox,0.463724841,Mt
-BAU,Aviation,2041,WTW,sox,0.474521385,Mt
-BAU,Aviation,2042,WTW,sox,0.485725319,Mt
-BAU,Aviation,2043,WTW,sox,0.497367928,Mt
-BAU,Aviation,2044,WTW,sox,0.509475037,Mt
-BAU,Aviation,2045,WTW,sox,0.52207009,Mt
-BAU,Aviation,2046,WTW,sox,0.535162166,Mt
-BAU,Aviation,2047,WTW,sox,0.548765259,Mt
-BAU,Aviation,2048,WTW,sox,0.562894589,Mt
-BAU,Aviation,2049,WTW,sox,0.577541245,Mt
-BAU,Aviation,2050,WTW,sox,0.592707752,Mt
-BAU,Aviation,2023,WTW,nox,4.123887357,Mt
-BAU,Aviation,2024,WTW,nox,3.969957956,Mt
-BAU,Aviation,2025,WTW,nox,4.045875733,Mt
-BAU,Aviation,2026,WTW,nox,4.127661137,Mt
-BAU,Aviation,2027,WTW,nox,4.213444793,Mt
-BAU,Aviation,2028,WTW,nox,4.302742076,Mt
-BAU,Aviation,2029,WTW,nox,4.395356457,Mt
-BAU,Aviation,2030,WTW,nox,4.491064155,Mt
-BAU,Aviation,2031,WTW,nox,4.589595321,Mt
-BAU,Aviation,2032,WTW,nox,4.690719328,Mt
-BAU,Aviation,2033,WTW,nox,4.794278568,Mt
-BAU,Aviation,2034,WTW,nox,4.900235896,Mt
-BAU,Aviation,2035,WTW,nox,5.008689366,Mt
-BAU,Aviation,2036,WTW,nox,5.119833052,Mt
-BAU,Aviation,2037,WTW,nox,5.233934571,Mt
-BAU,Aviation,2038,WTW,nox,5.351282219,Mt
-BAU,Aviation,2039,WTW,nox,5.472264084,Mt
-BAU,Aviation,2040,WTW,nox,5.597273282,Mt
-BAU,Aviation,2041,WTW,nox,5.72676157,Mt
-BAU,Aviation,2042,WTW,nox,5.861100303,Mt
-BAU,Aviation,2043,WTW,nox,6.000656692,Mt
-BAU,Aviation,2044,WTW,nox,6.1457571,Mt
-BAU,Aviation,2045,WTW,nox,6.296625102,Mt
-BAU,Aviation,2046,WTW,nox,6.45345768,Mt
-BAU,Aviation,2047,WTW,nox,6.616377916,Mt
-BAU,Aviation,2048,WTW,nox,6.785485426,Mt
-BAU,Aviation,2049,WTW,nox,6.960807275,Mt
-BAU,Aviation,2050,WTW,nox,7.142335403,Mt
-BAU,Aviation,2023,WTW,ch4,1.16419186,Mt
-BAU,Aviation,2024,WTW,ch4,1.18271378,Mt
-BAU,Aviation,2025,WTW,ch4,1.205293356,Mt
-BAU,Aviation,2026,WTW,ch4,1.229642777,Mt
-BAU,Aviation,2027,WTW,ch4,1.255200014,Mt
-BAU,Aviation,2028,WTW,ch4,1.281813688,Mt
-BAU,Aviation,2029,WTW,ch4,1.309424386,Mt
-BAU,Aviation,2030,WTW,ch4,1.337965105,Mt
-BAU,Aviation,2031,WTW,ch4,1.367357342,Mt
-BAU,Aviation,2032,WTW,ch4,1.39753931,Mt
-BAU,Aviation,2033,WTW,ch4,1.428464581,Mt
-BAU,Aviation,2034,WTW,ch4,1.460126004,Mt
-BAU,Aviation,2035,WTW,ch4,1.492554397,Mt
-BAU,Aviation,2036,WTW,ch4,1.52580831,Mt
-BAU,Aviation,2037,WTW,ch4,1.559973761,Mt
-BAU,Aviation,2038,WTW,ch4,1.595136649,Mt
-BAU,Aviation,2039,WTW,ch4,1.631405883,Mt
-BAU,Aviation,2040,WTW,ch4,1.668901984,Mt
-BAU,Aviation,2041,WTW,ch4,1.707757727,Mt
-BAU,Aviation,2042,WTW,ch4,1.748079632,Mt
-BAU,Aviation,2043,WTW,ch4,1.789980282,Mt
-BAU,Aviation,2044,WTW,ch4,1.833552625,Mt
-BAU,Aviation,2045,WTW,ch4,1.878881034,Mt
-BAU,Aviation,2046,WTW,ch4,1.925998181,Mt
-BAU,Aviation,2047,WTW,ch4,1.974954433,Mt
-BAU,Aviation,2048,WTW,ch4,2.025804558,Mt
-BAU,Aviation,2049,WTW,ch4,2.07851649,Mt
-BAU,Aviation,2050,WTW,ch4,2.133099321,Mt
-BAU,Aviation,2023,WTW,n2o,0.00202453,Mt
-BAU,Aviation,2024,WTW,n2o,0.002056739,Mt
-BAU,Aviation,2025,WTW,n2o,0.002096005,Mt
-BAU,Aviation,2026,WTW,n2o,0.002138349,Mt
-BAU,Aviation,2027,WTW,n2o,0.002182793,Mt
-BAU,Aviation,2028,WTW,n2o,0.002229074,Mt
-BAU,Aviation,2029,WTW,n2o,0.002277089,Mt
-BAU,Aviation,2030,WTW,n2o,0.002326721,Mt
-BAU,Aviation,2031,WTW,n2o,0.002377834,Mt
-BAU,Aviation,2032,WTW,n2o,0.002430321,Mt
-BAU,Aviation,2033,WTW,n2o,0.0024841,Mt
-BAU,Aviation,2034,WTW,n2o,0.002539159,Mt
-BAU,Aviation,2035,WTW,n2o,0.002595552,Mt
-BAU,Aviation,2036,WTW,n2o,0.002653381,Mt
-BAU,Aviation,2037,WTW,n2o,0.002712794,Mt
-BAU,Aviation,2038,WTW,n2o,0.002773943,Mt
-BAU,Aviation,2039,WTW,n2o,0.002837015,Mt
-BAU,Aviation,2040,WTW,n2o,0.002902221,Mt
-BAU,Aviation,2041,WTW,n2o,0.002969791,Mt
-BAU,Aviation,2042,WTW,n2o,0.00303991,Mt
-BAU,Aviation,2043,WTW,n2o,0.003112776,Mt
-BAU,Aviation,2044,WTW,n2o,0.003188548,Mt
-BAU,Aviation,2045,WTW,n2o,0.003267374,Mt
-BAU,Aviation,2046,WTW,n2o,0.003349311,Mt
-BAU,Aviation,2047,WTW,n2o,0.003434446,Mt
-BAU,Aviation,2048,WTW,n2o,0.003522874,Mt
-BAU,Aviation,2049,WTW,n2o,0.00361454,Mt
-BAU,Aviation,2050,WTW,n2o,0.00370946,Mt
-BAU,Aviation,2023,WTW,bc,0.02356836,Mt
-BAU,Aviation,2024,WTW,bc,0.026586697,Mt
-BAU,Aviation,2025,WTW,bc,0.027095113,Mt
-BAU,Aviation,2026,WTW,bc,0.027643233,Mt
-BAU,Aviation,2027,WTW,bc,0.028218434,Mt
-BAU,Aviation,2028,WTW,bc,0.028817398,Mt
-BAU,Aviation,2029,WTW,bc,0.029438809,Mt
-BAU,Aviation,2030,WTW,bc,0.030081168,Mt
-BAU,Aviation,2031,WTW,bc,0.030742685,Mt
-BAU,Aviation,2032,WTW,bc,0.031421891,Mt
-BAU,Aviation,2033,WTW,bc,0.03211774,Mt
-BAU,Aviation,2034,WTW,bc,0.032830021,Mt
-BAU,Aviation,2035,WTW,bc,0.033559401,Mt
-BAU,Aviation,2036,WTW,bc,0.034307181,Mt
-BAU,Aviation,2037,WTW,bc,0.035075208,Mt
-BAU,Aviation,2038,WTW,bc,0.035865407,Mt
-BAU,Aviation,2039,WTW,bc,0.036680301,Mt
-BAU,Aviation,2040,WTW,bc,0.037522567,Mt
-BAU,Aviation,2041,WTW,bc,0.038395223,Mt
-BAU,Aviation,2042,WTW,bc,0.039300717,Mt
-BAU,Aviation,2043,WTW,bc,0.04024155,Mt
-BAU,Aviation,2044,WTW,bc,0.041219865,Mt
-BAU,Aviation,2045,WTW,bc,0.042237358,Mt
-BAU,Aviation,2046,WTW,bc,0.043295064,Mt
-BAU,Aviation,2047,WTW,bc,0.044393965,Mt
-BAU,Aviation,2048,WTW,bc,0.045535006,Mt
-BAU,Aviation,2049,WTW,bc,0.046717938,Mt
-BAU,Aviation,2050,WTW,bc,0.047942839,Mt
-BAU,Aviation,2023,WTW,contrails,0.017684003405910236,W/m2
-BAU,Aviation,2024,WTW,contrails,0.018097756632503178,W/m2
-BAU,Aviation,2025,WTW,contrails,0.018523879397374585,W/m2
-BAU,Aviation,2026,WTW,contrails,0.018962371700524457,W/m2
-BAU,Aviation,2027,WTW,contrails,0.01941367717518219,W/m2
-BAU,Aviation,2028,WTW,contrails,0.01987821335850486,W/m2
-BAU,Aviation,2029,WTW,contrails,0.020356423883721865,W/m2
-BAU,Aviation,2030,WTW,contrails,0.020848778480134923,W/m2
-BAU,Aviation,2031,WTW,contrails,0.021355772973118064,W/m2
-BAU,Aviation,2032,WTW,contrails,0.021877955380189947,W/m2
-BAU,Aviation,2033,WTW,contrails,0.022415795430652297,W/m2
-BAU,Aviation,2034,WTW,contrails,0.022969893334168406,W/m2
-BAU,Aviation,2035,WTW,contrails,0.023540797108256944,W/m2
-BAU,Aviation,2036,WTW,contrails,0.024129106962581214,W/m2
-BAU,Aviation,2037,WTW,contrails,0.02473544920287683,W/m2
-BAU,Aviation,2038,WTW,contrails,0.025360450134879416,W/m2
-BAU,Aviation,2039,WTW,contrails,0.026004814352541535,W/m2
-BAU,Aviation,2040,WTW,contrails,0.026669142065526494,W/m2
-BAU,Aviation,2041,WTW,contrails,0.02735442492458235,W/m2
-BAU,Aviation,2042,WTW,contrails,0.028061106562938507,W/m2
-BAU,Aviation,2043,WTW,contrails,0.02879023082348766,W/m2
-BAU,Aviation,2044,WTW,contrails,0.029542580588399328,W/m2
-BAU,Aviation,2045,WTW,contrails,0.03031867777911986,W/m2
-BAU,Aviation,2046,WTW,contrails,0.03111982719926514,W/m2
-BAU,Aviation,2047,WTW,contrails,0.03194681173100467,W/m2
-BAU,Aviation,2048,WTW,contrails,0.032800675217231165,W/m2
-BAU,Aviation,2049,WTW,contrails,0.03368246150083731,W/m2
-BAU,Aviation,2050,WTW,contrails,0.03459295346399264,W/m2
+BAU,Aviation,2023,WTW,co2,1.005358454,Gt
+BAU,Aviation,2024,WTW,co2,1.088815881,Gt
+BAU,Aviation,2025,WTW,co2,1.1628456880000002,Gt
+BAU,Aviation,2026,WTW,co2,1.1878903909999998,Gt
+BAU,Aviation,2027,WTW,co2,1.215064091,Gt
+BAU,Aviation,2028,WTW,co2,1.243515519,Gt
+BAU,Aviation,2029,WTW,co2,1.2729005820000001,Gt
+BAU,Aviation,2030,WTW,co2,1.303190431,Gt
+BAU,Aviation,2031,WTW,co2,1.3343639680000001,Gt
+BAU,Aviation,2032,WTW,co2,1.366416532,Gt
+BAU,Aviation,2033,WTW,co2,1.3993893350000002,Gt
+BAU,Aviation,2034,WTW,co2,1.433363839,Gt
+BAU,Aviation,2035,WTW,co2,1.468465371,Gt
+BAU,Aviation,2036,WTW,co2,1.504853901,Gt
+BAU,Aviation,2037,WTW,co2,1.5427091419999999,Gt
+BAU,Aviation,2038,WTW,co2,1.582193838,Gt
+BAU,Aviation,2039,WTW,co2,1.623446319,Gt
+BAU,Aviation,2040,WTW,co2,1.666529444,Gt
+BAU,Aviation,2041,WTW,co2,1.71143939,Gt
+BAU,Aviation,2042,WTW,co2,1.758084128,Gt
+BAU,Aviation,2043,WTW,co2,1.806336256,Gt
+BAU,Aviation,2044,WTW,co2,1.856065081,Gt
+BAU,Aviation,2045,WTW,co2,1.907166559,Gt
+BAU,Aviation,2046,WTW,co2,1.959623244,Gt
+BAU,Aviation,2047,WTW,co2,2.013508568,Gt
+BAU,Aviation,2048,WTW,co2,2.068990667,Gt
+BAU,Aviation,2049,WTW,co2,2.12627635,Gt
+BAU,Aviation,2050,WTW,co2,2.1855702790000002,Gt
+Continuation,Aviation,2023,WTW,co2,1.005358454,Gt
+Continuation,Aviation,2024,WTW,co2,1.070718456,Gt
+Continuation,Aviation,2025,WTW,co2,1.134230169,Gt
+Continuation,Aviation,2026,WTW,co2,1.151571696,Gt
+Continuation,Aviation,2027,WTW,co2,1.170897412,Gt
+Continuation,Aviation,2028,WTW,co2,1.191185035,Gt
+Continuation,Aviation,2029,WTW,co2,1.21202333,Gt
+Continuation,Aviation,2030,WTW,co2,1.233472486,Gt
+Continuation,Aviation,2031,WTW,co2,1.25340295,Gt
+Continuation,Aviation,2032,WTW,co2,1.2738313330000002,Gt
+Continuation,Aviation,2033,WTW,co2,1.294758286,Gt
+Continuation,Aviation,2034,WTW,co2,1.316222661,Gt
+Continuation,Aviation,2035,WTW,co2,1.3380729630000001,Gt
+Continuation,Aviation,2036,WTW,co2,1.360138057,Gt
+Continuation,Aviation,2037,WTW,co2,1.3819686160000002,Gt
+Continuation,Aviation,2038,WTW,co2,1.403192819,Gt
+Continuation,Aviation,2039,WTW,co2,1.423802604,Gt
+Continuation,Aviation,2040,WTW,co2,1.444655612,Gt
+Continuation,Aviation,2041,WTW,co2,1.466577331,Gt
+Continuation,Aviation,2042,WTW,co2,1.4885951290000001,Gt
+Continuation,Aviation,2043,WTW,co2,1.510462505,Gt
+Continuation,Aviation,2044,WTW,co2,1.531845637,Gt
+Continuation,Aviation,2045,WTW,co2,1.552714665,Gt
+Continuation,Aviation,2046,WTW,co2,1.5725054920000001,Gt
+Continuation,Aviation,2047,WTW,co2,1.591693556,Gt
+Continuation,Aviation,2048,WTW,co2,1.610333252,Gt
+Continuation,Aviation,2049,WTW,co2,1.6293820860000001,Gt
+Continuation,Aviation,2050,WTW,co2,1.649507942,Gt
+GHG Forward,Aviation,2023,WTW,co2,1.005358454,Gt
+GHG Forward,Aviation,2024,WTW,co2,1.0547302319999998,Gt
+GHG Forward,Aviation,2025,WTW,co2,1.0959519370000002,Gt
+GHG Forward,Aviation,2026,WTW,co2,1.100698967,Gt
+GHG Forward,Aviation,2027,WTW,co2,1.1068506230000001,Gt
+GHG Forward,Aviation,2028,WTW,co2,1.113490764,Gt
+GHG Forward,Aviation,2029,WTW,co2,1.120222714,Gt
+GHG Forward,Aviation,2030,WTW,co2,1.124504759,Gt
+GHG Forward,Aviation,2031,WTW,co2,1.10575607,Gt
+GHG Forward,Aviation,2032,WTW,co2,1.0860537300000002,Gt
+GHG Forward,Aviation,2033,WTW,co2,1.06536497,Gt
+GHG Forward,Aviation,2034,WTW,co2,1.0436879449999998,Gt
+GHG Forward,Aviation,2035,WTW,co2,1.019885588,Gt
+GHG Forward,Aviation,2036,WTW,co2,0.9928788869999999,Gt
+GHG Forward,Aviation,2037,WTW,co2,0.9628378694,Gt
+GHG Forward,Aviation,2038,WTW,co2,0.9292887084,Gt
+GHG Forward,Aviation,2039,WTW,co2,0.8926586721,Gt
+GHG Forward,Aviation,2040,WTW,co2,0.8548452675,Gt
+GHG Forward,Aviation,2041,WTW,co2,0.8163018161,Gt
+GHG Forward,Aviation,2042,WTW,co2,0.7772211539,Gt
+GHG Forward,Aviation,2043,WTW,co2,0.7373874675,Gt
+GHG Forward,Aviation,2044,WTW,co2,0.6970861604,Gt
+GHG Forward,Aviation,2045,WTW,co2,0.6564165568,Gt
+GHG Forward,Aviation,2046,WTW,co2,0.6149256779,Gt
+GHG Forward,Aviation,2047,WTW,co2,0.5731294087000001,Gt
+GHG Forward,Aviation,2048,WTW,co2,0.531178316,Gt
+GHG Forward,Aviation,2049,WTW,co2,0.48920905740000004,Gt
+GHG Forward,Aviation,2050,WTW,co2,0.447300018,Gt
+SLCP Forward,Aviation,2023,WTW,co2,1.005358454,Gt
+SLCP Forward,Aviation,2024,WTW,co2,1.070718456,Gt
+SLCP Forward,Aviation,2025,WTW,co2,1.134230169,Gt
+SLCP Forward,Aviation,2026,WTW,co2,1.151571696,Gt
+SLCP Forward,Aviation,2027,WTW,co2,1.171274991,Gt
+SLCP Forward,Aviation,2028,WTW,co2,1.191950687,Gt
+SLCP Forward,Aviation,2029,WTW,co2,1.213798325,Gt
+SLCP Forward,Aviation,2030,WTW,co2,1.2362958410000002,Gt
+SLCP Forward,Aviation,2031,WTW,co2,1.2566943750000001,Gt
+SLCP Forward,Aviation,2032,WTW,co2,1.2776269480000002,Gt
+SLCP Forward,Aviation,2033,WTW,co2,1.299109265,Gt
+SLCP Forward,Aviation,2034,WTW,co2,1.321214224,Gt
+SLCP Forward,Aviation,2035,WTW,co2,1.343863985,Gt
+SLCP Forward,Aviation,2036,WTW,co2,1.365928159,Gt
+SLCP Forward,Aviation,2037,WTW,co2,1.3881630500000002,Gt
+SLCP Forward,Aviation,2038,WTW,co2,1.410216829,Gt
+SLCP Forward,Aviation,2039,WTW,co2,1.43189332,Gt
+SLCP Forward,Aviation,2040,WTW,co2,1.45380289,Gt
+SLCP Forward,Aviation,2041,WTW,co2,1.476664346,Gt
+SLCP Forward,Aviation,2042,WTW,co2,1.4995447549999998,Gt
+SLCP Forward,Aviation,2043,WTW,co2,1.5222282310000002,Gt
+SLCP Forward,Aviation,2044,WTW,co2,1.544332902,Gt
+SLCP Forward,Aviation,2045,WTW,co2,1.5657407820000002,Gt
+SLCP Forward,Aviation,2046,WTW,co2,1.585842052,Gt
+SLCP Forward,Aviation,2047,WTW,co2,1.60513586,Gt
+SLCP Forward,Aviation,2048,WTW,co2,1.62372019,Gt
+SLCP Forward,Aviation,2049,WTW,co2,1.642617992,Gt
+SLCP Forward,Aviation,2050,WTW,co2,1.662547382,Gt
+Full Breakthrough,Aviation,2023,WTW,co2,1.005358454,Gt
+Full Breakthrough,Aviation,2024,WTW,co2,1.0547302319999998,Gt
+Full Breakthrough,Aviation,2025,WTW,co2,1.0959519370000002,Gt
+Full Breakthrough,Aviation,2026,WTW,co2,1.100698967,Gt
+Full Breakthrough,Aviation,2027,WTW,co2,1.107219157,Gt
+Full Breakthrough,Aviation,2028,WTW,co2,1.114235688,Gt
+Full Breakthrough,Aviation,2029,WTW,co2,1.1219440139999999,Gt
+Full Breakthrough,Aviation,2030,WTW,co2,1.1272265090000002,Gt
+Full Breakthrough,Aviation,2031,WTW,co2,1.109503531,Gt
+Full Breakthrough,Aviation,2032,WTW,co2,1.090856796,Gt
+Full Breakthrough,Aviation,2033,WTW,co2,1.0712639529999999,Gt
+Full Breakthrough,Aviation,2034,WTW,co2,1.050747146,Gt
+Full Breakthrough,Aviation,2035,WTW,co2,1.028209721,Gt
+Full Breakthrough,Aviation,2036,WTW,co2,1.001621179,Gt
+Full Breakthrough,Aviation,2037,WTW,co2,0.9722336970000001,Gt
+Full Breakthrough,Aviation,2038,WTW,co2,0.9395374035999999,Gt
+Full Breakthrough,Aviation,2039,WTW,co2,0.9037898066000001,Gt
+Full Breakthrough,Aviation,2040,WTW,co2,0.8667330627000001,Gt
+Full Breakthrough,Aviation,2041,WTW,co2,0.828760085,Gt
+Full Breakthrough,Aviation,2042,WTW,co2,0.7901058130999999,Gt
+Full Breakthrough,Aviation,2043,WTW,co2,0.7505754423,Gt
+Full Breakthrough,Aviation,2044,WTW,co2,0.7104455054000001,Gt
+Full Breakthrough,Aviation,2045,WTW,co2,0.6697913041000001,Gt
+Full Breakthrough,Aviation,2046,WTW,co2,0.6281519626000001,Gt
+Full Breakthrough,Aviation,2047,WTW,co2,0.5860863969,Gt
+Full Breakthrough,Aviation,2048,WTW,co2,0.5437836309,Gt
+Full Breakthrough,Aviation,2049,WTW,co2,0.5014142099,Gt
+Full Breakthrough,Aviation,2050,WTW,co2,0.4590799325,Gt
+BAU,Aviation,2023,WTW,h2o,0.0017305830932,W/m2
+BAU,Aviation,2024,WTW,h2o,0.0018782777572,W/m2
+BAU,Aviation,2025,WTW,h2o,0.0019999635707999997,W/m2
+BAU,Aviation,2026,WTW,h2o,0.00204303982636,W/m2
+BAU,Aviation,2027,WTW,h2o,0.0020897774133599996,W/m2
+BAU,Aviation,2028,WTW,h2o,0.0021387120091999998,W/m2
+BAU,Aviation,2029,WTW,h2o,0.0021892519443599996,W/m2
+BAU,Aviation,2030,WTW,h2o,0.00224134804296,W/m2
+BAU,Aviation,2031,WTW,h2o,0.0022949641883999996,W/m2
+BAU,Aviation,2032,WTW,h2o,0.00235009236384,W/m2
+BAU,Aviation,2033,WTW,h2o,0.0024068034432,W/m2
+BAU,Aviation,2034,WTW,h2o,0.0024652375253999994,W/m2
+BAU,Aviation,2035,WTW,h2o,0.0025256101306799996,W/m2
+BAU,Aviation,2036,WTW,h2o,0.00258819633696,W/m2
+BAU,Aviation,2037,WTW,h2o,0.0026533051688,W/m2
+BAU,Aviation,2038,WTW,h2o,0.0027212164579599996,W/m2
+BAU,Aviation,2039,WTW,h2o,0.0027921680529600004,W/m2
+BAU,Aviation,2040,WTW,h2o,0.0028662680155199997,W/m2
+BAU,Aviation,2041,WTW,h2o,0.0029435097515200003,W/m2
+BAU,Aviation,2042,WTW,h2o,0.00302373498024,W/m2
+BAU,Aviation,2043,WTW,h2o,0.0031067245986399995,W/m2
+BAU,Aviation,2044,WTW,h2o,0.00319225384816,W/m2
+BAU,Aviation,2045,WTW,h2o,0.00328014379628,W/m2
+BAU,Aviation,2046,WTW,h2o,0.00337036444888,W/m2
+BAU,Aviation,2047,WTW,h2o,0.00346304209368,W/m2
+BAU,Aviation,2048,WTW,h2o,0.0035584659094399997,W/m2
+BAU,Aviation,2049,WTW,h2o,0.00365699161412,W/m2
+BAU,Aviation,2050,WTW,h2o,0.0037589712825599995,W/m2
+Continuation,Aviation,2023,WTW,h2o,0.0017305830932,W/m2
+Continuation,Aviation,2024,WTW,h2o,0.00184620332624,W/m2
+Continuation,Aviation,2025,WTW,h2o,0.0019579927509999996,W/m2
+Continuation,Aviation,2026,WTW,h2o,0.00199282624268,W/m2
+Continuation,Aviation,2027,WTW,h2o,0.00203124272624,W/m2
+Continuation,Aviation,2028,WTW,h2o,0.00207169781624,W/m2
+Continuation,Aviation,2029,WTW,h2o,0.0021135402163200002,W/m2
+Continuation,Aviation,2030,WTW,h2o,0.00215663241352,W/m2
+Continuation,Aviation,2031,WTW,h2o,0.00220084755852,W/m2
+Continuation,Aviation,2032,WTW,h2o,0.00224618504656,W/m2
+Continuation,Aviation,2033,WTW,h2o,0.0022926501884000003,W/m2
+Continuation,Aviation,2034,WTW,h2o,0.00234031589636,W/m2
+Continuation,Aviation,2035,WTW,h2o,0.0023890604561199996,W/m2
+Continuation,Aviation,2036,WTW,h2o,0.00243870808168,W/m2
+Continuation,Aviation,2037,WTW,h2o,0.00248835683928,W/m2
+Continuation,Aviation,2038,WTW,h2o,0.0025370074776799997,W/m2
+Continuation,Aviation,2039,WTW,h2o,0.0025849445278799997,W/m2
+Continuation,Aviation,2040,WTW,h2o,0.0026337168806,W/m2
+Continuation,Aviation,2041,WTW,h2o,0.0026837178492799996,W/m2
+Continuation,Aviation,2042,WTW,h2o,0.00273427330176,W/m2
+Continuation,Aviation,2043,WTW,h2o,0.0027849324937199997,W/m2
+Continuation,Aviation,2044,WTW,h2o,0.00283507744364,W/m2
+Continuation,Aviation,2045,WTW,h2o,0.0028846448987199995,W/m2
+Continuation,Aviation,2046,WTW,h2o,0.00293257840408,W/m2
+Continuation,Aviation,2047,WTW,h2o,0.0029797707108,W/m2
+Continuation,Aviation,2048,WTW,h2o,0.0030263212361199996,W/m2
+Continuation,Aviation,2049,WTW,h2o,0.00307400918448,W/m2
+Continuation,Aviation,2050,WTW,h2o,0.0031240916990399998,W/m2
+GHG Forward,Aviation,2023,WTW,h2o,0.0017305830932,W/m2
+GHG Forward,Aviation,2024,WTW,h2o,0.00181863539468,W/m2
+GHG Forward,Aviation,2025,WTW,h2o,0.0019229572986,W/m2
+GHG Forward,Aviation,2026,WTW,h2o,0.0019511637787199998,W/m2
+GHG Forward,Aviation,2027,WTW,h2o,0.0019825982383999997,W/m2
+GHG Forward,Aviation,2028,WTW,h2o,0.00201571019572,W/m2
+GHG Forward,Aviation,2029,WTW,h2o,0.00204983433148,W/m2
+GHG Forward,Aviation,2030,WTW,h2o,0.00208030928924,W/m2
+GHG Forward,Aviation,2031,WTW,h2o,0.0021139396043999997,W/m2
+GHG Forward,Aviation,2032,WTW,h2o,0.0021480112336800003,W/m2
+GHG Forward,Aviation,2033,WTW,h2o,0.00218250453512,W/m2
+GHG Forward,Aviation,2034,WTW,h2o,0.0022174626734,W/m2
+GHG Forward,Aviation,2035,WTW,h2o,0.00225055838176,W/m2
+GHG Forward,Aviation,2036,WTW,h2o,0.0022800456910399996,W/m2
+GHG Forward,Aviation,2037,WTW,h2o,0.00230510006792,W/m2
+GHG Forward,Aviation,2038,WTW,h2o,0.0023239432949199996,W/m2
+GHG Forward,Aviation,2039,WTW,h2o,0.0023368206352400002,W/m2
+GHG Forward,Aviation,2040,WTW,h2o,0.0023480544011599998,W/m2
+GHG Forward,Aviation,2041,WTW,h2o,0.0023570300499199995,W/m2
+GHG Forward,Aviation,2042,WTW,h2o,0.0023653912011600002,W/m2
+GHG Forward,Aviation,2043,WTW,h2o,0.0023723245936,W/m2
+GHG Forward,Aviation,2044,WTW,h2o,0.00237852684628,W/m2
+GHG Forward,Aviation,2045,WTW,h2o,0.00238508075624,W/m2
+GHG Forward,Aviation,2046,WTW,h2o,0.0023900438525599997,W/m2
+GHG Forward,Aviation,2047,WTW,h2o,0.00239604008124,W/m2
+GHG Forward,Aviation,2048,WTW,h2o,0.0024036341295199997,W/m2
+GHG Forward,Aviation,2049,WTW,h2o,0.0024135314028799998,W/m2
+GHG Forward,Aviation,2050,WTW,h2o,0.00242640861736,W/m2
+SLCP Forward,Aviation,2023,WTW,h2o,0.0017305830932,W/m2
+SLCP Forward,Aviation,2024,WTW,h2o,0.00184620332624,W/m2
+SLCP Forward,Aviation,2025,WTW,h2o,0.0019579927509999996,W/m2
+SLCP Forward,Aviation,2026,WTW,h2o,0.00199282624268,W/m2
+SLCP Forward,Aviation,2027,WTW,h2o,0.00203124272624,W/m2
+SLCP Forward,Aviation,2028,WTW,h2o,0.0020716985161599996,W/m2
+SLCP Forward,Aviation,2029,WTW,h2o,0.00211354389532,W/m2
+SLCP Forward,Aviation,2030,WTW,h2o,0.00215665934224,W/m2
+SLCP Forward,Aviation,2031,WTW,h2o,0.00219982303788,W/m2
+SLCP Forward,Aviation,2032,WTW,h2o,0.002244110232,W/m2
+SLCP Forward,Aviation,2033,WTW,h2o,0.00228955207,W/m2
+SLCP Forward,Aviation,2034,WTW,h2o,0.0023362812168799996,W/m2
+SLCP Forward,Aviation,2035,WTW,h2o,0.00238430881052,W/m2
+SLCP Forward,Aviation,2036,WTW,h2o,0.0024336996845200002,W/m2
+SLCP Forward,Aviation,2037,WTW,h2o,0.00248382118036,W/m2
+SLCP Forward,Aviation,2038,WTW,h2o,0.00253373157596,W/m2
+SLCP Forward,Aviation,2039,WTW,h2o,0.00258337868724,W/m2
+SLCP Forward,Aviation,2040,WTW,h2o,0.0026338531195599997,W/m2
+SLCP Forward,Aviation,2041,WTW,h2o,0.00268534596096,W/m2
+SLCP Forward,Aviation,2042,WTW,h2o,0.00273724991852,W/m2
+SLCP Forward,Aviation,2043,WTW,h2o,0.0027891647206800003,W/m2
+SLCP Forward,Aviation,2044,WTW,h2o,0.00284038300312,W/m2
+SLCP Forward,Aviation,2045,WTW,h2o,0.00289067809056,W/m2
+SLCP Forward,Aviation,2046,WTW,h2o,0.00293891572728,W/m2
+SLCP Forward,Aviation,2047,WTW,h2o,0.00298602587192,W/m2
+SLCP Forward,Aviation,2048,WTW,h2o,0.0030321868324799995,W/m2
+SLCP Forward,Aviation,2049,WTW,h2o,0.00307928623704,W/m2
+SLCP Forward,Aviation,2050,WTW,h2o,0.0031286643252799997,W/m2
+Full Breakthrough,Aviation,2023,WTW,h2o,0.0017305830932,W/m2
+Full Breakthrough,Aviation,2024,WTW,h2o,0.00181863539468,W/m2
+Full Breakthrough,Aviation,2025,WTW,h2o,0.0019229572986,W/m2
+Full Breakthrough,Aviation,2026,WTW,h2o,0.0019511637787199998,W/m2
+Full Breakthrough,Aviation,2027,WTW,h2o,0.0019825982383999997,W/m2
+Full Breakthrough,Aviation,2028,WTW,h2o,0.0020157108608000003,W/m2
+Full Breakthrough,Aviation,2029,WTW,h2o,0.00204983779884,W/m2
+Full Breakthrough,Aviation,2030,WTW,h2o,0.0020803348014799996,W/m2
+Full Breakthrough,Aviation,2031,WTW,h2o,0.00211399980584,W/m2
+Full Breakthrough,Aviation,2032,WTW,h2o,0.0021481336661200003,W/m2
+Full Breakthrough,Aviation,2033,WTW,h2o,0.0021827414673999995,W/m2
+Full Breakthrough,Aviation,2034,WTW,h2o,0.0022179229030399998,W/m2
+Full Breakthrough,Aviation,2035,WTW,h2o,0.0022514713400399997,W/m2
+Full Breakthrough,Aviation,2036,WTW,h2o,0.00228185787076,W/m2
+Full Breakthrough,Aviation,2037,WTW,h2o,0.0023084883863599996,W/m2
+Full Breakthrough,Aviation,2038,WTW,h2o,0.002329600026,W/m2
+Full Breakthrough,Aviation,2039,WTW,h2o,0.00234509241772,W/m2
+Full Breakthrough,Aviation,2040,WTW,h2o,0.0023588760129999997,W/m2
+Full Breakthrough,Aviation,2041,WTW,h2o,0.00237014962392,W/m2
+Full Breakthrough,Aviation,2042,WTW,h2o,0.00238063084064,W/m2
+Full Breakthrough,Aviation,2043,WTW,h2o,0.0023895511842800003,W/m2
+Full Breakthrough,Aviation,2044,WTW,h2o,0.0023975457110799996,W/m2
+Full Breakthrough,Aviation,2045,WTW,h2o,0.0024055793262799997,W/m2
+Full Breakthrough,Aviation,2046,WTW,h2o,0.00241165116608,W/m2
+Full Breakthrough,Aviation,2047,WTW,h2o,0.0024184471766,W/m2
+Full Breakthrough,Aviation,2048,WTW,h2o,0.0024266165435199998,W/m2
+Full Breakthrough,Aviation,2049,WTW,h2o,0.00243695464324,W/m2
+Full Breakthrough,Aviation,2050,WTW,h2o,0.0024502083845199998,W/m2
+BAU,Aviation,2023,WTW,sox,0.324425431,Mt
+BAU,Aviation,2024,WTW,sox,0.351056879,Mt
+BAU,Aviation,2025,WTW,sox,0.374925628,Mt
+BAU,Aviation,2026,WTW,sox,0.383000561,Mt
+BAU,Aviation,2027,WTW,sox,0.391761927,Mt
+BAU,Aviation,2028,WTW,sox,0.400935258,Mt
+BAU,Aviation,2029,WTW,sox,0.410409613,Mt
+BAU,Aviation,2030,WTW,sox,0.420175691,Mt
+BAU,Aviation,2031,WTW,sox,0.430226687,Mt
+BAU,Aviation,2032,WTW,sox,0.4405611,Mt
+BAU,Aviation,2033,WTW,sox,0.451192217,Mt
+BAU,Aviation,2034,WTW,sox,0.462146304,Mt
+BAU,Aviation,2035,WTW,sox,0.473463768,Mt
+BAU,Aviation,2036,WTW,sox,0.485196186,Mt
+BAU,Aviation,2037,WTW,sox,0.497401503,Mt
+BAU,Aviation,2038,WTW,sox,0.51013219,Mt
+BAU,Aviation,2039,WTW,sox,0.523432848,Mt
+BAU,Aviation,2040,WTW,sox,0.537323743,Mt
+BAU,Aviation,2041,WTW,sox,0.551803643,Mt
+BAU,Aviation,2042,WTW,sox,0.566842877,Mt
+BAU,Aviation,2043,WTW,sox,0.582400366,Mt
+BAU,Aviation,2044,WTW,sox,0.598433973,Mt
+BAU,Aviation,2045,WTW,sox,0.614910152,Mt
+BAU,Aviation,2046,WTW,sox,0.631823278,Mt
+BAU,Aviation,2047,WTW,sox,0.649197027,Mt
+BAU,Aviation,2048,WTW,sox,0.667085609,Mt
+BAU,Aviation,2049,WTW,sox,0.685555705,Mt
+BAU,Aviation,2050,WTW,sox,0.7046733,Mt
+Continuation,Aviation,2023,WTW,sox,0.324425431,Mt
+Continuation,Aviation,2024,WTW,sox,0.3450636,Mt
+Continuation,Aviation,2025,WTW,sox,0.365469201,Mt
+Continuation,Aviation,2026,WTW,sox,0.370915394,Mt
+Continuation,Aviation,2027,WTW,sox,0.377003325,Mt
+Continuation,Aviation,2028,WTW,sox,0.383396982,Mt
+Continuation,Aviation,2029,WTW,sox,0.389970264,Mt
+Continuation,Aviation,2030,WTW,sox,0.396743081,Mt
+Continuation,Aviation,2031,WTW,sox,0.403022674,Mt
+Continuation,Aviation,2032,WTW,sox,0.409459013,Mt
+Continuation,Aviation,2033,WTW,sox,0.416052253,Mt
+Continuation,Aviation,2034,WTW,sox,0.422814827,Mt
+Continuation,Aviation,2035,WTW,sox,0.429691034,Mt
+Continuation,Aviation,2036,WTW,sox,0.436648952,Mt
+Continuation,Aviation,2037,WTW,sox,0.443527828,Mt
+Continuation,Aviation,2038,WTW,sox,0.450219053,Mt
+Continuation,Aviation,2039,WTW,sox,0.456712774,Mt
+Continuation,Aviation,2040,WTW,sox,0.463285862,Mt
+Continuation,Aviation,2041,WTW,sox,0.470228607,Mt
+Continuation,Aviation,2042,WTW,sox,0.477206607,Mt
+Continuation,Aviation,2043,WTW,sox,0.484142429,Mt
+Continuation,Aviation,2044,WTW,sox,0.490930703,Mt
+Continuation,Aviation,2045,WTW,sox,0.497563552,Mt
+Continuation,Aviation,2046,WTW,sox,0.503860286,Mt
+Continuation,Aviation,2047,WTW,sox,0.509976325,Mt
+Continuation,Aviation,2048,WTW,sox,0.515930754,Mt
+Continuation,Aviation,2049,WTW,sox,0.522032191,Mt
+Continuation,Aviation,2050,WTW,sox,0.528496342,Mt
+GHG Forward,Aviation,2023,WTW,sox,0.324425431,Mt
+GHG Forward,Aviation,2024,WTW,sox,0.339911027,Mt
+GHG Forward,Aviation,2025,WTW,sox,0.352252022,Mt
+GHG Forward,Aviation,2026,WTW,sox,0.35323866,Mt
+GHG Forward,Aviation,2027,WTW,sox,0.354681849,Mt
+GHG Forward,Aviation,2028,WTW,sox,0.356286867,Mt
+GHG Forward,Aviation,2029,WTW,sox,0.357926755,Mt
+GHG Forward,Aviation,2030,WTW,sox,0.358790914,Mt
+GHG Forward,Aviation,2031,WTW,sox,0.351513452,Mt
+GHG Forward,Aviation,2032,WTW,sox,0.343890499,Mt
+GHG Forward,Aviation,2033,WTW,sox,0.335910851,Mt
+GHG Forward,Aviation,2034,WTW,sox,0.327573065,Mt
+GHG Forward,Aviation,2035,WTW,sox,0.318514615,Mt
+GHG Forward,Aviation,2036,WTW,sox,0.308536969,Mt
+GHG Forward,Aviation,2037,WTW,sox,0.297603879,Mt
+GHG Forward,Aviation,2038,WTW,sox,0.285582193,Mt
+GHG Forward,Aviation,2039,WTW,sox,0.272619059,Mt
+GHG Forward,Aviation,2040,WTW,sox,0.259306513,Mt
+GHG Forward,Aviation,2041,WTW,sox,0.246937094,Mt
+GHG Forward,Aviation,2042,WTW,sox,0.234402397,Mt
+GHG Forward,Aviation,2043,WTW,sox,0.2216395,Mt
+GHG Forward,Aviation,2044,WTW,sox,0.208736783,Mt
+GHG Forward,Aviation,2045,WTW,sox,0.195713638,Mt
+GHG Forward,Aviation,2046,WTW,sox,0.182438267,Mt
+GHG Forward,Aviation,2047,WTW,sox,0.169075337,Mt
+GHG Forward,Aviation,2048,WTW,sox,0.15568557,Mt
+GHG Forward,Aviation,2049,WTW,sox,0.14232361,Mt
+GHG Forward,Aviation,2050,WTW,sox,0.129024835,Mt
+SLCP Forward,Aviation,2023,WTW,sox,0.324425431,Mt
+SLCP Forward,Aviation,2024,WTW,sox,0.3450636,Mt
+SLCP Forward,Aviation,2025,WTW,sox,0.365469201,Mt
+SLCP Forward,Aviation,2026,WTW,sox,0.370915394,Mt
+SLCP Forward,Aviation,2027,WTW,sox,0.374414445,Mt
+SLCP Forward,Aviation,2028,WTW,sox,0.378150165,Mt
+SLCP Forward,Aviation,2029,WTW,sox,0.377815125,Mt
+SLCP Forward,Aviation,2030,WTW,sox,0.377495097,Mt
+SLCP Forward,Aviation,2031,WTW,sox,0.37631689,Mt
+SLCP Forward,Aviation,2032,WTW,sox,0.375115008,Mt
+SLCP Forward,Aviation,2033,WTW,sox,0.373890551,Mt
+SLCP Forward,Aviation,2034,WTW,sox,0.372660365,Mt
+SLCP Forward,Aviation,2035,WTW,sox,0.37139131,Mt
+SLCP Forward,Aviation,2036,WTW,sox,0.377571968,Mt
+SLCP Forward,Aviation,2037,WTW,sox,0.383806818,Mt
+SLCP Forward,Aviation,2038,WTW,sox,0.390016984,Mt
+SLCP Forward,Aviation,2039,WTW,sox,0.39613645,Mt
+SLCP Forward,Aviation,2040,WTW,sox,0.402340135,Mt
+SLCP Forward,Aviation,2041,WTW,sox,0.40888253,Mt
+SLCP Forward,Aviation,2042,WTW,sox,0.415458521,Mt
+SLCP Forward,Aviation,2043,WTW,sox,0.422011649,Mt
+SLCP Forward,Aviation,2044,WTW,sox,0.428437549,Mt
+SLCP Forward,Aviation,2045,WTW,sox,0.434703184,Mt
+SLCP Forward,Aviation,2046,WTW,sox,0.440633666,Mt
+SLCP Forward,Aviation,2047,WTW,sox,0.446362885,Mt
+SLCP Forward,Aviation,2048,WTW,sox,0.4519171,Mt
+SLCP Forward,Aviation,2049,WTW,sox,0.457585657,Mt
+SLCP Forward,Aviation,2050,WTW,sox,0.463573362,Mt
+Full Breakthrough,Aviation,2023,WTW,sox,0.324425431,Mt
+Full Breakthrough,Aviation,2024,WTW,sox,0.339911027,Mt
+Full Breakthrough,Aviation,2025,WTW,sox,0.352252022,Mt
+Full Breakthrough,Aviation,2026,WTW,sox,0.35323866,Mt
+Full Breakthrough,Aviation,2027,WTW,sox,0.352154993,Mt
+Full Breakthrough,Aviation,2028,WTW,sox,0.351181919,Mt
+Full Breakthrough,Aviation,2029,WTW,sox,0.346138229,Mt
+Full Breakthrough,Aviation,2030,WTW,sox,0.340228146,Mt
+Full Breakthrough,Aviation,2031,WTW,sox,0.326044849,Mt
+Full Breakthrough,Aviation,2032,WTW,sox,0.311402246,Mt
+Full Breakthrough,Aviation,2033,WTW,sox,0.296293866,Mt
+Full Breakthrough,Aviation,2034,WTW,sox,0.280724808,Mt
+Full Breakthrough,Aviation,2035,WTW,sox,0.264406116,Mt
+Full Breakthrough,Aviation,2036,WTW,sox,0.254251477,Mt
+Full Breakthrough,Aviation,2037,WTW,sox,0.243322762,Mt
+Full Breakthrough,Aviation,2038,WTW,sox,0.231515716,Mt
+Full Breakthrough,Aviation,2039,WTW,sox,0.218926236,Mt
+Full Breakthrough,Aviation,2040,WTW,sox,0.206001312,Mt
+Full Breakthrough,Aviation,2041,WTW,sox,0.194037876,Mt
+Full Breakthrough,Aviation,2042,WTW,sox,0.181893598,Mt
+Full Breakthrough,Aviation,2043,WTW,sox,0.169529851,Mt
+Full Breakthrough,Aviation,2044,WTW,sox,0.157017925,Mt
+Full Breakthrough,Aviation,2045,WTW,sox,0.144370424,Mt
+Full Breakthrough,Aviation,2046,WTW,sox,0.131523088,Mt
+Full Breakthrough,Aviation,2047,WTW,sox,0.118581443,Mt
+Full Breakthrough,Aviation,2048,WTW,sox,0.105599688,Mt
+Full Breakthrough,Aviation,2049,WTW,sox,0.092623127,Mt
+Full Breakthrough,Aviation,2050,WTW,sox,0.07967729,Mt
+BAU,Aviation,2023,WTW,nox,4.130005796,Mt
+BAU,Aviation,2024,WTW,nox,4.508713363,Mt
+BAU,Aviation,2025,WTW,nox,4.828751157,Mt
+BAU,Aviation,2026,WTW,nox,4.962618088,Mt
+BAU,Aviation,2027,WTW,nox,5.107046956,Mt
+BAU,Aviation,2028,WTW,nox,5.258527922,Mt
+BAU,Aviation,2029,WTW,nox,5.415685443,Mt
+BAU,Aviation,2030,WTW,nox,5.578513594,Mt
+BAU,Aviation,2031,WTW,nox,5.747004474,Mt
+BAU,Aviation,2032,WTW,nox,5.921203766,Mt
+BAU,Aviation,2033,WTW,nox,6.101366163,Mt
+BAU,Aviation,2034,WTW,nox,6.287932653,Mt
+BAU,Aviation,2035,WTW,nox,6.481559783,Mt
+BAU,Aviation,2036,WTW,nox,6.683086071,Mt
+BAU,Aviation,2037,WTW,nox,6.893463653,Mt
+BAU,Aviation,2038,WTW,nox,7.113591705,Mt
+BAU,Aviation,2039,WTW,nox,7.344278874,Mt
+BAU,Aviation,2040,WTW,nox,7.585999392,Mt
+BAU,Aviation,2041,WTW,nox,7.838920682,Mt
+BAU,Aviation,2042,WTW,nox,8.102791876,Mt
+BAU,Aviation,2043,WTW,nox,8.377177772,Mt
+BAU,Aviation,2044,WTW,nox,8.661609944,Mt
+BAU,Aviation,2045,WTW,nox,8.955729598,Mt
+BAU,Aviation,2046,WTW,nox,9.259579972,Mt
+BAU,Aviation,2047,WTW,nox,9.573648211,Mt
+BAU,Aviation,2048,WTW,nox,9.898896313,Mt
+BAU,Aviation,2049,WTW,nox,10.2365071,Mt
+BAU,Aviation,2050,WTW,nox,10.58768619,Mt
+Continuation,Aviation,2023,WTW,nox,4.130005796,Mt
+Continuation,Aviation,2024,WTW,nox,4.432887453,Mt
+Continuation,Aviation,2025,WTW,nox,4.730205573,Mt
+Continuation,Aviation,2026,WTW,nox,4.844921954,Mt
+Continuation,Aviation,2027,WTW,nox,4.969642224,Mt
+Continuation,Aviation,2028,WTW,nox,5.100675114,Mt
+Continuation,Aviation,2029,WTW,nox,5.236517761,Mt
+Continuation,Aviation,2030,WTW,nox,5.376964255,Mt
+Continuation,Aviation,2031,WTW,nox,5.521813352,Mt
+Continuation,Aviation,2032,WTW,nox,5.671134018,Mt
+Continuation,Aviation,2033,WTW,nox,5.825016361,Mt
+Continuation,Aviation,2034,WTW,nox,5.983722847,Mt
+Continuation,Aviation,2035,WTW,nox,6.140673089,Mt
+Continuation,Aviation,2036,WTW,nox,6.292864683,Mt
+Continuation,Aviation,2037,WTW,nox,6.430392232,Mt
+Continuation,Aviation,2038,WTW,nox,6.542706267,Mt
+Continuation,Aviation,2039,WTW,nox,6.631652293,Mt
+Continuation,Aviation,2040,WTW,nox,6.710507774,Mt
+Continuation,Aviation,2041,WTW,nox,6.786885461,Mt
+Continuation,Aviation,2042,WTW,nox,6.856192893,Mt
+Continuation,Aviation,2043,WTW,nox,6.915775791,Mt
+Continuation,Aviation,2044,WTW,nox,6.961816145,Mt
+Continuation,Aviation,2045,WTW,nox,6.990251026,Mt
+Continuation,Aviation,2046,WTW,nox,6.997091858,Mt
+Continuation,Aviation,2047,WTW,nox,6.990511602,Mt
+Continuation,Aviation,2048,WTW,nox,6.970664452,Mt
+Continuation,Aviation,2049,WTW,nox,6.949057596,Mt
+Continuation,Aviation,2050,WTW,nox,6.933817029,Mt
+GHG Forward,Aviation,2023,WTW,nox,4.130005796,Mt
+GHG Forward,Aviation,2024,WTW,nox,4.366178316,Mt
+GHG Forward,Aviation,2025,WTW,nox,4.644651792,Mt
+GHG Forward,Aviation,2026,WTW,nox,4.742345818,Mt
+GHG Forward,Aviation,2027,WTW,nox,4.848944209,Mt
+GHG Forward,Aviation,2028,WTW,nox,4.960715242,Mt
+GHG Forward,Aviation,2029,WTW,nox,5.0760993,Mt
+GHG Forward,Aviation,2030,WTW,nox,5.183239166,Mt
+GHG Forward,Aviation,2031,WTW,nox,5.299889737,Mt
+GHG Forward,Aviation,2032,WTW,nox,5.418901701,Mt
+GHG Forward,Aviation,2033,WTW,nox,5.540257115,Mt
+GHG Forward,Aviation,2034,WTW,nox,5.664098214,Mt
+GHG Forward,Aviation,2035,WTW,nox,5.778483215,Mt
+GHG Forward,Aviation,2036,WTW,nox,5.876399902,Mt
+GHG Forward,Aviation,2037,WTW,nox,5.949090997,Mt
+GHG Forward,Aviation,2038,WTW,nox,5.98523739,Mt
+GHG Forward,Aviation,2039,WTW,nox,5.987037362,Mt
+GHG Forward,Aviation,2040,WTW,nox,5.974006801,Mt
+GHG Forward,Aviation,2041,WTW,nox,5.950196982,Mt
+GHG Forward,Aviation,2042,WTW,nox,5.917461467,Mt
+GHG Forward,Aviation,2043,WTW,nox,5.872492609,Mt
+GHG Forward,Aviation,2044,WTW,nox,5.81567142,Mt
+GHG Forward,Aviation,2045,WTW,nox,5.748748537,Mt
+GHG Forward,Aviation,2046,WTW,nox,5.663381476,Mt
+GHG Forward,Aviation,2047,WTW,nox,5.571250703,Mt
+GHG Forward,Aviation,2048,WTW,nox,5.474212083,Mt
+GHG Forward,Aviation,2049,WTW,nox,5.380151661,Mt
+GHG Forward,Aviation,2050,WTW,nox,5.294737203,Mt
+SLCP Forward,Aviation,2023,WTW,nox,4.130005796,Mt
+SLCP Forward,Aviation,2024,WTW,nox,4.432361131,Mt
+SLCP Forward,Aviation,2025,WTW,nox,4.729273019,Mt
+SLCP Forward,Aviation,2026,WTW,nox,4.843600297,Mt
+SLCP Forward,Aviation,2027,WTW,nox,4.967903097,Mt
+SLCP Forward,Aviation,2028,WTW,nox,5.098480825,Mt
+SLCP Forward,Aviation,2029,WTW,nox,5.233829525,Mt
+SLCP Forward,Aviation,2030,WTW,nox,5.373777923,Mt
+SLCP Forward,Aviation,2031,WTW,nox,5.515576955,Mt
+SLCP Forward,Aviation,2032,WTW,nox,5.661755577,Mt
+SLCP Forward,Aviation,2033,WTW,nox,5.812461822,Mt
+SLCP Forward,Aviation,2034,WTW,nox,5.968104095,Mt
+SLCP Forward,Aviation,2035,WTW,nox,6.120386612,Mt
+SLCP Forward,Aviation,2036,WTW,nox,6.265944449,Mt
+SLCP Forward,Aviation,2037,WTW,nox,6.392724932,Mt
+SLCP Forward,Aviation,2038,WTW,nox,6.487292662,Mt
+SLCP Forward,Aviation,2039,WTW,nox,6.550905935,Mt
+SLCP Forward,Aviation,2040,WTW,nox,6.598621928,Mt
+SLCP Forward,Aviation,2041,WTW,nox,6.639963857,Mt
+SLCP Forward,Aviation,2042,WTW,nox,6.669225654,Mt
+SLCP Forward,Aviation,2043,WTW,nox,6.683187641,Mt
+SLCP Forward,Aviation,2044,WTW,nox,6.676803743,Mt
+SLCP Forward,Aviation,2045,WTW,nox,6.648683111,Mt
+SLCP Forward,Aviation,2046,WTW,nox,6.590161945,Mt
+SLCP Forward,Aviation,2047,WTW,nox,6.512161649,Mt
+SLCP Forward,Aviation,2048,WTW,nox,6.414998248,Mt
+SLCP Forward,Aviation,2049,WTW,nox,6.313178846,Mt
+SLCP Forward,Aviation,2050,WTW,nox,6.216881556,Mt
+Full Breakthrough,Aviation,2023,WTW,nox,4.130005796,Mt
+Full Breakthrough,Aviation,2024,WTW,nox,4.366178316,Mt
+Full Breakthrough,Aviation,2025,WTW,nox,4.644651792,Mt
+Full Breakthrough,Aviation,2026,WTW,nox,4.742345818,Mt
+Full Breakthrough,Aviation,2027,WTW,nox,4.848944209,Mt
+Full Breakthrough,Aviation,2028,WTW,nox,4.960716853,Mt
+Full Breakthrough,Aviation,2029,WTW,nox,5.076107757,Mt
+Full Breakthrough,Aviation,2030,WTW,nox,5.183302217,Mt
+Full Breakthrough,Aviation,2031,WTW,nox,5.300039425,Mt
+Full Breakthrough,Aviation,2032,WTW,nox,5.419208298,Mt
+Full Breakthrough,Aviation,2033,WTW,nox,5.540854838,Mt
+Full Breakthrough,Aviation,2034,WTW,nox,5.665267907,Mt
+Full Breakthrough,Aviation,2035,WTW,nox,5.778899659,Mt
+Full Breakthrough,Aviation,2036,WTW,nox,5.874425127,Mt
+Full Breakthrough,Aviation,2037,WTW,nox,5.941140509,Mt
+Full Breakthrough,Aviation,2038,WTW,nox,5.965180118,Mt
+Full Breakthrough,Aviation,2039,WTW,nox,5.948412393,Mt
+Full Breakthrough,Aviation,2040,WTW,nox,5.912737318,Mt
+Full Breakthrough,Aviation,2041,WTW,nox,5.864078757,Mt
+Full Breakthrough,Aviation,2042,WTW,nox,5.803644729,Mt
+Full Breakthrough,Aviation,2043,WTW,nox,5.728011263,Mt
+Full Breakthrough,Aviation,2044,WTW,nox,5.637006778,Mt
+Full Breakthrough,Aviation,2045,WTW,nox,5.531568298,Mt
+Full Breakthrough,Aviation,2046,WTW,nox,5.402440323,Mt
+Full Breakthrough,Aviation,2047,WTW,nox,5.263050405,Mt
+Full Breakthrough,Aviation,2048,WTW,nox,5.115420878,Mt
+Full Breakthrough,Aviation,2049,WTW,nox,4.969112418,Mt
+Full Breakthrough,Aviation,2050,WTW,nox,4.831147718,Mt
+BAU,Aviation,2023,WTW,ch4,1.16657978,Mt
+BAU,Aviation,2024,WTW,ch4,1.263420609,Mt
+BAU,Aviation,2025,WTW,ch4,1.349321987,Mt
+BAU,Aviation,2026,WTW,ch4,1.378382909,Mt
+BAU,Aviation,2027,WTW,ch4,1.409914239,Mt
+BAU,Aviation,2028,WTW,ch4,1.442928196,Mt
+BAU,Aviation,2029,WTW,ch4,1.477025507,Mt
+BAU,Aviation,2030,WTW,ch4,1.512172697,Mt
+BAU,Aviation,2031,WTW,ch4,1.548345287,Mt
+BAU,Aviation,2032,WTW,ch4,1.585537865,Mt
+BAU,Aviation,2033,WTW,ch4,1.623798253,Mt
+BAU,Aviation,2034,WTW,ch4,1.663220978,Mt
+BAU,Aviation,2035,WTW,ch4,1.703951463,Mt
+BAU,Aviation,2036,WTW,ch4,1.746175332,Mt
+BAU,Aviation,2037,WTW,ch4,1.790101117,Mt
+BAU,Aviation,2038,WTW,ch4,1.835917658,Mt
+BAU,Aviation,2039,WTW,ch4,1.883785472,Mt
+BAU,Aviation,2040,WTW,ch4,1.933777493,Mt
+BAU,Aviation,2041,WTW,ch4,1.98588929,Mt
+BAU,Aviation,2042,WTW,ch4,2.040014073,Mt
+BAU,Aviation,2043,WTW,ch4,2.09600401,Mt
+BAU,Aviation,2044,WTW,ch4,2.153707451,Mt
+BAU,Aviation,2045,WTW,ch4,2.213003665,Mt
+BAU,Aviation,2046,WTW,ch4,2.273872412,Mt
+BAU,Aviation,2047,WTW,ch4,2.336398896,Mt
+BAU,Aviation,2048,WTW,ch4,2.400778217,Mt
+BAU,Aviation,2049,WTW,ch4,2.467250348,Mt
+BAU,Aviation,2050,WTW,ch4,2.536052772,Mt
+Continuation,Aviation,2023,WTW,ch4,1.16657978,Mt
+Continuation,Aviation,2024,WTW,ch4,1.242897657,Mt
+Continuation,Aviation,2025,WTW,ch4,1.316808838,Mt
+Continuation,Aviation,2026,WTW,ch4,1.337416362,Mt
+Continuation,Aviation,2027,WTW,ch4,1.360361288,Mt
+Continuation,Aviation,2028,WTW,ch4,1.384481145,Mt
+Continuation,Aviation,2029,WTW,ch4,1.409279105,Mt
+Continuation,Aviation,2030,WTW,ch4,1.434826399,Mt
+Continuation,Aviation,2031,WTW,ch4,1.458475999,Mt
+Continuation,Aviation,2032,WTW,ch4,1.482717338,Mt
+Continuation,Aviation,2033,WTW,ch4,1.507551382,Mt
+Continuation,Aviation,2034,WTW,ch4,1.533023576,Mt
+Continuation,Aviation,2035,WTW,ch4,1.55898796,Mt
+Continuation,Aviation,2036,WTW,ch4,1.585318228,Mt
+Continuation,Aviation,2037,WTW,ch4,1.611419595,Mt
+Continuation,Aviation,2038,WTW,ch4,1.636815663,Mt
+Continuation,Aviation,2039,WTW,ch4,1.661524609,Mt
+Continuation,Aviation,2040,WTW,ch4,1.686540181,Mt
+Continuation,Aviation,2041,WTW,ch4,1.71273021,Mt
+Continuation,Aviation,2042,WTW,ch4,1.739038977,Mt
+Continuation,Aviation,2043,WTW,ch4,1.765171886,Mt
+Continuation,Aviation,2044,WTW,ch4,1.790731825,Mt
+Continuation,Aviation,2045,WTW,ch4,1.8156764,Mt
+Continuation,Aviation,2046,WTW,ch4,1.8393335,Mt
+Continuation,Aviation,2047,WTW,ch4,1.862257604,Mt
+Continuation,Aviation,2048,WTW,ch4,1.884505022,Mt
+Continuation,Aviation,2049,WTW,ch4,1.907188252,Mt
+Continuation,Aviation,2050,WTW,ch4,1.931082097,Mt
+GHG Forward,Aviation,2023,WTW,ch4,1.16657978,Mt
+GHG Forward,Aviation,2024,WTW,ch4,1.224338412,Mt
+GHG Forward,Aviation,2025,WTW,ch4,1.27500725,Mt
+GHG Forward,Aviation,2026,WTW,ch4,1.282361081,Mt
+GHG Forward,Aviation,2027,WTW,ch4,1.291489323,Mt
+GHG Forward,Aviation,2028,WTW,ch4,1.301334951,Mt
+GHG Forward,Aviation,2029,WTW,ch4,1.311443031,Mt
+GHG Forward,Aviation,2030,WTW,ch4,1.318840217,Mt
+GHG Forward,Aviation,2031,WTW,ch4,1.301574413,Mt
+GHG Forward,Aviation,2032,WTW,ch4,1.283344396,Mt
+GHG Forward,Aviation,2033,WTW,ch4,1.264114654,Mt
+GHG Forward,Aviation,2034,WTW,ch4,1.243886333,Mt
+GHG Forward,Aviation,2035,WTW,ch4,1.221329583,Mt
+GHG Forward,Aviation,2036,WTW,ch4,1.195629713,Mt
+GHG Forward,Aviation,2037,WTW,ch4,1.16656618,Mt
+GHG Forward,Aviation,2038,WTW,ch4,1.133513232,Mt
+GHG Forward,Aviation,2039,WTW,ch4,1.096925231,Mt
+GHG Forward,Aviation,2040,WTW,ch4,1.059079231,Mt
+GHG Forward,Aviation,2041,WTW,ch4,1.015382997,Mt
+GHG Forward,Aviation,2042,WTW,ch4,0.971030727,Mt
+GHG Forward,Aviation,2043,WTW,ch4,0.925741674,Mt
+GHG Forward,Aviation,2044,WTW,ch4,0.87986058,Mt
+GHG Forward,Aviation,2045,WTW,ch4,0.833554894,Mt
+GHG Forward,Aviation,2046,WTW,ch4,0.78617132,Mt
+GHG Forward,Aviation,2047,WTW,ch4,0.738380986,Mt
+GHG Forward,Aviation,2048,WTW,ch4,0.690305346,Mt
+GHG Forward,Aviation,2049,WTW,ch4,0.642058438,Mt
+GHG Forward,Aviation,2050,WTW,ch4,0.593690283,Mt
+SLCP Forward,Aviation,2023,WTW,ch4,1.16657978,Mt
+SLCP Forward,Aviation,2024,WTW,ch4,1.242897657,Mt
+SLCP Forward,Aviation,2025,WTW,ch4,1.316808838,Mt
+SLCP Forward,Aviation,2026,WTW,ch4,1.337416362,Mt
+SLCP Forward,Aviation,2027,WTW,ch4,1.360361288,Mt
+SLCP Forward,Aviation,2028,WTW,ch4,1.384481612,Mt
+SLCP Forward,Aviation,2029,WTW,ch4,1.409281559,Mt
+SLCP Forward,Aviation,2030,WTW,ch4,1.434844295,Mt
+SLCP Forward,Aviation,2031,WTW,ch4,1.457804159,Mt
+SLCP Forward,Aviation,2032,WTW,ch4,1.481365821,Mt
+SLCP Forward,Aviation,2033,WTW,ch4,1.505547154,Mt
+SLCP Forward,Aviation,2034,WTW,ch4,1.530432247,Mt
+SLCP Forward,Aviation,2035,WTW,ch4,1.55596072,Mt
+SLCP Forward,Aviation,2036,WTW,ch4,1.582159471,Mt
+SLCP Forward,Aviation,2037,WTW,ch4,1.608602125,Mt
+SLCP Forward,Aviation,2038,WTW,ch4,1.63484059,Mt
+SLCP Forward,Aviation,2039,WTW,ch4,1.660674363,Mt
+SLCP Forward,Aviation,2040,WTW,ch4,1.686804807,Mt
+SLCP Forward,Aviation,2041,WTW,ch4,1.713974607,Mt
+SLCP Forward,Aviation,2042,WTW,ch4,1.741176525,Mt
+SLCP Forward,Aviation,2043,WTW,ch4,1.768153113,Mt
+SLCP Forward,Aviation,2044,WTW,ch4,1.79445359,Mt
+SLCP Forward,Aviation,2045,WTW,ch4,1.819933161,Mt
+SLCP Forward,Aviation,2046,WTW,ch4,1.843869962,Mt
+SLCP Forward,Aviation,2047,WTW,ch4,1.86684182,Mt
+SLCP Forward,Aviation,2048,WTW,ch4,1.888955264,Mt
+SLCP Forward,Aviation,2049,WTW,ch4,1.911392984,Mt
+SLCP Forward,Aviation,2050,WTW,ch4,1.934984345,Mt
+Full Breakthrough,Aviation,2023,WTW,ch4,1.16657978,Mt
+Full Breakthrough,Aviation,2024,WTW,ch4,1.224338412,Mt
+Full Breakthrough,Aviation,2025,WTW,ch4,1.27500725,Mt
+Full Breakthrough,Aviation,2026,WTW,ch4,1.282361081,Mt
+Full Breakthrough,Aviation,2027,WTW,ch4,1.291489323,Mt
+Full Breakthrough,Aviation,2028,WTW,ch4,1.30133538,Mt
+Full Breakthrough,Aviation,2029,WTW,ch4,1.31144525,Mt
+Full Breakthrough,Aviation,2030,WTW,ch4,1.318856392,Mt
+Full Breakthrough,Aviation,2031,WTW,ch4,1.301611483,Mt
+Full Breakthrough,Aviation,2032,WTW,ch4,1.283417549,Mt
+Full Breakthrough,Aviation,2033,WTW,ch4,1.264251894,Mt
+Full Breakthrough,Aviation,2034,WTW,ch4,1.244144514,Mt
+Full Breakthrough,Aviation,2035,WTW,ch4,1.221825051,Mt
+Full Breakthrough,Aviation,2036,WTW,ch4,1.196580039,Mt
+Full Breakthrough,Aviation,2037,WTW,ch4,1.168280978,Mt
+Full Breakthrough,Aviation,2038,WTW,ch4,1.136272295,Mt
+Full Breakthrough,Aviation,2039,WTW,ch4,1.100807875,Mt
+Full Breakthrough,Aviation,2040,WTW,ch4,1.063959776,Mt
+Full Breakthrough,Aviation,2041,WTW,ch4,1.021033942,Mt
+Full Breakthrough,Aviation,2042,WTW,ch4,0.977285753,Mt
+Full Breakthrough,Aviation,2043,WTW,ch4,0.932462767,Mt
+Full Breakthrough,Aviation,2044,WTW,ch4,0.886895018,Mt
+Full Breakthrough,Aviation,2045,WTW,ch4,0.840718515,Mt
+Full Breakthrough,Aviation,2046,WTW,ch4,0.793279443,Mt
+Full Breakthrough,Aviation,2047,WTW,ch4,0.745288618,Mt
+Full Breakthrough,Aviation,2048,WTW,ch4,0.69691087,Mt
+Full Breakthrough,Aviation,2049,WTW,ch4,0.648298419,Mt
+Full Breakthrough,Aviation,2050,WTW,ch4,0.599527294,Mt
+BAU,Aviation,2023,WTW,n2o,0.00233316,Mt
+BAU,Aviation,2024,WTW,n2o,0.002526841,Mt
+BAU,Aviation,2025,WTW,n2o,0.002698644,Mt
+BAU,Aviation,2026,WTW,n2o,0.002756766,Mt
+BAU,Aviation,2027,WTW,n2o,0.002819828,Mt
+BAU,Aviation,2028,WTW,n2o,0.002885856,Mt
+BAU,Aviation,2029,WTW,n2o,0.002954051,Mt
+BAU,Aviation,2030,WTW,n2o,0.003024345,Mt
+BAU,Aviation,2031,WTW,n2o,0.003096691,Mt
+BAU,Aviation,2032,WTW,n2o,0.003171076,Mt
+BAU,Aviation,2033,WTW,n2o,0.003247597,Mt
+BAU,Aviation,2034,WTW,n2o,0.003326442,Mt
+BAU,Aviation,2035,WTW,n2o,0.003407903,Mt
+BAU,Aviation,2036,WTW,n2o,0.003492351,Mt
+BAU,Aviation,2037,WTW,n2o,0.003580202,Mt
+BAU,Aviation,2038,WTW,n2o,0.003671835,Mt
+BAU,Aviation,2039,WTW,n2o,0.003767571,Mt
+BAU,Aviation,2040,WTW,n2o,0.003867555,Mt
+BAU,Aviation,2041,WTW,n2o,0.003971779,Mt
+BAU,Aviation,2042,WTW,n2o,0.004080028,Mt
+BAU,Aviation,2043,WTW,n2o,0.004192008,Mt
+BAU,Aviation,2044,WTW,n2o,0.004307415,Mt
+BAU,Aviation,2045,WTW,n2o,0.004426007,Mt
+BAU,Aviation,2046,WTW,n2o,0.004547745,Mt
+BAU,Aviation,2047,WTW,n2o,0.004672798,Mt
+BAU,Aviation,2048,WTW,n2o,0.004801556,Mt
+BAU,Aviation,2049,WTW,n2o,0.004934501,Mt
+BAU,Aviation,2050,WTW,n2o,0.005072106,Mt
+Continuation,Aviation,2023,WTW,n2o,0.00233316,Mt
+Continuation,Aviation,2024,WTW,n2o,0.002483703,Mt
+Continuation,Aviation,2025,WTW,n2o,0.002631751,Mt
+Continuation,Aviation,2026,WTW,n2o,0.002672151,Mt
+Continuation,Aviation,2027,WTW,n2o,0.002717203,Mt
+Continuation,Aviation,2028,WTW,n2o,0.002764488,Mt
+Continuation,Aviation,2029,WTW,n2o,0.002813763,Mt
+Continuation,Aviation,2030,WTW,n2o,0.002864528,Mt
+Continuation,Aviation,2031,WTW,n2o,0.002923458,Mt
+Continuation,Aviation,2032,WTW,n2o,0.002983889,Mt
+Continuation,Aviation,2033,WTW,n2o,0.003045827,Mt
+Continuation,Aviation,2034,WTW,n2o,0.00310937,Mt
+Continuation,Aviation,2035,WTW,n2o,0.003174282,Mt
+Continuation,Aviation,2036,WTW,n2o,0.003240295,Mt
+Continuation,Aviation,2037,WTW,n2o,0.003306174,Mt
+Continuation,Aviation,2038,WTW,n2o,0.003371037,Mt
+Continuation,Aviation,2039,WTW,n2o,0.003434759,Mt
+Continuation,Aviation,2040,WTW,n2o,0.003499365,Mt
+Continuation,Aviation,2041,WTW,n2o,0.003566163,Mt
+Continuation,Aviation,2042,WTW,n2o,0.003633415,Mt
+Continuation,Aviation,2043,WTW,n2o,0.003700485,Mt
+Continuation,Aviation,2044,WTW,n2o,0.003766509,Mt
+Continuation,Aviation,2045,WTW,n2o,0.003831363,Mt
+Continuation,Aviation,2046,WTW,n2o,0.003893599,Mt
+Continuation,Aviation,2047,WTW,n2o,0.003954362,Mt
+Continuation,Aviation,2048,WTW,n2o,0.004013744,Mt
+Continuation,Aviation,2049,WTW,n2o,0.004074079,Mt
+Continuation,Aviation,2050,WTW,n2o,0.004137009,Mt
+GHG Forward,Aviation,2023,WTW,n2o,0.00233316,Mt
+GHG Forward,Aviation,2024,WTW,n2o,0.002446615,Mt
+GHG Forward,Aviation,2025,WTW,n2o,0.002549781,Mt
+GHG Forward,Aviation,2026,WTW,n2o,0.002564367,Mt
+GHG Forward,Aviation,2027,WTW,n2o,0.002582497,Mt
+GHG Forward,Aviation,2028,WTW,n2o,0.002602058,Mt
+GHG Forward,Aviation,2029,WTW,n2o,0.002622139,Mt
+GHG Forward,Aviation,2030,WTW,n2o,0.002636796,Mt
+GHG Forward,Aviation,2031,WTW,n2o,0.002651488,Mt
+GHG Forward,Aviation,2032,WTW,n2o,0.002665839,Mt
+GHG Forward,Aviation,2033,WTW,n2o,0.002679807,Mt
+GHG Forward,Aviation,2034,WTW,n2o,0.002693428,Mt
+GHG Forward,Aviation,2035,WTW,n2o,0.002703839,Mt
+GHG Forward,Aviation,2036,WTW,n2o,0.002709014,Mt
+GHG Forward,Aviation,2037,WTW,n2o,0.002708103,Mt
+GHG Forward,Aviation,2038,WTW,n2o,0.002699192,Mt
+GHG Forward,Aviation,2039,WTW,n2o,0.002682785,Mt
+GHG Forward,Aviation,2040,WTW,n2o,0.002664001,Mt
+GHG Forward,Aviation,2041,WTW,n2o,0.0027622,Mt
+GHG Forward,Aviation,2042,WTW,n2o,0.002859976,Mt
+GHG Forward,Aviation,2043,WTW,n2o,0.002956195,Mt
+GHG Forward,Aviation,2044,WTW,n2o,0.003051542,Mt
+GHG Forward,Aviation,2045,WTW,n2o,0.003146279,Mt
+GHG Forward,Aviation,2046,WTW,n2o,0.003237491,Mt
+GHG Forward,Aviation,2047,WTW,n2o,0.003327171,Mt
+GHG Forward,Aviation,2048,WTW,n2o,0.003415727,Mt
+GHG Forward,Aviation,2049,WTW,n2o,0.003503893,Mt
+GHG Forward,Aviation,2050,WTW,n2o,0.0035925,Mt
+SLCP Forward,Aviation,2023,WTW,n2o,0.00233316,Mt
+SLCP Forward,Aviation,2024,WTW,n2o,0.002483703,Mt
+SLCP Forward,Aviation,2025,WTW,n2o,0.002631751,Mt
+SLCP Forward,Aviation,2026,WTW,n2o,0.002672151,Mt
+SLCP Forward,Aviation,2027,WTW,n2o,0.002714771,Mt
+SLCP Forward,Aviation,2028,WTW,n2o,0.002759561,Mt
+SLCP Forward,Aviation,2029,WTW,n2o,0.00280235,Mt
+SLCP Forward,Aviation,2030,WTW,n2o,0.002846479,Mt
+SLCP Forward,Aviation,2031,WTW,n2o,0.002897198,Mt
+SLCP Forward,Aviation,2032,WTW,n2o,0.002949247,Mt
+SLCP Forward,Aviation,2033,WTW,n2o,0.003002664,Mt
+SLCP Forward,Aviation,2034,WTW,n2o,0.00305762,Mt
+SLCP Forward,Aviation,2035,WTW,n2o,0.003114054,Mt
+SLCP Forward,Aviation,2036,WTW,n2o,0.003179043,Mt
+SLCP Forward,Aviation,2037,WTW,n2o,0.003244873,Mt
+SLCP Forward,Aviation,2038,WTW,n2o,0.00331075,Mt
+SLCP Forward,Aviation,2039,WTW,n2o,0.003376115,Mt
+SLCP Forward,Aviation,2040,WTW,n2o,0.003442364,Mt
+SLCP Forward,Aviation,2041,WTW,n2o,0.003510535,Mt
+SLCP Forward,Aviation,2042,WTW,n2o,0.003578997,Mt
+SLCP Forward,Aviation,2043,WTW,n2o,0.003647191,Mt
+SLCP Forward,Aviation,2044,WTW,n2o,0.003714154,Mt
+SLCP Forward,Aviation,2045,WTW,n2o,0.003779548,Mt
+SLCP Forward,Aviation,2046,WTW,n2o,0.003841839,Mt
+SLCP Forward,Aviation,2047,WTW,n2o,0.0039022,Mt
+SLCP Forward,Aviation,2048,WTW,n2o,0.003960822,Mt
+SLCP Forward,Aviation,2049,WTW,n2o,0.004020149,Mt
+SLCP Forward,Aviation,2050,WTW,n2o,0.004081913,Mt
+Full Breakthrough,Aviation,2023,WTW,n2o,0.00233316,Mt
+Full Breakthrough,Aviation,2024,WTW,n2o,0.002446615,Mt
+Full Breakthrough,Aviation,2025,WTW,n2o,0.002549781,Mt
+Full Breakthrough,Aviation,2026,WTW,n2o,0.002564367,Mt
+Full Breakthrough,Aviation,2027,WTW,n2o,0.002580123,Mt
+Full Breakthrough,Aviation,2028,WTW,n2o,0.002597263,Mt
+Full Breakthrough,Aviation,2029,WTW,n2o,0.00261107,Mt
+Full Breakthrough,Aviation,2030,WTW,n2o,0.002619388,Mt
+Full Breakthrough,Aviation,2031,WTW,n2o,0.002627631,Mt
+Full Breakthrough,Aviation,2032,WTW,n2o,0.002635456,Mt
+Full Breakthrough,Aviation,2033,WTW,n2o,0.002642851,Mt
+Full Breakthrough,Aviation,2034,WTW,n2o,0.002649918,Mt
+Full Breakthrough,Aviation,2035,WTW,n2o,0.002653989,Mt
+Full Breakthrough,Aviation,2036,WTW,n2o,0.002659945,Mt
+Full Breakthrough,Aviation,2037,WTW,n2o,0.002660686,Mt
+Full Breakthrough,Aviation,2038,WTW,n2o,0.002654324,Mt
+Full Breakthrough,Aviation,2039,WTW,n2o,0.00264094,Mt
+Full Breakthrough,Aviation,2040,WTW,n2o,0.002625085,Mt
+Full Breakthrough,Aviation,2041,WTW,n2o,0.002726593,Mt
+Full Breakthrough,Aviation,2042,WTW,n2o,0.002827659,Mt
+Full Breakthrough,Aviation,2043,WTW,n2o,0.002927199,Mt
+Full Breakthrough,Aviation,2044,WTW,n2o,0.003025791,Mt
+Full Breakthrough,Aviation,2045,WTW,n2o,0.003123511,Mt
+Full Breakthrough,Aviation,2046,WTW,n2o,0.003217388,Mt
+Full Breakthrough,Aviation,2047,WTW,n2o,0.003309382,Mt
+Full Breakthrough,Aviation,2048,WTW,n2o,0.003399967,Mt
+Full Breakthrough,Aviation,2049,WTW,n2o,0.003489964,Mt
+Full Breakthrough,Aviation,2050,WTW,n2o,0.003580276,Mt
+BAU,Aviation,2023,WTW,bc,0.023641291,Mt
+BAU,Aviation,2024,WTW,bc,0.02841943,Mt
+BAU,Aviation,2025,WTW,bc,0.030362208,Mt
+BAU,Aviation,2026,WTW,bc,0.031015217,Mt
+BAU,Aviation,2027,WTW,bc,0.031725013,Mt
+BAU,Aviation,2028,WTW,bc,0.032470899,Mt
+BAU,Aviation,2029,WTW,bc,0.033243414,Mt
+BAU,Aviation,2030,WTW,bc,0.034039551,Mt
+BAU,Aviation,2031,WTW,bc,0.03485798,Mt
+BAU,Aviation,2032,WTW,bc,0.035698684,Mt
+BAU,Aviation,2033,WTW,bc,0.036562835,Mt
+BAU,Aviation,2034,WTW,bc,0.037452652,Mt
+BAU,Aviation,2035,WTW,bc,0.038371554,Mt
+BAU,Aviation,2036,WTW,bc,0.039323954,Mt
+BAU,Aviation,2037,WTW,bc,0.040314833,Mt
+BAU,Aviation,2038,WTW,bc,0.041348753,Mt
+BAU,Aviation,2039,WTW,bc,0.042429635,Mt
+BAU,Aviation,2040,WTW,bc,0.043559355,Mt
+BAU,Aviation,2041,WTW,bc,0.044737967,Mt
+BAU,Aviation,2042,WTW,bc,0.045963123,Mt
+BAU,Aviation,2043,WTW,bc,0.047231506,Mt
+BAU,Aviation,2044,WTW,bc,0.048539711,Mt
+BAU,Aviation,2045,WTW,bc,0.04988504,Mt
+BAU,Aviation,2046,WTW,bc,0.051267089,Mt
+BAU,Aviation,2047,WTW,bc,0.052687849,Mt
+BAU,Aviation,2048,WTW,bc,0.054151734,Mt
+BAU,Aviation,2049,WTW,bc,0.055664006,Mt
+BAU,Aviation,2050,WTW,bc,0.057229601,Mt
+Continuation,Aviation,2023,WTW,bc,0.023641291,Mt
+Continuation,Aviation,2024,WTW,bc,0.027971569,Mt
+Continuation,Aviation,2025,WTW,bc,0.029658886,Mt
+Continuation,Aviation,2026,WTW,bc,0.030114183,Mt
+Continuation,Aviation,2027,WTW,bc,0.030620794,Mt
+Continuation,Aviation,2028,WTW,bc,0.031154299,Mt
+Continuation,Aviation,2029,WTW,bc,0.031704501,Mt
+Continuation,Aviation,2030,WTW,bc,0.032270893,Mt
+Continuation,Aviation,2031,WTW,bc,0.032802362,Mt
+Continuation,Aviation,2032,WTW,bc,0.033346761,Mt
+Continuation,Aviation,2033,WTW,bc,0.033904265,Mt
+Continuation,Aviation,2034,WTW,bc,0.034476015,Mt
+Continuation,Aviation,2035,WTW,bc,0.035057913,Mt
+Continuation,Aviation,2036,WTW,bc,0.035647696,Mt
+Continuation,Aviation,2037,WTW,bc,0.036232895,Mt
+Continuation,Aviation,2038,WTW,bc,0.036804522,Mt
+Continuation,Aviation,2039,WTW,bc,0.037362568,Mt
+Continuation,Aviation,2040,WTW,bc,0.037927614,Mt
+Continuation,Aviation,2041,WTW,bc,0.038520876,Mt
+Continuation,Aviation,2042,WTW,bc,0.039116979,Mt
+Continuation,Aviation,2043,WTW,bc,0.039709348,Mt
+Continuation,Aviation,2044,WTW,bc,0.040288869,Mt
+Continuation,Aviation,2045,WTW,bc,0.040855609,Mt
+Continuation,Aviation,2046,WTW,bc,0.041394591,Mt
+Continuation,Aviation,2047,WTW,bc,0.041922,Mt
+Continuation,Aviation,2048,WTW,bc,0.042439744,Mt
+Continuation,Aviation,2049,WTW,bc,0.042972134,Mt
+Continuation,Aviation,2050,WTW,bc,0.043536141,Mt
+GHG Forward,Aviation,2023,WTW,bc,0.023641291,Mt
+GHG Forward,Aviation,2024,WTW,bc,0.027553791,Mt
+GHG Forward,Aviation,2025,WTW,bc,0.028638666,Mt
+GHG Forward,Aviation,2026,WTW,bc,0.028762477,Mt
+GHG Forward,Aviation,2027,WTW,bc,0.028927039,Mt
+GHG Forward,Aviation,2028,WTW,bc,0.029111,Mt
+GHG Forward,Aviation,2029,WTW,bc,0.02930419,Mt
+GHG Forward,Aviation,2030,WTW,bc,0.029438624,Mt
+GHG Forward,Aviation,2031,WTW,bc,0.029041242,Mt
+GHG Forward,Aviation,2032,WTW,bc,0.028653253,Mt
+GHG Forward,Aviation,2033,WTW,bc,0.028275355,Mt
+GHG Forward,Aviation,2034,WTW,bc,0.027909036,Mt
+GHG Forward,Aviation,2035,WTW,bc,0.027523347,Mt
+GHG Forward,Aviation,2036,WTW,bc,0.027101782,Mt
+GHG Forward,Aviation,2037,WTW,bc,0.026639456,Mt
+GHG Forward,Aviation,2038,WTW,bc,0.026122321,Mt
+GHG Forward,Aviation,2039,WTW,bc,0.025559461,Mt
+GHG Forward,Aviation,2040,WTW,bc,0.0250027,Mt
+GHG Forward,Aviation,2041,WTW,bc,0.024503198,Mt
+GHG Forward,Aviation,2042,WTW,bc,0.024021074,Mt
+GHG Forward,Aviation,2043,WTW,bc,0.023548598,Mt
+GHG Forward,Aviation,2044,WTW,bc,0.023092975,Mt
+GHG Forward,Aviation,2045,WTW,bc,0.022654963,Mt
+GHG Forward,Aviation,2046,WTW,bc,0.022218101,Mt
+GHG Forward,Aviation,2047,WTW,bc,0.021798006,Mt
+GHG Forward,Aviation,2048,WTW,bc,0.021400989,Mt
+GHG Forward,Aviation,2049,WTW,bc,0.021033989,Mt
+GHG Forward,Aviation,2050,WTW,bc,0.020702899,Mt
+SLCP Forward,Aviation,2023,WTW,bc,0.023641291,Mt
+SLCP Forward,Aviation,2024,WTW,bc,0.027971569,Mt
+SLCP Forward,Aviation,2025,WTW,bc,0.029658886,Mt
+SLCP Forward,Aviation,2026,WTW,bc,0.030114183,Mt
+SLCP Forward,Aviation,2027,WTW,bc,0.030451488,Mt
+SLCP Forward,Aviation,2028,WTW,bc,0.030813273,Mt
+SLCP Forward,Aviation,2029,WTW,bc,0.030923397,Mt
+SLCP Forward,Aviation,2030,WTW,bc,0.031048047,Mt
+SLCP Forward,Aviation,2031,WTW,bc,0.031124528,Mt
+SLCP Forward,Aviation,2032,WTW,bc,0.031214507,Mt
+SLCP Forward,Aviation,2033,WTW,bc,0.031318496,Mt
+SLCP Forward,Aviation,2034,WTW,bc,0.031438302,Mt
+SLCP Forward,Aviation,2035,WTW,bc,0.03151175,Mt
+SLCP Forward,Aviation,2036,WTW,bc,0.031919117,Mt
+SLCP Forward,Aviation,2037,WTW,bc,0.032156351,Mt
+SLCP Forward,Aviation,2038,WTW,bc,0.032123892,Mt
+SLCP Forward,Aviation,2039,WTW,bc,0.031831495,Mt
+SLCP Forward,Aviation,2040,WTW,bc,0.031397075,Mt
+SLCP Forward,Aviation,2041,WTW,bc,0.030913715,Mt
+SLCP Forward,Aviation,2042,WTW,bc,0.030328788,Mt
+SLCP Forward,Aviation,2043,WTW,bc,0.029621855,Mt
+SLCP Forward,Aviation,2044,WTW,bc,0.028760993,Mt
+SLCP Forward,Aviation,2045,WTW,bc,0.027750008,Mt
+SLCP Forward,Aviation,2046,WTW,bc,0.026530767,Mt
+SLCP Forward,Aviation,2047,WTW,bc,0.025192602,Mt
+SLCP Forward,Aviation,2048,WTW,bc,0.023741236,Mt
+SLCP Forward,Aviation,2049,WTW,bc,0.022275355,Mt
+SLCP Forward,Aviation,2050,WTW,bc,0.020858755,Mt
+Full Breakthrough,Aviation,2023,WTW,bc,0.023641291,Mt
+Full Breakthrough,Aviation,2024,WTW,bc,0.027553791,Mt
+Full Breakthrough,Aviation,2025,WTW,bc,0.028638666,Mt
+Full Breakthrough,Aviation,2026,WTW,bc,0.028762477,Mt
+Full Breakthrough,Aviation,2027,WTW,bc,0.028768071,Mt
+Full Breakthrough,Aviation,2028,WTW,bc,0.028794903,Mt
+Full Breakthrough,Aviation,2029,WTW,bc,0.028589777,Mt
+Full Breakthrough,Aviation,2030,WTW,bc,0.028338045,Mt
+Full Breakthrough,Aviation,2031,WTW,bc,0.027602055,Mt
+Full Breakthrough,Aviation,2032,WTW,bc,0.026907129,Mt
+Full Breakthrough,Aviation,2033,WTW,bc,0.02625481,Mt
+Full Breakthrough,Aviation,2034,WTW,bc,0.02564765,Mt
+Full Breakthrough,Aviation,2035,WTW,bc,0.025011706,Mt
+Full Breakthrough,Aviation,2036,WTW,bc,0.024590331,Mt
+Full Breakthrough,Aviation,2037,WTW,bc,0.024014701,Mt
+Full Breakthrough,Aviation,2038,WTW,bc,0.023216047,Mt
+Full Breakthrough,Aviation,2039,WTW,bc,0.022225428,Mt
+Full Breakthrough,Aviation,2040,WTW,bc,0.021172153,Mt
+Full Breakthrough,Aviation,2041,WTW,bc,0.020149431,Mt
+Full Breakthrough,Aviation,2042,WTW,bc,0.019107941,Mt
+Full Breakthrough,Aviation,2043,WTW,bc,0.018034764,Mt
+Full Breakthrough,Aviation,2044,WTW,bc,0.016925301,Mt
+Full Breakthrough,Aviation,2045,WTW,bc,0.015787283,Mt
+Full Breakthrough,Aviation,2046,WTW,bc,0.014583671,Mt
+Full Breakthrough,Aviation,2047,WTW,bc,0.013376627,Mt
+Full Breakthrough,Aviation,2048,WTW,bc,0.012172891,Mt
+Full Breakthrough,Aviation,2049,WTW,bc,0.011019028,Mt
+Full Breakthrough,Aviation,2050,WTW,bc,0.009942385,Mt
+BAU,Aviation,2023,WTW,contrails,0.027707540152446863,W/m2
+BAU,Aviation,2024,WTW,contrails,0.030770460559335525,W/m2
+BAU,Aviation,2025,WTW,contrails,0.033241696758190845,W/m2
+BAU,Aviation,2026,WTW,contrails,0.03419959225742512,W/m2
+BAU,Aviation,2027,WTW,contrails,0.035187983750985696,W/m2
+BAU,Aviation,2028,WTW,contrails,0.03620796104207923,W/m2
+BAU,Aviation,2029,WTW,contrails,0.03726065781098628,W/m2
+BAU,Aviation,2030,WTW,contrails,0.03834725358781487,W/m2
+BAU,Aviation,2031,WTW,contrails,0.03946897582277197,W/m2
+BAU,Aviation,2032,WTW,contrails,0.040627102059167704,W/m2
+BAU,Aviation,2033,WTW,contrails,0.041822962214663945,W/m2
+BAU,Aviation,2034,WTW,contrails,0.043057940976594614,W/m2
+BAU,Aviation,2035,WTW,contrails,0.04433348031751882,W/m2
+BAU,Aviation,2036,WTW,contrails,0.04565108213752265,W/m2
+BAU,Aviation,2037,WTW,contrails,0.04701231104016152,W/m2
+BAU,Aviation,2038,WTW,contrails,0.04841879724933294,W/m2
+BAU,Aviation,2039,WTW,contrails,0.049872239674793595,W/m2
+BAU,Aviation,2040,WTW,contrails,0.05137440913448229,W/m2
+BAU,Aviation,2041,WTW,contrails,0.05292715174228727,W/m2
+BAU,Aviation,2042,WTW,contrails,0.05453239247040131,W/m2
+BAU,Aviation,2043,WTW,contrails,0.05619213889594468,W/m2
+BAU,Aviation,2044,WTW,contrails,0.057908485142105275,W/m2
+BAU,Aviation,2045,WTW,contrails,0.0596836160246495,W/m2
+BAU,Aviation,2046,WTW,contrails,0.06151981141530001,W/m2
+BAU,Aviation,2047,WTW,contrails,0.06341945083415736,W/m2
+BAU,Aviation,2048,WTW,contrails,0.06538501828406727,W/m2
+BAU,Aviation,2049,WTW,contrails,0.06741910734060333,W/m2
+BAU,Aviation,2050,WTW,contrails,0.06952442651215325,W/m2
+Continuation,Aviation,2023,WTW,contrails,0.027707540152446863,W/m2
+Continuation,Aviation,2024,WTW,contrails,0.03031196872417832,W/m2
+Continuation,Aviation,2025,WTW,contrails,0.032566213361398054,W/m2
+Continuation,Aviation,2026,WTW,contrails,0.0333476480823291,W/m2
+Continuation,Aviation,2027,WTW,contrails,0.034148821827775386,W/m2
+Continuation,Aviation,2028,WTW,contrails,0.03496790292225409,W/m2
+Continuation,Aviation,2029,WTW,contrails,0.03580519371631622,W/m2
+Continuation,Aviation,2030,WTW,contrails,0.03666359999284684,W/m2
+Continuation,Aviation,2031,WTW,contrails,0.03750894863730832,W/m2
+Continuation,Aviation,2032,WTW,contrails,0.038377021628127256,W/m2
+Continuation,Aviation,2033,WTW,contrails,0.03926855972192448,W/m2
+Continuation,Aviation,2034,WTW,contrails,0.040184355497339536,W/m2
+Continuation,Aviation,2035,WTW,contrails,0.04112522708554842,W/m2
+Continuation,Aviation,2036,WTW,contrails,0.04209202780483267,W/m2
+Continuation,Aviation,2037,WTW,contrails,0.043085806034289555,W/m2
+Continuation,Aviation,2038,WTW,contrails,0.04411099706664897,W/m2
+Continuation,Aviation,2039,WTW,contrails,0.045165275603799994,W/m2
+Continuation,Aviation,2040,WTW,contrails,0.04624970135911543,W/m2
+Continuation,Aviation,2041,WTW,contrails,0.04737703156505444,W/m2
+Continuation,Aviation,2042,WTW,contrails,0.04853615298359187,W/m2
+Continuation,Aviation,2043,WTW,contrails,0.04972826685926889,W/m2
+Continuation,Aviation,2044,WTW,contrails,0.05095458205485424,W/m2
+Continuation,Aviation,2045,WTW,contrails,0.05221677818137336,W/m2
+Continuation,Aviation,2046,WTW,contrails,0.05351569274661045,W/m2
+Continuation,Aviation,2047,WTW,contrails,0.05485248473079158,W/m2
+Continuation,Aviation,2048,WTW,contrails,0.056228493050902835,W/m2
+Continuation,Aviation,2049,WTW,contrails,0.057645242712544405,W/m2
+Continuation,Aviation,2050,WTW,contrails,0.059104305175506223,W/m2
+GHG Forward,Aviation,2023,WTW,contrails,0.027707540152446863,W/m2
+GHG Forward,Aviation,2024,WTW,contrails,0.02985910881172338,W/m2
+GHG Forward,Aviation,2025,WTW,contrails,0.03164580496504418,W/m2
+GHG Forward,Aviation,2026,WTW,contrails,0.03214818362179311,W/m2
+GHG Forward,Aviation,2027,WTW,contrails,0.03265839346209363,W/m2
+GHG Forward,Aviation,2028,WTW,contrails,0.03317634586404682,W/m2
+GHG Forward,Aviation,2029,WTW,contrails,0.03370196958501359,W/m2
+GHG Forward,Aviation,2030,WTW,contrails,0.03414315659082376,W/m2
+GHG Forward,Aviation,2031,WTW,contrails,0.034247913682919774,W/m2
+GHG Forward,Aviation,2032,WTW,contrails,0.0343598086222618,W/m2
+GHG Forward,Aviation,2033,WTW,contrails,0.03447995587738257,W/m2
+GHG Forward,Aviation,2034,WTW,contrails,0.034609471087319835,W/m2
+GHG Forward,Aviation,2035,WTW,contrails,0.034749504995279276,W/m2
+GHG Forward,Aviation,2036,WTW,contrails,0.03486631869460302,W/m2
+GHG Forward,Aviation,2037,WTW,contrails,0.03499642929293203,W/m2
+GHG Forward,Aviation,2038,WTW,contrails,0.03514118831419043,W/m2
+GHG Forward,Aviation,2039,WTW,contrails,0.03530199953475312,W/m2
+GHG Forward,Aviation,2040,WTW,contrails,0.03548031162213663,W/m2
+GHG Forward,Aviation,2041,WTW,contrails,0.03571222343347701,W/m2
+GHG Forward,Aviation,2042,WTW,contrails,0.035966172687225725,W/m2
+GHG Forward,Aviation,2043,WTW,contrails,0.03624357994973581,W/m2
+GHG Forward,Aviation,2044,WTW,contrails,0.036546013414336304,W/m2
+GHG Forward,Aviation,2045,WTW,contrails,0.03687540231044773,W/m2
+GHG Forward,Aviation,2046,WTW,contrails,0.03718391654994936,W/m2
+GHG Forward,Aviation,2047,WTW,contrails,0.03751806523617338,W/m2
+GHG Forward,Aviation,2048,WTW,contrails,0.037879628887516524,W/m2
+GHG Forward,Aviation,2049,WTW,contrails,0.03827037606414409,W/m2
+GHG Forward,Aviation,2050,WTW,contrails,0.03869213283191869,W/m2
+SLCP Forward,Aviation,2023,WTW,contrails,0.027707540152446863,W/m2
+SLCP Forward,Aviation,2024,WTW,contrails,0.03031196872417832,W/m2
+SLCP Forward,Aviation,2025,WTW,contrails,0.03243778584653507,W/m2
+SLCP Forward,Aviation,2026,WTW,contrails,0.03308739471282389,W/m2
+SLCP Forward,Aviation,2027,WTW,contrails,0.0336232639710949,W/m2
+SLCP Forward,Aviation,2028,WTW,contrails,0.03417206881394174,W/m2
+SLCP Forward,Aviation,2029,WTW,contrails,0.034734215035070945,W/m2
+SLCP Forward,Aviation,2030,WTW,contrails,0.03505899546114155,W/m2
+SLCP Forward,Aviation,2031,WTW,contrails,0.03537260567199836,W/m2
+SLCP Forward,Aviation,2032,WTW,contrails,0.035479690550802134,W/m2
+SLCP Forward,Aviation,2033,WTW,contrails,0.035192275135565075,W/m2
+SLCP Forward,Aviation,2034,WTW,contrails,0.03421305618072304,W/m2
+SLCP Forward,Aviation,2035,WTW,contrails,0.0321706608163279,W/m2
+SLCP Forward,Aviation,2036,WTW,contrails,0.029018993788908817,W/m2
+SLCP Forward,Aviation,2037,WTW,contrails,0.024749364164653533,W/m2
+SLCP Forward,Aviation,2038,WTW,contrails,0.020187388877095844,W/m2
+SLCP Forward,Aviation,2039,WTW,contrails,0.016209331926690336,W/m2
+SLCP Forward,Aviation,2040,WTW,contrails,0.013142323106968858,W/m2
+SLCP Forward,Aviation,2041,WTW,contrails,0.01080908784556643,W/m2
+SLCP Forward,Aviation,2042,WTW,contrails,0.008944826462907554,W/m2
+SLCP Forward,Aviation,2043,WTW,contrails,0.007466874197747,W/m2
+SLCP Forward,Aviation,2044,WTW,contrails,0.0064084146446258825,W/m2
+SLCP Forward,Aviation,2045,WTW,contrails,0.005758671532060112,W/m2
+SLCP Forward,Aviation,2046,WTW,contrails,0.00543099276154171,W/m2
+SLCP Forward,Aviation,2047,WTW,contrails,0.00531950486966252,W/m2
+SLCP Forward,Aviation,2048,WTW,contrails,0.005340333056126384,W/m2
+SLCP Forward,Aviation,2049,WTW,contrails,0.005439138715716894,W/m2
+SLCP Forward,Aviation,2050,WTW,contrails,0.005584156864121952,W/m2
+Full Breakthrough,Aviation,2023,WTW,contrails,0.027707540152446863,W/m2
+Full Breakthrough,Aviation,2024,WTW,contrails,0.02985910881172338,W/m2
+Full Breakthrough,Aviation,2025,WTW,contrails,0.03152192373028439,W/m2
+Full Breakthrough,Aviation,2026,WTW,contrails,0.031900064010435415,W/m2
+Full Breakthrough,Aviation,2027,WTW,contrails,0.032163355408296346,W/m2
+Full Breakthrough,Aviation,2028,WTW,contrails,0.032435890239153366,W/m2
+Full Breakthrough,Aviation,2029,WTW,contrails,0.0327179207269447,W/m2
+Full Breakthrough,Aviation,2030,WTW,contrails,0.03268480069773768,W/m2
+Full Breakthrough,Aviation,2031,WTW,contrails,0.032369283306323965,W/m2
+Full Breakthrough,Aviation,2032,WTW,contrails,0.03188222173899816,W/m2
+Full Breakthrough,Aviation,2033,WTW,contrails,0.031069031925260022,W/m2
+Full Breakthrough,Aviation,2034,WTW,contrails,0.029690466443324976,W/m2
+Full Breakthrough,Aviation,2035,WTW,contrails,0.027459094323768543,W/m2
+Full Breakthrough,Aviation,2036,WTW,contrails,0.02432333319862504,W/m2
+Full Breakthrough,Aviation,2037,WTW,contrails,0.02037709428242557,W/m2
+Full Breakthrough,Aviation,2038,WTW,contrails,0.01633000378234539,W/m2
+Full Breakthrough,Aviation,2039,WTW,contrails,0.012886263679047683,W/m2
+Full Breakthrough,Aviation,2040,WTW,contrails,0.010271605704882605,W/m2
+Full Breakthrough,Aviation,2041,WTW,contrails,0.008313022729334662,W/m2
+Full Breakthrough,Aviation,2042,WTW,contrails,0.006772800065395913,W/m2
+Full Breakthrough,Aviation,2043,WTW,contrails,0.005569240345435989,W/m2
+Full Breakthrough,Aviation,2044,WTW,contrails,0.004710987396787922,W/m2
+Full Breakthrough,Aviation,2045,WTW,contrails,0.004174884876818528,W/m2
+Full Breakthrough,Aviation,2046,WTW,contrails,0.003882347534782292,W/m2
+Full Breakthrough,Aviation,2047,WTW,contrails,0.0037519741266209055,W/m2
+Full Breakthrough,Aviation,2048,WTW,contrails,0.00371874820050489,W/m2
+Full Breakthrough,Aviation,2049,WTW,contrails,0.0037416057164772944,W/m2
+Full Breakthrough,Aviation,2050,WTW,contrails,0.003797046234515163,W/m2

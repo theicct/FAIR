@@ -156,3 +156,6 @@ CMIP6/batches/100/*
 Preprocessing/final/*
 inputs/final/*
 !inputs/final/README.md
+examples/Results/*
+examples/diagnostic/*
+examples/Results/temperature_all.csv
