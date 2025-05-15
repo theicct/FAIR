@@ -238,9 +238,9 @@ def clean_temp_output(f):
 def main():
     """Set up FaIR, run it, and save results."""
     # Read input data
-    # forcing = pd.read_csv('../CMIP6/rcmip-radiative-forcing-annual-means-v5-1-0.csv')
-    # ems = pd.read_csv('../CMIP6/rcmip-emissions-annual-means-v5-1-0.csv')
-    # conc = pd.read_csv('../CMIP6/rcmip-concentrations-annual-means-v5-1-0.csv')
+    # forcing = pd.read_csv('../inputs/final/rcmip-radiative-forcing-annual-means-v5-1-0.csv')
+    # ems = pd.read_csv('../inputs/final/rcmip-emissions-annual-means-v5-1-0.csv')
+    # conc = pd.read_csv('../inputs/final/rcmip-concentrations-annual-means-v5-1-0.csv')
 
     # Define scenarios
 
@@ -252,9 +252,9 @@ def main():
     # Run in batches
     for i in range(0, 100000, batch_size):
         batch_number = round(i/batch_size)
-        # df_emis = pd.read_csv(f'../CMIP6/rcmip-emissions-annual-means-v5-1-0_{i/batch_size}.csv')
-        # df_conc = pd.read_csv(f'../CMIP6/rcmip-concentrations-annual-means-v5-1-0_{i/batch_size}.csv')
-        df_forc = pd.read_csv(f'../CMIP6/batches/{batch_size}/rcmip-radiative-forcing-annual-means-v5-1-0_{batch_number}.csv')
+        # df_emis = pd.read_csv(f'../inputs/final/rcmip-emissions-annual-means-v5-1-0_{i/batch_size}.csv')
+        # df_conc = pd.read_csv(f'../inputs/final/rcmip-concentrations-annual-means-v5-1-0_{i/batch_size}.csv')
+        df_forc = pd.read_csv(f'../inputs/final/batches/{batch_size}/rcmip-radiative-forcing-annual-means-v5-1-0_{batch_number}.csv')
 
         # Get the scenarios for this batch
         scenarios = list(df_forc['Scenario'].unique())
