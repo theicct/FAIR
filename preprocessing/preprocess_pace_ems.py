@@ -8,6 +8,12 @@ import pandas as pd
 pd.set_option('display.width', 1000)
 pd.set_option('display.max_columns', 500)
 
+# FNAME_IN = 'PACE/pace_vizcon_summary_apr23.csv'
+FNAME_IN = 'PACE/vizcon_summary_may12(in).csv'
+FNAME_IN_CONERF = 'PACE/vizcon_summary+contrail_erf_may9.csv'
+
+CONTRAILS_VAR_NAME = 'ConERF'
+CONTRAILS_UNITS = 'mW/m2'
 
 SA_EARTH_m2 = 5.1e14  # m2
 SECONDS_IN_YEAR = 365.25 * 24 * 60 * 60  # seconds in a year
@@ -58,14 +64,32 @@ def convert_units(df_long):
     df_long.loc[df_long['Species'] == 'CO2', 'ems'] = df_long['ems'] * 0.001
     df_long.loc[df_long['Species'] == 'CO2', 'Units'] = 'Gt'
 
-    # Contrails are in units of mW/m2, convert to W/m2
     if 'contrails' in df_long['Species'].unique():
-        assert df_long.loc[df_long['Species'] == 'contrails', 'Units'].unique() == ['GJ']
-        df_long.loc[df_long['Species'] == 'contrails', 'ems'] = df_long['ems'] * 1e9
-        df_long.loc[df_long['Species'] == 'contrails', 'Units'] = 'J'
+        if CONTRAILS_UNITS == 'GJ':
+            assert df_long.loc[df_long['Species'] == 'contrails', 'Units'].unique() == ['GJ']
+            df_long.loc[df_long['Species'] == 'contrails', 'ems'] = df_long['ems'] * 1e9
+            df_long.loc[df_long['Species'] == 'contrails', 'Units'] = 'J'
 
-        df_long.loc[df_long['Species'] == 'contrails', 'ems'] = 0.42 * df_long['ems'] / (SA_EARTH_m2 * SECONDS_IN_YEAR)
-        df_long.loc[df_long['Species'] == 'contrails', 'Units'] = 'W/m2'
+            df_long.loc[df_long['Species'] == 'contrails', 'ems'] = 0.42 * df_long['ems'] / (SA_EARTH_m2 * SECONDS_IN_YEAR)
+            df_long.loc[df_long['Species'] == 'contrails', 'Units'] = 'W/m2'
+
+        elif CONTRAILS_UNITS == 'mW/m2':
+            df_long.loc[df_long['Species'] == 'contrails', 'ems'] = df_long['ems'] / 1000
+            df_long.loc[df_long['Species'] == 'contrails', 'Units'] = 'W/m2'
+
+    # Convert Stratospheric water vapor and stratospheric NOx emission into radiative forcing
+
+    if 'H2O' in df_long['Species'].unique():
+        # 0.0052 ± 0.0026 mW m−2 (Tg (H2O) yr−1)−1
+        df_long.loc[df_long['Species'] == 'H2O', 'ems'] *= 0.0052 / 1000
+        df_long.loc[df_long['Species'] == 'H2O', 'Units'] = 'W/m2'
+
+    if 'NOx' in df_long['Species'].unique():
+        # Two conversions are needed:
+        # 1. Convert from NOx to N using molecular weight conversion (*14/46)
+        # 2. Convert from mass emissions to radiative forcing (3.6 mW m−2 (Tg (N) yr−1)−1)
+        df_long.loc[df_long['Species'] == 'NOx', 'ems'] *= 14/46 * 3.6 / 1000
+        df_long.loc[df_long['Species'] == 'NOx', 'Units'] = 'W/m2'
 
     return df_long
 
@@ -93,7 +117,10 @@ def run():
 
     TODO: add on-road, off-road, and calculate WTT emissions for sectors missing them.
     """
-    df = pd.read_csv('pace_vizcon_summary_apr23.csv')
+    df = pd.read_csv(FNAME_IN)
+    conerf = pd.read_csv(FNAME_IN_CONERF)
+    # Merge the two dataframes on 'Scenario', 'CY', and 'Sector'
+    df = pd.merge(df, conerf[['Scenario', 'CY', 'ConERF']], on=['Scenario', 'CY'], how='left')
 
     # Drop where 'Scenario' is nan
     df = df.dropna(subset=['Scenario'])
@@ -104,7 +131,7 @@ def run():
     df['Scenario'] = df['Scenario'].replace('Baseline', 'BAU')
 
     # Rename 'nvPM' to 'BC'
-    df = df.rename(columns={'nvPM': 'BC', 'ConEF': 'contrails', 'CY': 'Year', 'SO2': 'SOx'})
+    df = df.rename(columns={'nvPM_mass': 'BC', CONTRAILS_VAR_NAME: 'contrails', 'CY': 'Year', 'SO2': 'SOx'})
 
     CLIMATE_FORCERS = ['CO2', 'H2O', 'SOx', 'NOx', 'CH4', 'N2O', 'BC', 'contrails']
     ID_COLS = ['Scenario', 'Sector', 'Year', 'Source']
@@ -117,7 +144,7 @@ def run():
 
     # Set Unit to GJ for EF and Mt for all others
     df_long['Units'] = 'Mt'
-    df_long.loc[df_long['Species'] == 'contrails', 'Units'] = 'GJ'
+    df_long.loc[df_long['Species'] == 'contrails', 'Units'] = CONTRAILS_UNITS
 
     df_long = convert_units(df_long)
 

@@ -8,26 +8,28 @@ pd.set_option('display.max_columns', 100000)
 
 BASE_YR = 2023
 END_YR = 2050
-EMS_IN = 'preprocessing/final/SLCP_inventory_long.csv'
-STRIVING_SCEN = 'Striving'
+EMS_IN = 'preprocessing/final/pace_inventory_long.csv'
+BASELINE_SCEN = 'BAU'
+STRIVING_SCEN = 'BAU'
+NOX_VAR = 'NOx aviation'
 
 
 def clean_slcp_ems(slcp_ems):
+    scenarios = slcp_ems['Scenario'].unique()
+
     # Convert all 'Species' names to lowercase
     slcp_ems['Species'] = slcp_ems['Species'].str.lower()
 
     # Pivot 'Scenario' column wide
     slcp_ems = slcp_ems.pivot_table(index=['Year', 'Species', 'Units', 'Source', 'Sector'], columns='Scenario', values='ems').reset_index()
-    # Filter out slcp_ems water vapour
-    slcp_ems = slcp_ems[slcp_ems['Species'] != 'h2o']
 
     # Rename 'ems' species columns to match expected names
     slcp_ems_conversion = {'bc':'BC', 'ch4':'CH4', 'co2':'CO2 FFI', 'h2o':'Stratospheric water vapour',
-                               'n2o':'N2O', 'nox':'NOx', 'sox':'Sulfur', 'so2':'Sulfur'}
+                               'n2o':'N2O', 'nox':NOX_VAR, 'sox':'Sulfur', 'so2':'Sulfur'}
     slcp_ems = slcp_ems.replace(slcp_ems_conversion)
 
 
-    return slcp_ems
+    return slcp_ems, scenarios
 
 
 def define_species_mapping():
@@ -95,132 +97,268 @@ def clean_inputs(ems, conc, forc, species_to_rcmip):
     return ems, conc, forc
 
 
-def adjust_contrail_forc(slcp_ems, forc, SSPs):
+def adjust_forc(slcp_ems, forc, SSPs, scenarios):
     ct_var = 'Effective Radiative Forcing|Anthropogenic|Other|Contrails and Contrail-induced Cirrus'
+    nox_var_fair = 'Effective Radiative Forcing|Anthropogenic|Other|CH4 Oxidation Stratospheric H2O'
+    h2o_var = 'Effective Radiative Forcing|Anthropogenic|Other|CH4 Oxidation Stratospheric H2O'
+    SSP = 'ssp119'
 
     # Use ICCT estimates for contrail BAU and striving under SSP119
-    for SSP in SSPs:
-        for yr in range(BASE_YR, END_YR+1):
-            bau = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'contrails')]['BAU'].values[0]
-            if STRIVING_SCEN is not None:
-                striving = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'contrails')][STRIVING_SCEN].values[0]
+    # Contrails ---------------------------------------------------------------------------------------------------
+    for yr in range(BASE_YR, END_YR+1):
+        bau = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'contrails')][BASELINE_SCEN].values[0]
 
-            for scen in forc['Scenario'].unique():
-                # Set default to BAU
-                forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == scen), str(yr)] = bau
+        # For contrails, we add an additional step to set the BAU to 0 for all scenarios since contrails only come
+        # from aviation.
+        for scen in forc['Scenario'].unique():
+            # Set default to BAU
+            forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == scen), str(yr)] = bau
 
-            # Adjust the BAU for contrail scenarios
-            if STRIVING_SCEN is not None:
-                # Set the striving scenario
-                forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_striving'), str(yr)] = striving
-                forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_contrails_Aviation_striving'), str(
-                    yr)] = striving
+        # Adjust the BAU for contrail scenarios
+        for striving_scen in [s for s in scenarios if s!=BASELINE_SCEN]:
+            # Set the striving scenario
+            striving = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'contrails')][striving_scen].values[0]
 
-            forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_zero_tra'), str(yr)] = 0
+            forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_{striving_scen}'), str(yr)] = striving
+            forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_contrails_Aviation_{striving_scen}'), str(
+                yr)] = striving
 
-            # Add zero contrails scenario
-            forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_contrails_Aviation_zero'), str(
-                yr)] = 0
+        forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_zero_tra'), str(yr)] = 0
+
+        # Add zero contrails scenario
+        forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_contrails_Aviation_zero'), str(
+            yr)] = 0
+
+    # Stratospheric H2O ----------------------------------------------------------------------------------------------
+    for yr in range(BASE_YR, END_YR+1):
+        bau_h2o = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'Stratospheric water vapour')][BASELINE_SCEN].values[0]
+
+        # Adjust the BAU for contrail scenarios
+        for striving_scen in [s for s in scenarios if s!=BASELINE_SCEN]:
+            # Set the striving scenario
+            striving_h2o = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'Stratospheric water vapour')][striving_scen].values[0]
+
+            forc.loc[(forc['Variable'] == h2o_var) & (forc['Scenario'] == f'{SSP}_{striving_scen}'), str(yr)] += -1*(bau_h2o - striving_h2o)
+            forc.loc[(forc['Variable'] == h2o_var) & (forc['Scenario'] == f'{SSP}_Stratospheric water vapour_Aviation_{striving_scen}'), str(
+                yr)] = forc.loc[(forc['Variable'] == h2o_var) & (forc['Scenario'] == f'{SSP}_{striving_scen}'), str(yr)]
+
+        forc.loc[(forc['Variable'] == h2o_var) & (forc['Scenario'] == f'{SSP}_zero_tra'), str(yr)] += -1*bau_h2o
+
+        # Add zero contrails scenario
+        forc.loc[(forc['Variable'] == h2o_var) & (forc['Scenario'] == f'{SSP}_Stratospheric water vapour_Aviation_zero'), str(
+            yr)] += -1*bau_h2o
+
+    # Run NOx as an additional perturbation to H2O in the model because there is no valid NOx aviation forcing input
+    # NOx ---------------------------------------------------------------------------------------------------------
+    for yr in range(BASE_YR, END_YR+1):
+        bau_h2o = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == NOX_VAR)][BASELINE_SCEN].values[0]
+
+        # Adjust the BAU for contrail scenarios
+        for striving_scen in [s for s in scenarios if s!=BASELINE_SCEN]:
+            # Set the striving scenario
+            striving_h2o = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == NOX_VAR)][striving_scen].values[0]
+
+            forc.loc[(forc['Variable'] == h2o_var) & (forc['Scenario'] == f'{SSP}_{striving_scen}'), str(yr)] += -1*(bau_h2o - striving_h2o)
+            forc.loc[(forc['Variable'] == h2o_var) & (forc['Scenario'] == f'{SSP}_{NOX_VAR}_Aviation_{striving_scen}'), str(
+                yr)] += -1*(bau_h2o - striving_h2o)
+
+        forc.loc[(forc['Variable'] == h2o_var) & (forc['Scenario'] == f'{SSP}_zero_tra'), str(yr)] += -1*bau_h2o
+
+        # Add zero contrails scenario
+        forc.loc[(forc['Variable'] == h2o_var) & (forc['Scenario'] == f'{SSP}_{NOX_VAR}_Aviation_zero'), str(
+            yr)] += -1*bau_h2o
 
     return forc
 
 
-def align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, SSPs):
+def align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, SSPs, scenarios):
+    """
+    Align the inputs with FaIR by creating new scenarios and adjusting the emissions.
+    """
+    ems, conc, forc = create_new_scenarios(ems, conc, forc, scenarios, slcp_ems)
 
-    # Copy the ssp119 scenario to ssp119_striving
-    for SSP in SSPs:
-        ems = pd.concat([ems, ems[ems['Scenario'] == SSP].replace(SSP, f'{SSP}_striving')])
-        forc = pd.concat([forc, forc[forc['Scenario'] == SSP].replace(SSP, f'{SSP}_striving')])
-        conc = pd.concat([conc, conc[conc['Scenario'] == SSP].replace(SSP, f'{SSP}_striving')])
+    forc = adjust_forc(slcp_ems, forc, SSPs, scenarios)
 
-        ems = pd.concat([ems, ems[ems['Scenario'] == SSP].replace(SSP, f'{SSP}_zero_tra')])
-        forc = pd.concat([forc, forc[forc['Scenario'] == SSP].replace(SSP, f'{SSP}_zero_tra')])
-        conc = pd.concat([conc, conc[conc['Scenario'] == SSP].replace(SSP, f'{SSP}_zero_tra')])
+    # ems = modify_emissions(ems, slcp_ems, species_to_rcmip)
+    ems = modify_emissions_v2(ems, slcp_ems, species_to_rcmip, scenarios)
 
-        for specie in slcp_ems['Species'].unique():
-            for sector in slcp_ems['Sector'].unique():
-                # for source in slcp_ems['Source'].unique():
-                if slcp_ems[(slcp_ems['Species'] == specie) & (slcp_ems['Sector'] == sector)].empty:
-                    continue
-
-                ems = pd.concat([ems, ems[(ems['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_striving')])
-                conc = pd.concat([conc, conc[(conc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_striving')])
-                forc = pd.concat([forc, forc[(forc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_striving')])
-
-                # Add zero scenarios
-                ems = pd.concat([ems, ems[(ems['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_zero')])
-                conc = pd.concat([conc, conc[(conc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_zero')])
-                forc = pd.concat([forc, forc[(forc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_zero')])
-
-    forc = adjust_contrail_forc(slcp_ems, forc, SSPs)
-
-    # Use ICCT estimates for anthropogenic emissions as well
-    for specie, specie_rcmip_name in species_to_rcmip.items():
-    # for specie, specie_rcmip_name in dict({'N2O': 'N2O'}).items():
-        for SSP in SSPs:
-            if specie not in slcp_ems['Species'].values:
-                continue
-            print(specie)
-            icct_units = slcp_ems[(slcp_ems['Species'] == specie)]['Units'].values[0]
-            expected_units = ems.loc[(ems["Scenario"] == SSP) & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) & (
-                        ems["Region"] == "World")]['Unit'].values[0]
-            expected_units = str(expected_units).split(' ')[0]
-            for yr in range(BASE_YR, END_YR+1):
-
-                ems_yr = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == specie)].copy()
-
-                assert expected_units == 'Mt' or expected_units == 'kt', f"Expected units are not Mt or kt, but {expected_units}"
-
-                conversion_factors = {
-                    ('Gt', 'Mt'): 1e3,
-                    ('Gt', 'kt'): 1e6,
-                    ('Mt', 'kt'): 1e3,
-                    ('kt', 'Mt'): 1e-3
-                }
-
-                factor = conversion_factors.get((icct_units, expected_units))
-
-                id_cols = ['Scenario', 'Year',  'Species', 'Units', 'Source', 'Sector']
-                scenarios = [col for col in ems_yr.columns if col not in id_cols]
-
-                if factor:
-                    ems_yr[scenarios] *= factor
-
-                for scen in scenarios:
-                    ems_yr['Avoided'] = ems_yr[scen] - ems_yr['BAU']
-                    scen_lower = scen.lower()
-
-                    ems.loc[(ems["Scenario"] == f'{SSP}_{scen_lower}') & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
-                            (ems["Region"] == "World"), str(yr)] += (ems_yr['Avoided']).sum()
-                ems.loc[(ems["Scenario"] == f'{SSP}_zero_tra') & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
-                        (ems["Region"] == "World"), str(yr)] += -1*ems_yr['BAU'].sum()
-
-                for sector in slcp_ems['Sector'].unique():
-                    # for source in slcp_ems['Source'].unique():
-                    if slcp_ems[(slcp_ems['Species'] == specie) & (slcp_ems['Sector'] == sector)].empty:
-                        continue
-                    for scen in scenarios:
-                        scen_lower = scen.lower()
-                        scenario_name = f'{SSP}_{specie}_{sector}_{scen_lower}'
-                        avoided = ems_yr[(ems_yr['Sector'] == sector)]['Avoided'].values.sum()
-                        ems.loc[(ems["Scenario"] == scenario_name) & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
-                                (ems["Region"] == "World"), str(yr)] += avoided
-
-                    # Add a zero_out_scenario
-                    zero_scenario_name = f'{SSP}_{specie}_{sector}_zero'
-                    sector_bau = ems_yr[(ems_yr['Sector'] == sector)]['BAU'].values.sum()
-                    ems.loc[(ems["Scenario"] == zero_scenario_name) & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
-                            (ems["Region"] == "World"), str(yr)] += -1 * sector_bau
-
-                    if (yr == 2050) & (specie=='Contrails'):
-                        pass
-
-    # drop all duplicates in case we ran a scenario twice
-    ems = ems.drop_duplicates()
-    forc = forc.drop_duplicates()
-    conc = conc.drop_duplicates()
+    # Ensure no duplicates
+    assert ems.duplicated().sum() == 0, "There are duplicates in the emissions data"
+    assert forc.duplicated().sum() == 0, "There are duplicates in the forcing data"
+    assert conc.duplicated().sum() == 0, "There are duplicates in the concentrations data"
 
     return ems, conc, forc
+
+
+def create_new_scenarios(ems, conc, forc, scenarios, slcp_ems):
+    """
+    """
+    SSP = 'ssp119'
+    # Copy the ssp119 scenario to ssp119_striving
+    for scenario in scenarios:
+        ems = pd.concat([ems, ems[ems['Scenario'] == SSP].replace(SSP, f'{SSP}_{scenario}')])
+        forc = pd.concat([forc, forc[forc['Scenario'] == SSP].replace(SSP, f'{SSP}_{scenario}')])
+        conc = pd.concat([conc, conc[conc['Scenario'] == SSP].replace(SSP, f'{SSP}_{scenario}')])
+
+    ems = pd.concat([ems, ems[ems['Scenario'] == SSP].replace(SSP, f'{SSP}_zero_tra')])
+    forc = pd.concat([forc, forc[forc['Scenario'] == SSP].replace(SSP, f'{SSP}_zero_tra')])
+    conc = pd.concat([conc, conc[conc['Scenario'] == SSP].replace(SSP, f'{SSP}_zero_tra')])
+
+    for specie in slcp_ems['Species'].unique():
+        for sector in slcp_ems['Sector'].unique():
+            # for source in slcp_ems['Source'].unique():
+            if slcp_ems[(slcp_ems['Species'] == specie) & (slcp_ems['Sector'] == sector)].empty:
+                continue
+
+            for scenario in scenarios:
+                ems = pd.concat([ems, ems[(ems['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_{scenario}')])
+                conc = pd.concat([conc, conc[(conc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_{scenario}')])
+                forc = pd.concat([forc, forc[(forc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_{scenario}')])
+
+            # Add zero scenarios
+            ems = pd.concat([ems, ems[(ems['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_zero')])
+            conc = pd.concat([conc, conc[(conc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_zero')])
+            forc = pd.concat([forc, forc[(forc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_zero')])
+
+    return ems, conc, forc
+
+
+def modify_emissions_v2(ems, slcp_ems, species_to_rcmip, scenarios):
+    """Try 2: fill in ems with the valeus from slcp_ems"""
+    slcp_ems = convert_units_ems(slcp_ems, ems, species_to_rcmip)
+
+    ems = perturb_baseline_ems(ems, slcp_ems, species_to_rcmip, scenarios)
+
+    return ems
+
+def perturb_baseline_ems(ems, slcp_ems, species_to_rcmip, scenarios):
+    """
+    Modify the emissions data to reflect the ICCT estimates for mitigation scenarios.
+
+    ems is wide by year. slcp_ems is long. For scenarios, subtract the difference avoided emissions. Currently, all
+    ems represent the baseline emissions.
+    """
+    for specie, specie_rcmip_name in species_to_rcmip.items():
+        if (specie not in slcp_ems['Species'].values) | (specie == 'Stratospheric water vapour'):
+            continue
+
+        # Calculate avoided emissions
+        ems_spec = slcp_ems[(slcp_ems['Species'] == specie)].copy()
+        for scen in scenarios:
+            ems_spec[f'Avoided_{scen}'] = ems_spec[scen] - ems_spec[BASELINE_SCEN]
+
+            for yr in ems_spec['Year'].unique():
+                ems_yr = ems_spec[ems_spec['Year'] == yr].copy()
+
+                # Add the avoided emissions to the ems dataframe
+                ems.loc[(ems["Scenario"] == f'ssp119_{scen}') & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
+                        (ems["Region"] == "World"), str(yr)] += ems_yr[f'Avoided_{scen}'].values
+                ems.loc[(ems["Scenario"] == f'ssp119_{specie}_Aviation_{scen}') & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
+                        (ems["Region"] == "World"), str(yr)] += ems_yr[f'Avoided_{scen}'].values
+                if scen == BASELINE_SCEN:
+                    ems.loc[(ems["Scenario"] == f'ssp119_{specie}_Aviation_zero') & (
+                        ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
+                            (ems["Region"] == "World"), str(yr)] += -1*ems_yr[BASELINE_SCEN].values
+                    ems.loc[(ems["Scenario"] == f'ssp119_zero_tra') & (
+                        ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
+                            (ems["Region"] == "World"), str(yr)] += -1*ems_yr[BASELINE_SCEN].values
+
+    return ems
+
+
+def convert_units_ems(slcp_ems, ems, species_to_rcmip):
+    SSP = 'ssp119'
+    id_cols = ['Scenario', 'Year', 'Species', 'Units', 'Source', 'Sector']
+    scenarios = [col for col in slcp_ems.columns if col not in id_cols]
+    conversion_factors = {
+        ('Gt', 'Mt'): 1e3,
+        ('Gt', 'kt'): 1e6,
+        ('Mt', 'kt'): 1e3,
+        ('kt', 'Mt'): 1e-3,
+        ('Mt', 'Mt'): 1,
+    }
+
+    # Modify the baseline emissions to reflect the ICCT estimates
+    for specie, specie_rcmip_name in species_to_rcmip.items():
+        if ((specie not in slcp_ems['Species'].values) | (specie == 'Stratospheric water vapour')
+                | (specie == NOX_VAR)):
+            continue
+        print(specie)
+        icct_units = slcp_ems[(slcp_ems['Species'] == specie)]['Units'].values[0]
+        expected_units = ems.loc[(ems["Scenario"] == SSP) & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) & (
+                    ems["Region"] == "World")]['Unit'].values[0]
+        expected_units = str(expected_units).split(' ')[0]
+        assert expected_units == 'Mt' or expected_units == 'kt', f"Expected units are not Mt or kt, but {expected_units}"
+
+        factor = conversion_factors.get((icct_units, expected_units))
+
+        print(f"Converting {specie} from {icct_units} to {expected_units} with factor {factor}")
+
+        if factor:
+            slcp_ems.loc[(slcp_ems['Species'] == specie), scenarios] *= factor
+            slcp_ems.loc[(slcp_ems['Species'] == specie), 'Units'] = expected_units
+
+    return slcp_ems
+
+
+def modify_emissions(ems, slcp_ems, species_to_rcmip):
+    """
+    Modify the emissions data to reflect the ICCT estimates for aviation
+    """
+    sector = 'Aviation'
+    SSP = 'ssp119'
+    id_cols = ['Scenario', 'Year', 'Species', 'Units', 'Source', 'Sector']
+    scenarios = [col for col in slcp_ems.columns if col not in id_cols]
+    # Modify the baseline emissions to reflect the ICCT estimates
+    for specie, specie_rcmip_name in species_to_rcmip.items():
+        if (specie not in slcp_ems['Species'].values) | (specie == 'Stratospheric water vapour'):
+            continue
+        print(specie)
+        icct_units = slcp_ems[(slcp_ems['Species'] == specie)]['Units'].values[0]
+        expected_units = ems.loc[(ems["Scenario"] == SSP) & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) & (
+                    ems["Region"] == "World")]['Unit'].values[0]
+        expected_units = str(expected_units).split(' ')[0]
+        assert expected_units == 'Mt' or expected_units == 'kt', f"Expected units are not Mt or kt, but {expected_units}"
+
+        ems_spec = slcp_ems[(slcp_ems['Species'] == specie)].copy()
+
+        conversion_factors = {
+            ('Gt', 'Mt'): 1e3,
+            ('Gt', 'kt'): 1e6,
+            ('Mt', 'kt'): 1e3,
+            ('kt', 'Mt'): 1e-3
+        }
+
+        factor = conversion_factors.get((icct_units, expected_units))
+
+        if factor:
+            ems_spec[scenarios] *= factor
+
+        for yr in range(BASE_YR, END_YR+1):
+            ems_yr = ems_spec[ems_spec['Year'] == yr].copy()
+
+            for scen in scenarios:
+                ems_yr_val = ems_yr[scen].values - ems_yr[BASELINE_SCEN].values
+
+                ems.loc[(ems["Scenario"] == f'{SSP}_{scen}') & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
+                        (ems["Region"] == "World"), str(yr)] += ems_yr_val
+                ems.loc[(ems["Scenario"] == f'{SSP}_{specie}_{sector}_{scen}') & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
+                        (ems["Region"] == "World"), str(yr)] += ems_yr_val
+
+            if yr == 2050:
+                print()
+            ems.loc[(ems["Scenario"] == f'{SSP}_zero_tra') & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
+                    (ems["Region"] == "World"), str(yr)] += -1*ems_yr[BASELINE_SCEN].values
+            ems.loc[(ems["Scenario"] == f'{SSP}_{specie}_{sector}_zero') & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
+                    (ems["Region"] == "World"), str(yr)] += -1*ems_yr[BASELINE_SCEN].values
+
+            if (yr == 2050) & (specie=='Contrails'):
+                pass
+
+    print(ems[(ems["Scenario"] == f'{SSP}_{specie}_{sector}_{scen}') & (ems["Variable"].str.endswith("|" + specie_rcmip_name))
+                  & (ems["Region"] == "World")])
+
+    return ems
 
 
 def main():
@@ -231,24 +369,24 @@ def main():
     conc = pd.read_csv('CMIP6/rcmip-concentrations-annual-means-v5-1-0_original.csv')
     forc = pd.read_csv('CMIP6/rcmip-radiative-forcing-annual-means-v5-1-0_original.csv')
 
-    slcp_ems = clean_slcp_ems(slcp_ems)
+    slcp_ems, scenarios = clean_slcp_ems(slcp_ems)
     species_to_rcmip = define_species_mapping()
 
     # Clean input data
     ems, conc, forc = clean_inputs(ems, conc, forc, species_to_rcmip)
 
     # Align inputs with FaIR
-    ems, conc, forc = align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, SSPs)
+    ems, conc, forc = align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, SSPs, scenarios)
 
-    forc.to_csv('CMIP6/rcmip-radiative-forcing-annual-means-v5-1-0.csv', index=False)
-    ems.to_csv('CMIP6/rcmip-emissions-annual-means-v5-1-0.csv', index=False)
-    conc.to_csv('CMIP6/rcmip-concentrations-annual-means-v5-1-0.csv', index=False)
+    forc.to_csv('inputs/final/rcmip-radiative-forcing-annual-means-v5-1-0.csv', index=False)
+    ems.to_csv('inputs/final/rcmip-emissions-annual-means-v5-1-0.csv', index=False)
+    conc.to_csv('inputs/final/rcmip-concentrations-annual-means-v5-1-0.csv', index=False)
 
     # Melt year columns into a single column
     ems_long = ems.melt(id_vars=['Model', 'Scenario', 'Region', 'Variable', 'Unit', 'Mip_Era', 'Activity_Id'], var_name='Year', value_name='ems')
-    ems_long.to_csv('CMIP6/rcmip-emissions-annual-means-v5-1-0_long.csv', index=False)
+    ems_long.to_csv('inputs/final/rcmip-emissions-annual-means-v5-1-0_long.csv', index=False)
     forc_long = forc.melt(id_vars=['Model', 'Scenario', 'Region', 'Variable', 'Unit', 'Mip_Era', 'Activity_Id'], var_name='Year', value_name='ems')
-    forc_long.to_csv('CMIP6/rcmip-forcing-annual-means-v5-1-0_long.csv', index=False)
+    forc_long.to_csv('inputs/final/rcmip-forcing-annual-means-v5-1-0_long.csv', index=False)
 
 if __name__ == "__main__":
     main()
