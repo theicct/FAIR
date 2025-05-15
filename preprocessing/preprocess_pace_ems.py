@@ -9,11 +9,10 @@ pd.set_option('display.width', 1000)
 pd.set_option('display.max_columns', 500)
 
 # FNAME_IN = 'PACE/pace_vizcon_summary_apr23.csv'
-FNAME_IN = 'PACE/vizcon_summary_may12(in).csv'
-FNAME_IN_CONERF = 'PACE/vizcon_summary+contrail_erf_may9.csv'
+FNAME_IN = 'PACE/summary_with_historical_data_May14.csv'
 
 CONTRAILS_VAR_NAME = 'ConERF'
-CONTRAILS_UNITS = 'mW/m2'
+CONTRAILS_UNITS = 'W/m2'
 
 SA_EARTH_m2 = 5.1e14  # m2
 SECONDS_IN_YEAR = 365.25 * 24 * 60 * 60  # seconds in a year
@@ -118,9 +117,7 @@ def run():
     TODO: add on-road, off-road, and calculate WTT emissions for sectors missing them.
     """
     df = pd.read_csv(FNAME_IN)
-    conerf = pd.read_csv(FNAME_IN_CONERF)
-    # Merge the two dataframes on 'Scenario', 'CY', and 'Sector'
-    df = pd.merge(df, conerf[['Scenario', 'CY', 'ConERF']], on=['Scenario', 'CY'], how='left')
+    # df = df[df['CY']>=2023].copy()
 
     # Drop where 'Scenario' is nan
     df = df.dropna(subset=['Scenario'])

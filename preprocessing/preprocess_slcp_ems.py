@@ -398,6 +398,24 @@ def convert_units(df_long):
     return df_long
 
 
+def add_aviation(aviation, df_long):
+    """
+    Add aviation-specific data to the dataframe.
+    """
+    # Remove existing aviation data
+    df_long = df_long.loc[df_long['Sector'] != 'Aviation'].copy()
+
+    # Filter Aviation
+    aviation = aviation[(aviation['Year'] >= 2020)].copy()
+    aviation = aviation[aviation['Scenario'].isin(['BAU', 'Full Breakthrough'])].copy()
+    # Rename 'Full Breakthrough' to 'Striving'
+    aviation.loc[aviation['Scenario'] == 'Full Breakthrough', 'Scenario'] = 'Striving'
+    # Combine
+    df_long = pd.concat([df_long, aviation], ignore_index=True)
+
+    return df_long
+
+
 def build_scenarios(df):
     """
     Create an individual scenario for each pollutant, Sector, Source, and current 'Scenario' name.
@@ -441,6 +459,10 @@ def run():
     df_long = calculate_off_road_diesel_wtt(df_long)
 
     df_long = convert_units(df_long)
+
+    # Add aviation-specific data
+    aviation = pd.read_csv('final/PACE_inventory_long.csv')
+    df_long = add_aviation(aviation, df_long)
 
     # Calculate WTT emissions for aviation
     # df_long = calculate_aviation_wtt(df_long)

@@ -9,6 +9,8 @@ from fair.interface import fill, initialise
 pd.set_option('display.width', None)
 pd.set_option('display.max_columns', None)
 
+MIN_YEAR = 1980
+MAX_YEAR = 2050
 
 def set_up_fair(scenarios):
 
@@ -36,25 +38,6 @@ def set_up_fair(scenarios):
     #                            'aerosol_chemistry_from_emissions': False, 'aerosol_chemistry_from_concentration': False}
     properties['Contrails']['input_mode'] = 'forcing'
     properties['Stratospheric water vapour']['input_mode'] = 'forcing'
-    # properties['Land use']['input_mode'] = 'forcing'
-    # properties['NOx']['input_mode'] = 'forcing'
-    # properties['NOx aviation']['ozone_radiative_efficiency'] = 0.0018
-    # properties['NOx aviation']['ch4_lifetime_chemical_sensitivity'] = -0.002564856
-    # properties['NOx aviation']['aerosol_chemistry_from_emissions'] = True
-    # properties['CH4']['input_mode'] = 'calculated'
-    # properties['Ozone']['input_mode'] = 'calculated'
-    # properties['NOx aviation']['greenhouse_gas'] = True
-    # properties['NOx aviation']['aerosol_chemistry_from_emissions'] = True
-    # properties['NOx aviation']['greenhouse_gas'] = True
-    # properties['NOx aviation']['aerosol_chemistry_from_emissions'] = True
-    # properties['Ozone']['aerosol_chemistry_from_emissions'] = True
-    # properties['CH4']['aerosol_chemistry_from_emissions'] = True
-    # properties['Stratospheric water vapour']['greenhouse_gas'] = True
-    # Adjust O3 so that NOx from aviation will force it
-    # properties['Ozone'] = {'type': 'ozone', 'input_mode': 'calculated', 'greenhouse_gas': True,
-    #                        'aerosol_chemistry_from_emissions': True, 'aerosol_chemistry_from_concentration': True}
-    # properties['CH4'] = {'type': 'ch4', 'input_mode': 'emissions', 'greenhouse_gas': True,
-    #                        'aerosol_chemistry_from_emissions': True, 'aerosol_chemistry_from_concentration': True}
 
     # Save a human-readable version of the properties for reference
     properties_df = pd.DataFrame(properties).transpose().reset_index()
@@ -70,10 +53,6 @@ def set_up_fair(scenarios):
     fill(f.species_configs['unperturbed_lifetime'], 10.8537568, specie='CH4')
     fill(f.species_configs['baseline_emissions'], 19.01978312, specie='CH4')
     fill(f.species_configs['baseline_emissions'], 0.08602230754, specie='N2O')
-
-    # fill(f.species_configs['forcing_reference_concentration'], 30, specie='Ozone')
-    # fill(f.species_configs['forcing_reference_concentration'], 4, specie='Stratospheric water vapour')
-    # fill(f.species_configs['forcing_reference_concentration'], 4, specie='NOx aviation')
 
     # Set up other model parameters to align with CMIP6 -------------------------------------------------------------------
 
@@ -119,14 +98,6 @@ def set_up_fair(scenarios):
 
 def add_zero_scenarios(df):
 
-    # zero = df[df['scenario']=='ssp119_zero_tra'].copy()[['timebounds', 'temp']]
-    #
-    # # Merge
-    # df = df.merge(zero, on=['timebounds'], how='left', suffixes=['', '_zero'])
-    #
-    # # Calculate the transportation attributable emissions by subtracting the zero_scenarios from the striving_scenarios
-    # df['Transportation-Attributable Temperature'] = df['temp'] - df['temp_zero']
-
     # Divide scenarios into total and pollutant specific
     scenarios = ['BAU', 'Continuation', 'Full Breakthrough', 'GHG Forward', 'SLCP Forward']
     # Add 'ssp119_' prefix
@@ -156,20 +127,20 @@ def clean_temp_output(f):
     temp = f.temperature.to_dataframe('temp').reset_index()
 
     forc = f.forcing.to_dataframe('forcing').reset_index()
-    forc = forc[(forc['timebounds'] >= 2023) & (forc['timebounds'] <= 2050)]
+    forc = forc[(forc['timebounds'] >= MIN_YEAR) & (forc['timebounds'] <= MAX_YEAR)]
     forc = forc.groupby(['timebounds', 'scenario', 'specie']).mean(numeric_only=True)
     forc.to_csv('diagnostic/out_forcing.csv')
 
     ems = f.emissions.to_dataframe('ems').reset_index()
-    ems = ems[(ems['timepoints'] >= 2023) & (ems['timepoints'] <= 2050)]
+    ems = ems[(ems['timepoints'] >= MIN_YEAR) & (ems['timepoints'] <= MAX_YEAR)]
     ems = ems.groupby(['timepoints', 'scenario', 'specie']).mean(numeric_only=True)
     ems.to_csv('diagnostic/out_ems.csv')
 
     # Average across all configs and set to layer = 0 for surface
     temp = temp[temp.pop('layer') == 0]
 
-    # Filter to 2023-2050
-    temp = temp[(temp['timebounds'] >= 2023) & (temp['timebounds'] <= 2050)]
+    # Filter to MIN_YEAR-MAX_YEAR
+    temp = temp[(temp['timebounds'] >= MIN_YEAR) & (temp['timebounds'] <= MAX_YEAR)]
 
     # Average across all configs
     df_avg = temp.groupby(["timebounds", "scenario"], as_index=False, dropna=False).agg({"temp": "mean"})
@@ -192,49 +163,9 @@ def clean_temp_output(f):
     df_avg.loc[df_avg['scenario'].isin(['ssp119', 'ssp119_striving', 'ssp119_zero_tra']), 'Pollutant'] = np.nan
     df_avg.loc[df_avg['scenario'].isin(['ssp119', 'ssp119_striving', 'ssp119_zero_tra']), 'Actual Pollutant'] = np.nan
 
-    # # Assign 'Sector' based on scenario
-    # df_avg['Sector'] = np.select(
-    #     [
-    #         df_avg['scenario'].str.contains('Aviation'),
-    #         df_avg['scenario'].str.contains('off-road'),
-    #         df_avg['scenario'].str.contains('on-road'),
-    #         df_avg['scenario'].str.contains('Marine')
-    #     ],
-    #     ['Aviation', 'off-road', 'on-road', 'Marine'],
-    #     default='Other'  # Default value if no condition is met
-    # )
-
     df_avg = add_zero_scenarios(df_avg)
 
-    # # Create a summed version for SLCPs and Kyoto
-    # all_slcps_striving = df_avg[df_avg['Pollutant']=='SLCP'].groupby(['timebounds'], as_index=False).agg({'Avoided': 'sum'})
-    # all_slcps_striving['scenario'] = 'Striving_all'
-    # all_slcps_striving['Pollutant'] = 'SLCP'
-    # all_kyoto_striving = df_avg[df_avg['Pollutant']=='Kyoto'].groupby(['timebounds'], as_index=False).agg({'Avoided': 'sum'})
-    # all_kyoto_striving['scenario'] = 'Striving_all'
-    # all_kyoto_striving['Pollutant'] = 'Kyoto'
-    #
-    # # Copy ZeroTra and Striving scenarios to the two Pollutants
-    # ztra1 = df_avg[df_avg['scenario']=='ssp119_zero_tra'].copy()
-    # ztra1['Pollutant'] = 'Kyoto'
-    # ztra2 = ztra1.copy()
-    # ztra1['Pollutant'] = 'SLCP'
-    #
-    # df_avg = pd.concat([df_avg, ztra1, ztra2], ignore_index=True)
-    #
-    # all_subs = pd.concat([all_slcps_striving, all_kyoto_striving], ignore_index=True)
-    # # Calculate the 'temp' column as ssp119 + the sum of the Avoided column
-    # all_subs = all_subs.merge(ssp119, on='timebounds', suffixes=('', '_ssp119'))
-    # all_subs['temp'] = all_subs['temp'] - all_subs['Avoided']
-    #
-    # # # Concatenate the summed versions to the original dataframe
-    # df_avg = pd.concat([df_avg,  all_subs], ignore_index=True)
-
     # Add 'Vizcon Scenario' Column
-    # Where 'scenario' contains 'Continuation', set 'Vizcon Scenario' to 'Continuation'
-    # Where 'scenario' contains 'Full Breakthrough', set 'Vizcon Scenario' to 'Full Breakthrough'
-    # Where 'scenario' contains 'GHG Forward', set 'Vizcon Scenario' to 'GHG Forward'
-    # Where 'scenario' contains 'SLCP Forward', set 'Vizcon Scenario' to 'SLCP Forward'
     df_avg['Vizcon Scenario'] = np.select(
         [
             df_avg['scenario'].str.contains('BAU'),

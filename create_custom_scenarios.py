@@ -6,7 +6,7 @@ import pandas as pd
 pd.set_option('display.width', 1000000)
 pd.set_option('display.max_columns', 100000)
 
-BASE_YR = 2023
+BASE_YR = 1980
 END_YR = 2050
 EMS_IN = 'preprocessing/final/pace_inventory_long.csv'
 BASELINE_SCEN = 'BAU'
