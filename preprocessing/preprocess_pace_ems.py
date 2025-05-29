@@ -10,6 +10,7 @@ pd.set_option('display.max_columns', 500)
 
 # FNAME_IN = 'PACE/pace_vizcon_summary_apr23.csv'
 FNAME_IN = 'PACE/summary_with_historical_data_May14.csv'
+EMS_OUT = 'final/PACE_inventory_long.csv'
 
 CONTRAILS_VAR_NAME = 'ConERF'
 CONTRAILS_UNITS = 'W/m2'
@@ -147,7 +148,7 @@ def run():
 
     df_long['Species'] = df_long['Species'].str.lower()
 
-    df_long.to_csv('final/PACE_inventory_long.csv', index=False)
+    df_long.to_csv(EMS_OUT, index=False)
 
 
 def main():

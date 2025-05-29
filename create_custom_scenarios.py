@@ -8,7 +8,7 @@ pd.set_option('display.max_columns', 100000)
 
 BASE_YR = 1980
 END_YR = 2050
-EMS_IN = 'preprocessing/final/pace_inventory_long.csv'
+EMS_IN = 'preprocessing/final/PACE_inventory_long.csv'
 BASELINE_SCEN = 'BAU'
 STRIVING_SCEN = 'BAU'
 NOX_VAR = 'NOx aviation'

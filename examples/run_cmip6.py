@@ -9,6 +9,9 @@ from fair.interface import fill, initialise
 pd.set_option('display.width', None)
 pd.set_option('display.max_columns', None)
 
+TEMP_OUT = 'Results/temperature_all_Vizcon_Aviation.csv'
+# TEMP_OUT = 'Results/temperature_all_Vizcon_Aviation_levers.csv'
+
 MIN_YEAR = 1980
 MAX_YEAR = 2050
 
@@ -96,10 +99,9 @@ def set_up_fair(scenarios):
     return f
 
 
-def add_zero_scenarios(df):
+def add_zero_scenarios(df, scenarios):
 
     # Divide scenarios into total and pollutant specific
-    scenarios = ['BAU', 'Continuation', 'Full Breakthrough', 'GHG Forward', 'SLCP Forward']
     # Add 'ssp119_' prefix
     scenarios = [f'ssp119_{s}' for s in scenarios]
     # Set the 'Actual Pollutant' value for these scenarios to 'All'
@@ -120,7 +122,7 @@ def add_zero_scenarios(df):
     return striving_scenarios
 
 
-def clean_temp_output(f):
+def clean_temp_output(f, vizcon_scenarios):
     """
     Takes the output from the FaIR model and averages it across all configurations.
     """
@@ -163,20 +165,14 @@ def clean_temp_output(f):
     df_avg.loc[df_avg['scenario'].isin(['ssp119', 'ssp119_striving', 'ssp119_zero_tra']), 'Pollutant'] = np.nan
     df_avg.loc[df_avg['scenario'].isin(['ssp119', 'ssp119_striving', 'ssp119_zero_tra']), 'Actual Pollutant'] = np.nan
 
-    df_avg = add_zero_scenarios(df_avg)
+    df_avg = add_zero_scenarios(df_avg, vizcon_scenarios)
 
     # Add 'Vizcon Scenario' Column
-    df_avg['Vizcon Scenario'] = np.select(
-        [
-            df_avg['scenario'].str.contains('BAU'),
-            df_avg['scenario'].str.contains('Continuation'),
-            df_avg['scenario'].str.contains('Full Breakthrough'),
-            df_avg['scenario'].str.contains('GHG Forward'),
-            df_avg['scenario'].str.contains('SLCP Forward')
-        ],
-        ['Baseline', 'Continuation', 'Full Breakthrough', 'GHG Forward', 'SLCP Forward'],
-        default='Other'  # Default value if no condition is met
-    )
+    for scen in vizcon_scenarios:
+        df_avg.loc[df_avg['scenario'].str.contains(scen), 'Vizcon Scenario'] = scen
+
+    # Rename BAU scenario to Baseline
+    df_avg.loc[df_avg['Vizcon Scenario'] == 'BAU', 'Vizcon Scenario'] = 'Baseline'
 
     return df_avg
 
@@ -191,6 +187,10 @@ def main():
     # Define scenarios
     scenarios = list(set(pd.concat([forcing['Scenario'], ems['Scenario'], conc['Scenario']]).unique()))
 
+    vizcon_scenarios =  np.unique([s.split('_')[-1] if '_' in s else s for s in scenarios])
+    # Drop 'ssp119', 'tra', 'zero'
+    vizcon_scenarios = [name for name in vizcon_scenarios if name not in ['ssp119', 'tra', 'zero']]
+
     # Set up FaIR
     f = set_up_fair(scenarios)
 
@@ -198,7 +198,7 @@ def main():
     f.run()
 
     # Retrieve the temperature results in a clean format
-    temp = clean_temp_output(f)
+    temp = clean_temp_output(f, vizcon_scenarios)
 
     # Filter to Sector='Aviation'
     # temp = temp[temp['Sector'] == 'Aviation'].copy()
@@ -208,7 +208,7 @@ def main():
                  'Actual Pollutant', 'BAU_temp_attribution', 'Striving_temp_attribution', 'temp']]
 
     # Save the results
-    temp.to_csv('Results/temperature_all_Vizcon_Aviation.csv', index=False)
+    temp.to_csv(TEMP_OUT, index=False)
 
 
 if __name__ == "__main__":
