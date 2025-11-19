@@ -13,7 +13,6 @@ END_YR = 2050
 EMS_IN = 'preprocessing/final/PACE_inventory_long.csv'
 # EMS_IN = 'preprocessing/final/PACE_inventory_levers_long.csv'
 BASELINE_SCEN = 'BAU'
-STRIVING_SCEN = 'BAU'
 NOX_VAR = 'NOx aviation'
 
 # Internal inputs

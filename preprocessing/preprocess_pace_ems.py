@@ -95,34 +95,16 @@ def convert_units(df_long):
     return df_long
 
 
-def build_scenarios(df):
-    """
-    Create an individual scenario for each pollutant, Sector, Source, and current 'Scenario' name.
-    """
-    # Also only filter to GHGs (co2, ch4, and n2o)
-    df = df.loc[df['Species'].isin(['co2', 'ch4', 'n2o'])].reset_index(drop=True)
-
-    for i, row in enumerate(df.iterrows()):
-        row = row[1]
-        # Create a new scenario name
-        new_scenario = f"{row.Scenario}_{row.Sector}_{row.Source}_{row.Species}"
-        df.loc[i, 'Scenario'] = new_scenario
-
-    print(df['Scenario'].unique())
-    return df
-
-
 def run():
     """
-    The base inventory file includes Marine and aviation currently.
-
-    TODO: add on-road, off-road, and calculate WTT emissions for sectors missing them.
+    Execute the script.
     """
     df = pd.read_csv(FNAME_IN)
-    # df = df[df['CY']>=1980].copy()
 
     # Drop where 'Scenario' is nan
     df = df.dropna(subset=['Scenario'])
+
+    # Assigns sector and scope metadata
     df['Sector'] = 'Aviation'
     df['Source'] = 'WTW'
 
@@ -141,7 +123,7 @@ def run():
         value_name='ems'
     )
 
-    # Set Unit to GJ for EF and Mt for all others
+    # Set Unit to GJ for EF and Mt for all others based on PACE output units
     df_long['Units'] = 'Mt'
     df_long.loc[df_long['Species'] == 'contrails', 'Units'] = CONTRAILS_UNITS
 
