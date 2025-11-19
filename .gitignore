@@ -144,3 +144,16 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.idea
+*.twbx
+*.twb
+
+examples/Results/sens/100/*
+CMIP6/batches/100/*
+preprocessing/final/*
+inputs/final/*
+!inputs/final/README.md
+examples/Results/*
+examples/diagnostic/*
+examples/Results/temperature_all.csv
