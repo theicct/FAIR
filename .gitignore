@@ -152,8 +152,10 @@ dmypy.json
 examples/Results/sens/100/*
 CMIP6/batches/100/*
 preprocessing/final/*
+!preprocessing/final/README.md
 inputs/final/*
 !inputs/final/README.md
 examples/Results/*
+!examples/Results/README.md
 examples/diagnostic/*
 examples/Results/temperature_all.csv

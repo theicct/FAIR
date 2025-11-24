@@ -71,7 +71,7 @@ def clean_inputs(ems, conc, forc, species_to_rcmip):
     conc = conc[conc['Variable'].str.endswith(tuple(species_to_rcmip.values()))]
     forc = forc[forc['Variable'].str.endswith(tuple(species_to_rcmip.values()))]
 
-    properties = pd.read_csv('/Users/j.benoit/Documents/GitHub/FAIR/examples/properties/properties.csv')
+    properties = pd.read_csv('examples/properties/properties.csv')
     # Only keep the species for which 'input_mode' is 'emissions'
     for specie in properties['Variable']:
         if properties.loc[properties['Variable'] == specie, 'input_mode'].values[0] != 'emissions':
