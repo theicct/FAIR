@@ -239,6 +239,8 @@ def fill_from_rcmip(self, batch=None, batch_size=None):
     This method is part of the `FAIR` class. It uses self.scenarios to look up
     the scenario to extract from the given files. If None, the emissions/concentration/
     forcing is filled in from the RCMIP database.
+
+    EDIT: this function has been modified by the ICCT to read in the local copies of perturbed CMIP6 scenario files.
     """
     # lookup converting FaIR default names to RCMIP names
     species_to_rcmip = {specie: specie.replace("-", "") for specie in self.species}
@@ -259,6 +261,8 @@ def fill_from_rcmip(self, batch=None, batch_size=None):
     for specie in species_to_rcmip_copy:
         if specie not in self.species:
             del species_to_rcmip[specie]
+
+    ## EDIT: Modified by ICCT to favor reading local copies rather than retrieving from zenodo
 
     # emissions_file = pooch.retrieve(
     #     url=(
@@ -284,17 +288,10 @@ def fill_from_rcmip(self, batch=None, batch_size=None):
     #     known_hash="md5:87ef6cd4e12ae0b331f516ea7f82ccba",
     # )
 
-    # df_emis = pd.read_csv('../CMIP6/off_road/off_road_rcmip-emissions-annual-means-v5-1-0.csv')
-    # df_conc = pd.read_csv('../CMIP6/off_road/off_road_rcmip-concentrations-annual-means-v5-1-0.csv')
-    # df_forc = pd.read_csv('../CMIP6/off_road/off_road_rcmip-radiative-forcing-annual-means-v5-1-0.csv')
-    if batch is None:
-        df_emis = pd.read_csv('../inputs/final/rcmip-emissions-annual-means-v5-1-0.csv')
-        df_conc = pd.read_csv('../inputs/final/rcmip-concentrations-annual-means-v5-1-0.csv')
-        df_forc = pd.read_csv('../inputs/final/rcmip-radiative-forcing-annual-means-v5-1-0.csv')
-    else:
-        df_emis = pd.read_csv(f'../inputs/final/batches/{batch_size}/rcmip-emissions-annual-means-v5-1-0_{batch}.csv')
-        df_conc = pd.read_csv(f'../inputs/final/batches/{batch_size}/rcmip-concentrations-annual-means-v5-1-0_{batch}.csv')
-        df_forc = pd.read_csv(f'../inputs/final/batches/{batch_size}/rcmip-radiative-forcing-annual-means-v5-1-0_{batch}.csv')
+    # Modified code to read local copies
+    df_emis = pd.read_csv('../inputs/final/rcmip-emissions-annual-means-v5-1-0.csv')
+    df_conc = pd.read_csv('../inputs/final/rcmip-concentrations-annual-means-v5-1-0.csv')
+    df_forc = pd.read_csv('../inputs/final/rcmip-radiative-forcing-annual-means-v5-1-0.csv')
 
     # filter to scenarios
     df_emis = df_emis[df_emis["Scenario"].isin(self.scenarios)]

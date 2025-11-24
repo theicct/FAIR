@@ -6,15 +6,32 @@ import pandas as pd
 pd.set_option('display.width', 1000000)
 pd.set_option('display.max_columns', 100000)
 
-BASE_YR = 1980
+# User inputs
+BASE_YR = 1940
 END_YR = 2050
 EMS_IN = 'preprocessing/final/PACE_inventory_long.csv'
+# EMS_IN = 'preprocessing/final/PACE_inventory_levers_long.csv'
 BASELINE_SCEN = 'BAU'
-STRIVING_SCEN = 'BAU'
 NOX_VAR = 'NOx aviation'
+SSPs = ['ssp119']  # Currently hardcoded to only handle ssp119
+
+# Internal inputs
+CMIP_EMISSIONS = 'CMIP6/rcmip-emissions-annual-means-v5-1-0_original.csv'
+CMIP_CONCENTRATIONS = 'CMIP6/rcmip-concentrations-annual-means-v5-1-0_original.csv'
+CMIP_FORCING = 'CMIP6/rcmip-radiative-forcing-annual-means-v5-1-0_original.csv'
+
+EMISSIONS_OUT = 'inputs/final/rcmip-emissions-annual-means-v5-1-0.csv'
+CONCENTRATION_OUT = 'inputs/final/rcmip-concentrations-annual-means-v5-1-0.csv'
+FORCING_OUT = 'inputs/final/rcmip-radiative-forcing-annual-means-v5-1-0.csv'
+
+EMISSIONS_OUT_LONG = 'inputs/final/rcmip-emissions-annual-means-v5-1-0_long.csv'
+FORCING_OUT_LONG = 'inputs/final/rcmip-forcing-annual-means-v5-1-0_long.csv'
 
 
 def clean_slcp_ems(slcp_ems):
+    """
+    Clean ICCT emissions and standardize with FaIR conventions.
+    """
     scenarios = slcp_ems['Scenario'].unique()
 
     # Convert all 'Species' names to lowercase
@@ -28,12 +45,22 @@ def clean_slcp_ems(slcp_ems):
                                'n2o':'N2O', 'nox':NOX_VAR, 'sox':'Sulfur', 'so2':'Sulfur'}
     slcp_ems = slcp_ems.replace(slcp_ems_conversion)
 
-
     return slcp_ems, scenarios
 
 
 def define_species_mapping():
-    species = ['CO2 FFI', 'CO2 AFOLU', 'CO2', 'CH4', 'N2O', 'Sulfur', 'BC', 'OC', 'NH3', 'NOx', 'VOC', 'CO', 'CFC-11', 'CFC-12', 'CFC-113', 'CFC-114', 'CFC-115', 'HCFC-22', 'HCFC-141b', 'HCFC-142b', 'CCl4', 'CHCl3', 'CH2Cl2', 'CH3Cl', 'CH3CCl3', 'CH3Br', 'Halon-1202', 'Halon-1211', 'Halon-1301', 'Halon-2402', 'CF4', 'C2F6', 'C3F8', 'c-C4F8', 'C4F10', 'C5F12', 'C6F14', 'C7F16', 'C8F18', 'NF3', 'SF6', 'SO2F2', 'HFC-125', 'HFC-134a', 'HFC-143a', 'HFC-152a', 'HFC-227ea', 'HFC-23', 'HFC-236fa', 'HFC-245fa', 'HFC-32', 'HFC-365mfc', 'HFC-4310mee', 'NOx aviation', 'Solar', 'Volcanic', 'Aerosol-radiation interactions', 'Aerosol-cloud interactions', 'Ozone', 'Contrails', 'Light absorbing particles on snow and ice', 'Stratospheric water vapour', 'Land use', 'Equivalent effective stratospheric chlorine']
+    """
+    # Define a naming mapping between shorthand species names and RCMIP FaIR species names.
+    """
+    # TODO: Create a constants.py file to hold long lists like this
+    species = ['CO2 FFI', 'CO2 AFOLU', 'CO2', 'CH4', 'N2O', 'Sulfur', 'BC', 'OC', 'NH3', 'NOx', 'VOC', 'CO', 'CFC-11',
+               'CFC-12', 'CFC-113', 'CFC-114', 'CFC-115', 'HCFC-22', 'HCFC-141b', 'HCFC-142b', 'CCl4', 'CHCl3',
+               'CH2Cl2', 'CH3Cl', 'CH3CCl3', 'CH3Br', 'Halon-1202', 'Halon-1211', 'Halon-1301', 'Halon-2402',
+               'CF4', 'C2F6', 'C3F8', 'c-C4F8', 'C4F10', 'C5F12', 'C6F14', 'C7F16', 'C8F18', 'NF3', 'SF6', 'SO2F2',
+               'HFC-125', 'HFC-134a', 'HFC-143a', 'HFC-152a', 'HFC-227ea', 'HFC-23', 'HFC-236fa', 'HFC-245fa', 'HFC-32',
+               'HFC-365mfc', 'HFC-4310mee', 'NOx aviation', 'Solar', 'Volcanic', 'Aerosol-radiation interactions',
+               'Aerosol-cloud interactions', 'Ozone', 'Contrails', 'Light absorbing particles on snow and ice',
+               'Stratospheric water vapour', 'Land use', 'Equivalent effective stratospheric chlorine']
 
     species_to_rcmip = {specie: specie.replace("-", "") for specie in species}
     species_to_rcmip["CO2 FFI"] = "CO2|MAGICC Fossil and Industrial"
@@ -52,12 +79,16 @@ def define_species_mapping():
 
 
 def clean_inputs(ems, conc, forc, species_to_rcmip):
+    """
+    Filter the CMIP6 emissions, concentrations, and forcing data to only include relevant data and linearly
+    interpolate missing values.
+    """
     # Filter the inputs to only the full species values
     ems = ems[ems['Variable'].str.endswith(tuple(species_to_rcmip.values()))]
     conc = conc[conc['Variable'].str.endswith(tuple(species_to_rcmip.values()))]
     forc = forc[forc['Variable'].str.endswith(tuple(species_to_rcmip.values()))]
 
-    properties = pd.read_csv('/Users/j.benoit/Documents/GitHub/FAIR/examples/properties/properties.csv')
+    properties = pd.read_csv('examples/properties/properties.csv')
     # Only keep the species for which 'input_mode' is 'emissions'
     for specie in properties['Variable']:
         if properties.loc[properties['Variable'] == specie, 'input_mode'].values[0] != 'emissions':
@@ -97,7 +128,29 @@ def clean_inputs(ems, conc, forc, species_to_rcmip):
     return ems, conc, forc
 
 
-def adjust_forc(slcp_ems, forc, SSPs, scenarios):
+def align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, scenarios):
+    """
+    Align the inputs with FaIR by creating new scenarios and adjusting the emissions.
+    """
+    ems, conc, forc = create_new_scenarios(ems, conc, forc, scenarios, slcp_ems)
+
+    forc = adjust_forc(slcp_ems, forc, scenarios)
+
+    ems = modify_emissions(ems, slcp_ems, species_to_rcmip, scenarios)
+
+    # Ensure no duplicates
+    assert ems.duplicated().sum() == 0, "There are duplicates in the emissions data"
+    assert forc.duplicated().sum() == 0, "There are duplicates in the forcing data"
+    assert conc.duplicated().sum() == 0, "There are duplicates in the concentrations data"
+
+    return ems, conc, forc
+
+
+def adjust_forc(slcp_ems, forc, scenarios):
+    """
+    Modify the radiative forcing data to reflect the ICCT estimates for aviation. Includes contrails, stratospheric H2O,
+    and stratospheric NOx.
+    """
     ct_var = 'Effective Radiative Forcing|Anthropogenic|Other|Contrails and Contrail-induced Cirrus'
     nox_var_fair = 'Effective Radiative Forcing|Anthropogenic|Other|CH4 Oxidation Stratospheric H2O'
     h2o_var = 'Effective Radiative Forcing|Anthropogenic|Other|CH4 Oxidation Stratospheric H2O'
@@ -171,27 +224,9 @@ def adjust_forc(slcp_ems, forc, SSPs, scenarios):
     return forc
 
 
-def align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, SSPs, scenarios):
-    """
-    Align the inputs with FaIR by creating new scenarios and adjusting the emissions.
-    """
-    ems, conc, forc = create_new_scenarios(ems, conc, forc, scenarios, slcp_ems)
-
-    forc = adjust_forc(slcp_ems, forc, SSPs, scenarios)
-
-    # ems = modify_emissions(ems, slcp_ems, species_to_rcmip)
-    ems = modify_emissions_v2(ems, slcp_ems, species_to_rcmip, scenarios)
-
-    # Ensure no duplicates
-    assert ems.duplicated().sum() == 0, "There are duplicates in the emissions data"
-    assert forc.duplicated().sum() == 0, "There are duplicates in the forcing data"
-    assert conc.duplicated().sum() == 0, "There are duplicates in the concentrations data"
-
-    return ems, conc, forc
-
-
 def create_new_scenarios(ems, conc, forc, scenarios, slcp_ems):
     """
+    Define a scenario for each pollutant, Sector, Source, and current 'Scenario' name.
     """
     SSP = 'ssp119'
     # Copy the ssp119 scenario to ssp119_striving
@@ -223,8 +258,8 @@ def create_new_scenarios(ems, conc, forc, scenarios, slcp_ems):
     return ems, conc, forc
 
 
-def modify_emissions_v2(ems, slcp_ems, species_to_rcmip, scenarios):
-    """Try 2: fill in ems with the valeus from slcp_ems"""
+def modify_emissions(ems, slcp_ems, species_to_rcmip, scenarios):
+    """Fill in ems with the values from slcp_ems"""
     slcp_ems = convert_units_ems(slcp_ems, ems, species_to_rcmip)
 
     ems = perturb_baseline_ems(ems, slcp_ems, species_to_rcmip, scenarios)
@@ -301,92 +336,39 @@ def convert_units_ems(slcp_ems, ems, species_to_rcmip):
     return slcp_ems
 
 
-def modify_emissions(ems, slcp_ems, species_to_rcmip):
-    """
-    Modify the emissions data to reflect the ICCT estimates for aviation
-    """
-    sector = 'Aviation'
-    SSP = 'ssp119'
-    id_cols = ['Scenario', 'Year', 'Species', 'Units', 'Source', 'Sector']
-    scenarios = [col for col in slcp_ems.columns if col not in id_cols]
-    # Modify the baseline emissions to reflect the ICCT estimates
-    for specie, specie_rcmip_name in species_to_rcmip.items():
-        if (specie not in slcp_ems['Species'].values) | (specie == 'Stratospheric water vapour'):
-            continue
-        print(specie)
-        icct_units = slcp_ems[(slcp_ems['Species'] == specie)]['Units'].values[0]
-        expected_units = ems.loc[(ems["Scenario"] == SSP) & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) & (
-                    ems["Region"] == "World")]['Unit'].values[0]
-        expected_units = str(expected_units).split(' ')[0]
-        assert expected_units == 'Mt' or expected_units == 'kt', f"Expected units are not Mt or kt, but {expected_units}"
-
-        ems_spec = slcp_ems[(slcp_ems['Species'] == specie)].copy()
-
-        conversion_factors = {
-            ('Gt', 'Mt'): 1e3,
-            ('Gt', 'kt'): 1e6,
-            ('Mt', 'kt'): 1e3,
-            ('kt', 'Mt'): 1e-3
-        }
-
-        factor = conversion_factors.get((icct_units, expected_units))
-
-        if factor:
-            ems_spec[scenarios] *= factor
-
-        for yr in range(BASE_YR, END_YR+1):
-            ems_yr = ems_spec[ems_spec['Year'] == yr].copy()
-
-            for scen in scenarios:
-                ems_yr_val = ems_yr[scen].values - ems_yr[BASELINE_SCEN].values
-
-                ems.loc[(ems["Scenario"] == f'{SSP}_{scen}') & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
-                        (ems["Region"] == "World"), str(yr)] += ems_yr_val
-                ems.loc[(ems["Scenario"] == f'{SSP}_{specie}_{sector}_{scen}') & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
-                        (ems["Region"] == "World"), str(yr)] += ems_yr_val
-
-            if yr == 2050:
-                print()
-            ems.loc[(ems["Scenario"] == f'{SSP}_zero_tra') & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
-                    (ems["Region"] == "World"), str(yr)] += -1*ems_yr[BASELINE_SCEN].values
-            ems.loc[(ems["Scenario"] == f'{SSP}_{specie}_{sector}_zero') & (ems["Variable"].str.endswith("|" + specie_rcmip_name)) &
-                    (ems["Region"] == "World"), str(yr)] += -1*ems_yr[BASELINE_SCEN].values
-
-            if (yr == 2050) & (specie=='Contrails'):
-                pass
-
-    print(ems[(ems["Scenario"] == f'{SSP}_{specie}_{sector}_{scen}') & (ems["Variable"].str.endswith("|" + specie_rcmip_name))
-                  & (ems["Region"] == "World")])
-
-    return ems
-
-
 def main():
-    SSPs = ['ssp119']
-    slcp_ems = pd.read_csv(EMS_IN)
+    """
+    Execute the script.
+    """
+    st = time.time()
+    slcp_ems = pd.read_csv(EMS_IN) # Custom ICCT emissions/forcing inputs
 
-    ems = pd.read_csv('CMIP6/rcmip-emissions-annual-means-v5-1-0_original.csv')
-    conc = pd.read_csv('CMIP6/rcmip-concentrations-annual-means-v5-1-0_original.csv')
-    forc = pd.read_csv('CMIP6/rcmip-radiative-forcing-annual-means-v5-1-0_original.csv')
+    # CMIP6 default inputs
+    ems = pd.read_csv(CMIP_EMISSIONS) # Emissions
+    conc = pd.read_csv(CMIP_CONCENTRATIONS) # Concentrations
+    forc = pd.read_csv(CMIP_FORCING) # Radiative forcing
 
-    slcp_ems, scenarios = clean_slcp_ems(slcp_ems)
+    # Clean inputs
     species_to_rcmip = define_species_mapping()
-
-    # Clean input data
+    slcp_ems, scenarios = clean_slcp_ems(slcp_ems)
     ems, conc, forc = clean_inputs(ems, conc, forc, species_to_rcmip)
 
     # Align inputs with FaIR
-    ems, conc, forc = align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, SSPs, scenarios)
+    ems, conc, forc = align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, scenarios)
 
-    forc.to_csv('inputs/final/rcmip-radiative-forcing-annual-means-v5-1-0.csv', index=False)
-    ems.to_csv('inputs/final/rcmip-emissions-annual-means-v5-1-0.csv', index=False)
-    conc.to_csv('inputs/final/rcmip-concentrations-annual-means-v5-1-0.csv', index=False)
+    # Export FaIR-ready final inputs
+    ems.to_csv(EMISSIONS_OUT, index=False)
+    conc.to_csv(CONCENTRATION_OUT, index=False)
+    forc.to_csv(FORCING_OUT, index=False)
 
-    # Melt year columns into a single column
+    # Create a long version along year for validation
     ems_long = ems.melt(id_vars=['Model', 'Scenario', 'Region', 'Variable', 'Unit', 'Mip_Era', 'Activity_Id'], var_name='Year', value_name='ems')
-    ems_long.to_csv('inputs/final/rcmip-emissions-annual-means-v5-1-0_long.csv', index=False)
+    ems_long.to_csv(EMISSIONS_OUT_LONG, index=False)
     forc_long = forc.melt(id_vars=['Model', 'Scenario', 'Region', 'Variable', 'Unit', 'Mip_Era', 'Activity_Id'], var_name='Year', value_name='ems')
-    forc_long.to_csv('inputs/final/rcmip-forcing-annual-means-v5-1-0_long.csv', index=False)
+    forc_long.to_csv(FORCING_OUT_LONG, index=False)
+
+    print(f"Script executed in {time.time() - st:.2f} seconds.")
+
 
 if __name__ == "__main__":
     main()

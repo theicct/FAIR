@@ -8,16 +8,13 @@ import pandas as pd
 pd.set_option('display.width', 1000)
 pd.set_option('display.max_columns', 500)
 
-# FNAME_IN = 'PACE/pace_vizcon_summary_apr23.csv'
-FNAME_IN = 'PACE/summary_with_historical_data_May14.csv'
-LEVERS_IN = 'PACE/summary_lever_attribution_test_FB_May14.csv'
-
-LEVERS_INTERMEDIATE = 'PACE/summary_lever_attribution_test_FB_May14_with_BAU.csv'
+LEVERS_IN = 'PACE/summary_jul15_lever_attribution_historical_and_slcp_uq.csv'
 
 PACE_EMS_OUT_LONG = 'final/PACE_inventory_levers_long.csv'
 
 CONTRAILS_VAR_NAME = 'ConERF'
 CONTRAILS_UNITS = 'W/m2'
+BASE_SCEN = 'Historical Trends'
 
 SA_EARTH_m2 = 5.1e14  # m2
 SECONDS_IN_YEAR = 365.25 * 24 * 60 * 60  # seconds in a year
@@ -119,23 +116,22 @@ def run():
     """
     The base inventory file includes Marine and aviation currently.
 
-    TODO: add on-road, off-road, and calculate WTT emissions for sectors missing them.
     """
-    bau = pd.read_csv(FNAME_IN)
-    bau = bau[bau['Scenario']=='Baseline'].copy()
+    # bau = pd.read_csv(FNAME_IN)
+    # bau = bau[bau['Scenario']=='Baseline'].copy()
     df = pd.read_csv(LEVERS_IN)
 
-    # Copy historical emissions from BAU to all scenarios
-    bau_historical = bau[bau['CY']<2023].copy()
-    for scen in df['Scenario'].unique():
-        scen_historical = bau_historical.copy()
-        scen_historical['Scenario'] = scen
-        df = pd.concat([df, scen_historical])
+    # # Copy historical emissions from BAU to all scenarios
+    # bau_historical = bau[bau['CY']<2023].copy()
+    # for scen in df['Scenario'].unique():
+    #     scen_historical = bau_historical.copy()
+    #     scen_historical['Scenario'] = scen
+    #     df = pd.concat([df, scen_historical])
 
-    df = pd.concat([df, bau], ignore_index=True)
+    # df = pd.concat([df, bau], ignore_index=True)
     df = df.sort_values(by=['Scenario', 'CY'])
 
-    df.to_csv(LEVERS_INTERMEDIATE)
+    # df.to_csv(LEVERS_INTERMEDIATE)
 
     # df = df[df['CY']>=1980].copy()
 
@@ -145,12 +141,12 @@ def run():
     df['Source'] = 'WTW'
 
     # Replace 'Baseline' with 'BAU'
-    df['Scenario'] = df['Scenario'].replace('Baseline', 'BAU')
+    df['Scenario'] = df['Scenario'].replace(BASE_SCEN, 'BAU')
 
     # Rename 'nvPM' to 'BC'
     df = df.rename(columns={'nvPM_mass': 'BC', CONTRAILS_VAR_NAME: 'contrails', 'CY': 'Year', 'SO2': 'SOx'})
 
-    CLIMATE_FORCERS = ['CO2', 'H2O', 'SOx', 'NOx', 'CH4', 'N2O', 'BC', 'contrails']
+    CLIMATE_FORCERS = ['CO2', 'H2OERF', 'SOx', 'NOxERF', 'CH4', 'N2O', 'BC', 'contrails']
     ID_COLS = ['Scenario', 'Sector', 'Year', 'Source']
 
     df_long = df[ID_COLS + CLIMATE_FORCERS].melt(
@@ -165,7 +161,14 @@ def run():
 
     df_long = convert_units(df_long)
 
+    # Rename 'NOXERF' to 'NOx' and 'H2OERF' to 'H2O'
+    df_long.loc[df_long['Species'] == 'NOxERF', 'Species'] = 'NOx'
+    df_long.loc[df_long['Species'] == 'H2OERF', 'Species'] = 'H2O'
+
     df_long['Species'] = df_long['Species'].str.lower()
+
+    # Remove all '_' from Scenario names
+    df_long['Scenario'] = df_long['Scenario'].str.replace('_', ' ', regex=False)
 
     df_long.to_csv(PACE_EMS_OUT_LONG, index=False)
 
