@@ -1,3 +1,5 @@
+"""Run ICCT emissions scenarios through FaIR and save temperature results."""
+
 import numpy as np
 import pandas as pd
 import time
@@ -35,6 +37,10 @@ EMS_IN = '../inputs/final/rcmip-emissions-annual-means-v5-1-0.csv'
 CONC_IN = '../inputs/final/rcmip-concentrations-annual-means-v5-1-0.csv'
 
 def set_up_fair(scenarios):
+    """
+    Set up the FaIR model with CMIP6-aligned parameters and the specified scenarios, following the example in
+     https://docs.fairmodel.net/en/latest/examples/cmip6_ssp_emissions_run.html
+    """
     print("Setting up FaIR model...")
 
     # Set up FAIR model --------------------------------------------------------------------------------------------------
@@ -57,8 +63,6 @@ def set_up_fair(scenarios):
     species, properties = read_properties()
 
     # Make exception for contrails
-    # properties['Contrails'] = {'type': 'contrails', 'input_mode': 'forcing', 'greenhouse_gas': False,
-    #                            'aerosol_chemistry_from_emissions': False, 'aerosol_chemistry_from_concentration': False}
     properties['Contrails']['input_mode'] = 'forcing'
     properties['Stratospheric water vapour']['input_mode'] = 'forcing'
 
@@ -72,7 +76,7 @@ def set_up_fair(scenarios):
     f.allocate()
 
     f.fill_species_configs()
-    # fill(f.species_configs['ozone_radiative_efficiency_array']
+    # As defined in FaIR example, additional parameters are defined for CH4 and N2O
     fill(f.species_configs['unperturbed_lifetime'], 10.8537568, specie='CH4')
     fill(f.species_configs['baseline_emissions'], 19.01978312, specie='CH4')
     fill(f.species_configs['baseline_emissions'], 0.08602230754, specie='N2O')
@@ -84,7 +88,7 @@ def set_up_fair(scenarios):
 
     f.fill_from_rcmip()
 
-    # overwrite volcanic
+    # overwrite volcanic, per example scenario
     volcanic_forcing = np.zeros(351)
     volcanic_forcing[:271] = df_volcanic[1749:].groupby(np.ceil(df_volcanic[1749:].index) // 1).mean().squeeze().values
     fill(f.forcing, volcanic_forcing[:, None, None], specie="Volcanic")  # sometimes need to expand the array
@@ -97,7 +101,6 @@ def set_up_fair(scenarios):
 
 
     df = pd.read_csv("../tests/test_data/4xCO2_cummins_ebm3.csv")
-    models = df['model'].unique()
 
     seed = 1355763
 
@@ -144,22 +147,13 @@ def add_zero_scenarios(df, scenarios):
 
 def clean_temp_output(f, vizcon_scenarios):
     """
-    Takes the output from the FaIR model and averages it across all configurations.
+    Takes the output from the FaIR model and averages it across all configurations, filter to surface layer,
+    and formats it into a clean dataframe.
     """
     print("Postprocessing outputs...")
     temp = f.temperature.to_dataframe('temp').reset_index()
 
-    # forc = f.forcing.to_dataframe('forcing').reset_index()
-    # forc = forc[(forc['timebounds'] >= MIN_YEAR) & (forc['timebounds'] <= MAX_YEAR)]
-    # forc = forc.groupby(['timebounds', 'scenario', 'specie']).mean(numeric_only=True)
-    # forc.to_csv('diagnostic/out_forcing.csv')
-    #
-    # ems = f.emissions.to_dataframe('ems').reset_index()
-    # ems = ems[(ems['timepoints'] >= MIN_YEAR) & (ems['timepoints'] <= MAX_YEAR)]
-    # ems = ems.groupby(['timepoints', 'scenario', 'specie']).mean(numeric_only=True)
-    # ems.to_csv('diagnostic/out_ems.csv')
-
-    # Average across all configs and set to layer = 0 for surface
+    # Set to layer = 0 for surface
     temp = temp[temp.pop('layer') == 0]
 
     # Filter to MIN_YEAR-MAX_YEAR
@@ -177,7 +171,6 @@ def clean_temp_output(f, vizcon_scenarios):
     # If scneario name contains 'CO2', 'CH4', or 'N2O', label 'Kyoto; otherwise 'SLCP'
     # Label 'Pollutant' based on scenario
     df_avg['Pollutant'] = np.where(df_avg['scenario'].str.contains('CO2'), 'CO2', 'non-CO2')
-    # df_avg['Pollutant'] = np.where(df_avg['scenario'].str.contains('CO2|CH4|N2O'), 'Kyoto', 'SLCP')
 
     df_avg['Actual Pollutant'] = df_avg['scenario'].str.split('_', expand=True)[1]
 
@@ -324,7 +317,6 @@ def postprocess_levers(temp):
     # Normalize the lever attribution ------------------------------------------------------------------------------
     temp = normalize_lever_attribution(temp)
 
-
     return temp
 
 
@@ -337,10 +329,10 @@ def main():
     ems = pd.read_csv(EMS_IN)
     conc = pd.read_csv(CONC_IN)
 
-    # Define scenarios
+    # Define full set of scenarios
     scenarios = list(set(pd.concat([forcing['Scenario'], ems['Scenario'], conc['Scenario']]).unique()))
 
-    # Replace '_upper' with ' upper' and '_lower' with ' lower'
+    # Replace '_upper' with ' upper' and '_lower' with ' lower' to avoid "_" delimiter issues
     scenarios = [s.replace('_upper', ' upper').replace('_lower', ' lower') for s in scenarios]
 
     vizcon_scenarios =  np.unique([s.split('_')[-1] if '_' in s else s for s in scenarios])
@@ -366,15 +358,13 @@ def main():
         # Save an intermediate output without lever renormalization
         temp.to_csv(INTERMEDIATE_OUT, index=False)
         print(f"Saved intermediate results to {INTERMEDIATE_OUT}")
-    # # Remove any scenarios with 'lower' or 'upper' in the scenario name
-    # temp = temp[~temp['scenario'].str.contains('lower', case=False, regex=True)]
-    # temp = temp[~temp['scenario'].str.contains('upper', case=False, regex=True)]
 
     temp = postprocess_levers(temp)
 
     # Save the results
     temp.to_csv(TEMP_OUT, index=False)
 
+    # Save a summary output with just the total attributable warming for each scenario
     scenario_totals = temp[temp['Actual Pollutant'] == 'All'].copy()
     scenario_totals = scenario_totals[['timebounds', 'Vizcon Scenario', 'Attributable Warming']]
     # Pivot 'Vizcon Scenario' to columns
