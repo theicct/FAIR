@@ -226,7 +226,7 @@ def fill_from_csv(
 
 
 # TO DO: make part of fill_from_csv
-def fill_from_rcmip(self):
+def fill_from_rcmip(self, batch_number=None, batch_size=None):
     """Fill emissions, concentrations and/or forcing from RCMIP scenarios.
 
     This method is part of the `FAIR` class. It uses self.scenarios to look up
@@ -282,9 +282,18 @@ def fill_from_rcmip(self):
     # )
 
     # Modified code to read local copies
-    df_emis = pd.read_csv('../inputs/final/rcmip-emissions-annual-means-v5-1-0.csv')
-    df_conc = pd.read_csv('../inputs/final/rcmip-concentrations-annual-means-v5-1-0.csv')
-    df_forc = pd.read_csv('../inputs/final/rcmip-radiative-forcing-annual-means-v5-1-0.csv')
+    if batch_number is not None and batch_size is not None:
+        df_emis = pd.read_csv(
+            f'../inputs/final/batches/{batch_size}/rcmip-emissions-annual-means-v5-1-0_{batch_number}.csv'
+        )
+        df_conc = pd.read_csv(
+            f'../inputs/final/batches/{batch_size}/rcmip-concentrations-annual-means-v5-1-0_{batch_number}.csv')
+        df_forc = pd.read_csv(
+            f'../inputs/final/batches/{batch_size}/rcmip-radiative-forcing-annual-means-v5-1-0_{batch_number}.csv')
+    else:
+        df_emis = pd.read_csv('../inputs/final/rcmip-emissions-annual-means-v5-1-0.csv')
+        df_conc = pd.read_csv('../inputs/final/rcmip-concentrations-annual-means-v5-1-0.csv')
+        df_forc = pd.read_csv('../inputs/final/rcmip-radiative-forcing-annual-means-v5-1-0.csv')
 
     # filter to scenarios
     df_emis = df_emis[df_emis["Scenario"].isin(self.scenarios)]

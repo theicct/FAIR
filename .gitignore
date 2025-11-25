@@ -155,7 +155,9 @@ preprocessing/final/*
 !preprocessing/final/README.md
 inputs/final/*
 !inputs/final/README.md
+
 examples/Results/*
 !examples/Results/README.md
+!examples/Results/sens/combine_sens.py
 examples/diagnostic/*
 examples/Results/temperature_all.csv
