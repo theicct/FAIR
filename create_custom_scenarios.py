@@ -1,5 +1,6 @@
 """Convert ICCT SLCP emissions to FaIR format and combine with CMIP6 emissions data."""
 
+import os
 import time
 import pandas as pd
 
@@ -10,8 +11,14 @@ pd.set_option('display.max_columns', 100000)
 # User inputs
 BASE_YR = 1940
 END_YR = 2050
-EMS_IN = 'preprocessing/final/PACE_inventory_long.csv'
+# EMS_IN = 'preprocessing/final/PACE_inventory_long.csv'
 # EMS_IN = 'preprocessing/final/PACE_inventory_levers_long.csv'
+EMS_IN = 'preprocessing/final/PACE_inventory_long_sens.csv' # Triggers special handling for sensitivity runs
+BATCH_SIZE = 10
+
+if EMS_IN == 'preprocessing/final/PACE_inventory_long_sens.csv':
+    RUNNING_SENS = True
+
 BASELINE_SCEN = 'BAU'
 NOX_VAR = 'NOx aviation'
 SSPs = ['ssp119']  # Currently hardcoded to only handle ssp119
@@ -129,6 +136,38 @@ def clean_inputs(ems, conc, forc, species_to_rcmip):
     return ems, conc, forc
 
 
+def handle_sensitivity_input(ems_orig, conc_orig, forc_orig, slcp_ems, species_to_rcmip, scenarios):
+    """
+    If a sensitivity run is being executed, create separate input files for batches of sensitivity runs.
+    """
+    id_cols = ['Year', 'Species', 'Units', 'Source', 'Sector']
+
+    # Ensure 'Results/sens/{BATCH_SIZE}' exists
+    if not os.path.exists(f'inputs/final/batches/{BATCH_SIZE}'):
+        os.makedirs(f'inputs/final/batches/{BATCH_SIZE}')
+    num_scenarios = len(scenarios)
+    num_batches = round(num_scenarios/BATCH_SIZE)
+    # Run in batches
+    for i in range(0, num_scenarios, BATCH_SIZE):
+        st = time.time()
+
+        scenario_batch = list(scenarios[i:i + BATCH_SIZE])
+
+        # Filter to batch
+        slcp_ems_batch = slcp_ems[id_cols + scenario_batch].copy()
+
+        # Align inputs with FaIR
+        ems, conc, forc = align_inputs_with_fair(ems_orig.copy(), conc_orig.copy(), forc_orig.copy(), slcp_ems_batch,
+                                                 species_to_rcmip, scenario_batch)
+
+        # Store each batched input in a separate directory
+        forc.to_csv(f'inputs/final/batches/{BATCH_SIZE}/rcmip-radiative-forcing-annual-means-v5-1-0_{round(i/BATCH_SIZE)}.csv', index=False)
+        ems.to_csv(f'inputs/final/batches/{BATCH_SIZE}/rcmip-emissions-annual-means-v5-1-0_{round(i/BATCH_SIZE)}.csv', index=False)
+        conc.to_csv(f'inputs/final/batches/{BATCH_SIZE}/rcmip-concentrations-annual-means-v5-1-0_{round(i/BATCH_SIZE)}.csv', index=False)
+
+        print(f'Ran batch {i/BATCH_SIZE} of {num_batches} ({i/BATCH_SIZE/num_batches*100:.2f}%) in {time.time() - st:.2f} seconds')
+
+
 def align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, scenarios):
     """
     Align the inputs with FaIR by creating new scenarios and adjusting the emissions.
@@ -153,35 +192,31 @@ def adjust_forc(slcp_ems, forc, scenarios):
     and stratospheric NOx.
     """
     ct_var = 'Effective Radiative Forcing|Anthropogenic|Other|Contrails and Contrail-induced Cirrus'
-    nox_var_fair = 'Effective Radiative Forcing|Anthropogenic|Other|CH4 Oxidation Stratospheric H2O'
     h2o_var = 'Effective Radiative Forcing|Anthropogenic|Other|CH4 Oxidation Stratospheric H2O'
     SSP = 'ssp119'
 
-    # Use ICCT estimates for contrail BAU and striving under SSP119
+    # Use ICCT estimates for contrail BAU and striving under SSP119. Set as contrail total forcing since
+    # contrails come from no other source
     # Contrails ---------------------------------------------------------------------------------------------------
     for yr in range(BASE_YR, END_YR+1):
-        bau = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'contrails')][BASELINE_SCEN].values[0]
-
-        # For contrails, we add an additional step to set the BAU to 0 for all scenarios since contrails only come
-        # from aviation.
-        for scen in forc['Scenario'].unique():
-            # Set default to BAU
-            forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == scen), str(yr)] = bau
-
-        # Adjust the BAU for contrail scenarios
-        for striving_scen in [s for s in scenarios if s!=BASELINE_SCEN]:
+        # Adjust the BAU for intervention scenarios
+        for scen in scenarios:
             # Set the striving scenario
-            striving = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'contrails')][striving_scen].values[0]
+            ct_val = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'contrails')][scen].values[0]
 
-            forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_{striving_scen}'), str(yr)] = striving
-            forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_contrails_Aviation_{striving_scen}'), str(
-                yr)] = striving
+            forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_{scen}'), str(yr)] = ct_val
+            if scen != BASELINE_SCEN:
+                forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_contrails_Aviation_{scen}'), str(
+                    yr)] = ct_val
 
+        # Set to 0 in zero-out scenarios, because contrails come from no other source
         forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_zero_tra'), str(yr)] = 0
-
-        # Add zero contrails scenario
         forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_contrails_Aviation_zero'), str(
             yr)] = 0
+
+    # We only consider contrails for sensitivity runs to save on compute
+    if RUNNING_SENS:
+        return forc
 
     # Stratospheric H2O ----------------------------------------------------------------------------------------------
     for yr in range(BASE_YR, END_YR+1):
@@ -240,21 +275,25 @@ def create_new_scenarios(ems, conc, forc, scenarios, slcp_ems):
     forc = pd.concat([forc, forc[forc['Scenario'] == SSP].replace(SSP, f'{SSP}_zero_tra')])
     conc = pd.concat([conc, conc[conc['Scenario'] == SSP].replace(SSP, f'{SSP}_zero_tra')])
 
-    for specie in slcp_ems['Species'].unique():
-        for sector in slcp_ems['Sector'].unique():
-            # for source in slcp_ems['Source'].unique():
-            if slcp_ems[(slcp_ems['Species'] == specie) & (slcp_ems['Sector'] == sector)].empty:
-                continue
+    # If running a contrail sensitivity run, skip species-specific scenarios (only contrails are modified)
+    if not RUNNING_SENS:
+        species_list = slcp_ems['Species'].unique()
 
-            for scenario in scenarios:
-                ems = pd.concat([ems, ems[(ems['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_{scenario}')])
-                conc = pd.concat([conc, conc[(conc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_{scenario}')])
-                forc = pd.concat([forc, forc[(forc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_{scenario}')])
+        for specie in species_list:
+            for sector in slcp_ems['Sector'].unique():
+                # for source in slcp_ems['Source'].unique():
+                if slcp_ems[(slcp_ems['Species'] == specie) & (slcp_ems['Sector'] == sector)].empty:
+                    continue
 
-            # Add zero scenarios
-            ems = pd.concat([ems, ems[(ems['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_zero')])
-            conc = pd.concat([conc, conc[(conc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_zero')])
-            forc = pd.concat([forc, forc[(forc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_zero')])
+                for scenario in scenarios:
+                    ems = pd.concat([ems, ems[(ems['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_{scenario}')])
+                    conc = pd.concat([conc, conc[(conc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_{scenario}')])
+                    forc = pd.concat([forc, forc[(forc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_{scenario}')])
+
+                # Add zero scenarios
+                ems = pd.concat([ems, ems[(ems['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_zero')])
+                conc = pd.concat([conc, conc[(conc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_zero')])
+                forc = pd.concat([forc, forc[(forc['Scenario'] == SSP)].replace(SSP, f'{SSP}_{specie}_{sector}_zero')])
 
     return ems, conc, forc
 
@@ -354,19 +393,23 @@ def main():
     slcp_ems, scenarios = clean_slcp_ems(slcp_ems)
     ems, conc, forc = clean_inputs(ems, conc, forc, species_to_rcmip)
 
-    # Align inputs with FaIR
-    ems, conc, forc = align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, scenarios)
+    if RUNNING_SENS:
+        # Fully handles adjustments and export for sensitivity runs
+        handle_sensitivity_input(ems, conc, forc, slcp_ems, species_to_rcmip, scenarios)
+    else:
+        # Align inputs with FaIR
+        ems, conc, forc = align_inputs_with_fair(ems, conc, forc, slcp_ems, species_to_rcmip, scenarios)
 
-    # Export FaIR-ready final inputs
-    ems.to_csv(EMISSIONS_OUT, index=False)
-    conc.to_csv(CONCENTRATION_OUT, index=False)
-    forc.to_csv(FORCING_OUT, index=False)
+        # Export FaIR-ready final inputs
+        ems.to_csv(EMISSIONS_OUT, index=False)
+        conc.to_csv(CONCENTRATION_OUT, index=False)
+        forc.to_csv(FORCING_OUT, index=False)
 
-    # Create a long version along year for validation
-    ems_long = ems.melt(id_vars=['Model', 'Scenario', 'Region', 'Variable', 'Unit', 'Mip_Era', 'Activity_Id'], var_name='Year', value_name='ems')
-    ems_long.to_csv(EMISSIONS_OUT_LONG, index=False)
-    forc_long = forc.melt(id_vars=['Model', 'Scenario', 'Region', 'Variable', 'Unit', 'Mip_Era', 'Activity_Id'], var_name='Year', value_name='ems')
-    forc_long.to_csv(FORCING_OUT_LONG, index=False)
+        # Create a long version along year for validation
+        ems_long = ems.melt(id_vars=['Model', 'Scenario', 'Region', 'Variable', 'Unit', 'Mip_Era', 'Activity_Id'], var_name='Year', value_name='ems')
+        ems_long.to_csv(EMISSIONS_OUT_LONG, index=False)
+        forc_long = forc.melt(id_vars=['Model', 'Scenario', 'Region', 'Variable', 'Unit', 'Mip_Era', 'Activity_Id'], var_name='Year', value_name='ems')
+        forc_long.to_csv(FORCING_OUT_LONG, index=False)
 
     print(f"Script executed in {time.time() - st:.2f} seconds.")
 

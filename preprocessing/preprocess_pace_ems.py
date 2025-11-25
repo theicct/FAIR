@@ -3,13 +3,24 @@ Convert PACE emissions outputs into inputs for FaIR.
 """
 
 import pandas as pd
+import numpy as np
 
 # set wide display
 pd.set_option('display.width', 1000)
 pd.set_option('display.max_columns', 500)
 
 FNAME_IN = 'PACE/summary_sept16_historical_and_slcp_uq.csv'
-EMS_OUT = 'final/PACE_inventory_long.csv'
+EMS_OUT = 'final/PACE_inventory_long.csv' # If SENSITIVITY_FNAME is not None, this will be replaced to include "_sens"
+
+# Optional: If a sensitivity runs file is provided, then only the baseline scenario will be included and
+# all sensitivity runs will be added from the provided file.
+SENSITIVITY_FNAME = 'PACE/pace_baseline_erf_projection_samples.csv'
+
+# Use a separate filename to indicate that the output includes sensitivity runs, which changes the handling in later scripts
+if SENSITIVITY_FNAME is not None:
+    EMS_OUT = 'final/PACE_inventory_long_sens.csv'
+    BASE_YR_SENS = 2023
+    END_YR_SENS = 2050
 
 CONTRAILS_VAR_NAME = 'ConERF'
 CONTRAILS_UNITS = 'W/m2'
@@ -125,6 +136,37 @@ def convert_units(df_long):
     return df_long
 
 
+def clean_sensitivity_runs(df):
+    """
+    Sensitivity output were provided in the wide format with years as rows and scenarios as columns.
+
+    Though the year rows were not labeled, they covered 2023 to 2050.
+    """
+    assert all(['Sample' in col for col in df.columns])
+
+    # Add a 'Year' column 2023-2050
+    years = np.arange(BASE_YR_SENS, END_YR_SENS+1)
+
+    assert len(years) == df.shape[0]
+
+    df['Year'] = years
+
+    # Melt and add scenario column
+    df = df.melt(id_vars=['Year'], var_name='Scenario', value_name='ems')
+
+    # Add metadata
+    df['Sector'] = 'Aviation'
+    df['Species'] = 'contrails'
+    df['Units'] = 'mW/m2'
+    df['Source'] = 'WTW'
+
+    # Convert units to W/m2
+    df['ems'] = df['ems'] * 1e-3
+    df['Units'] = 'W/m2'
+
+    return df
+
+
 def main():
     """
     Execute the script.
@@ -139,6 +181,16 @@ def main():
     df_long['Species'] = df_long['Species'].str.lower()
     # Remove all '_' from Scenario names since underscores are a key delimiter in later scripts
     df_long['Scenario'] = df_long['Scenario'].str.replace('_', ' ', regex=False)
+
+    if SENSITIVITY_FNAME is not None:
+        # Add the BAU scenario to the mc_simulations
+        bau_contrails = df_long[(df_long['Species'] == 'contrails') & (df_long['Scenario'] == 'BAU')].copy()
+        # Add in contrails from the Monte Carlo simulations
+        sens_simulations = pd.read_csv(SENSITIVITY_FNAME)
+        sens_simulations = clean_sensitivity_runs(sens_simulations)
+
+        # Concatenate the two dataframes
+        df_long = pd.concat([bau_contrails, sens_simulations], ignore_index=True)
 
     df_long.to_csv(EMS_OUT, index=False)
 

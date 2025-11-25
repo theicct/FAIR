@@ -1,5 +1,6 @@
 """Run ICCT emissions scenarios through FaIR and save temperature results."""
 
+import os
 import numpy as np
 import pandas as pd
 import time
@@ -17,29 +18,39 @@ MIN_YEAR = 1940
 MAX_YEAR = 2050
 BASE_SCEN = 'Historical Trends'
 
-# Define output paths. NOTE: "lever", if included in the TEMP_OUT filename, is a special keyword that triggers lever
-# attribution postprocessing (renormalization). If running a lever-based scenario, ensure that "lever" is in the filename
-# and INTERMEDIATE_OUT is additionally defined
-TEMP_OUT = 'Results/temperature_Sep17_2025.csv'
+# Define output paths. NOTE: "lever" and "sense", if included in the TEMP_OUT filename, are a special keywords that
+# triggers lever attribution postprocessing (renormalization) or sensitivity run processing. If running a lever-based
+# scenario, ensure that "lever" is in the filename and INTERMEDIATE_OUT is additionally defined
+TEMP_OUT = 'Results/temperature_sens_Sep17_2025.csv' # 'Results/temperature_lever_Sep17_2025.csv' # 'Results/temperature_sens_Sep17_2025.csv'
 # INTERMEDIATE_OUT = 'Results/temperature_Sep17_2025_no_normalization.csv'
 CLEAN_OUT = 'Results/temperature_Sep17_2025_summary.csv'
+
+BATCH_SIZE = 10 # Must be defined if running a sensitivity run and must be consistent with preprocessing
+TOTAL_SCENARIO_SIZE = 200 # Must be defined if running a sensitivity run and must be consistent with preprocessing # 100000
 
 if 'lever' in TEMP_OUT or 'Lever' in TEMP_OUT:
     POSTPROCESS_LEVERS = True
 else:
     POSTPROCESS_LEVERS = False
+if 'sens' in TEMP_OUT or 'Sens' in TEMP_OUT:
+    RUN_SENSITIVITY = True
+else:
+    RUN_SENSITIVITY = False
 
 print(f"Running a lever attribution scenario (with renormalization): {POSTPROCESS_LEVERS}")
+print(f"Running a sensitivity run: {RUN_SENSITIVITY}")
 
 # Internal input paths
 FORCING_IN = '../inputs/final/rcmip-radiative-forcing-annual-means-v5-1-0.csv'
 EMS_IN = '../inputs/final/rcmip-emissions-annual-means-v5-1-0.csv'
 CONC_IN = '../inputs/final/rcmip-concentrations-annual-means-v5-1-0.csv'
 
-def set_up_fair(scenarios):
+def set_up_fair(scenarios, batch_number=None, batch_size=None):
     """
     Set up the FaIR model with CMIP6-aligned parameters and the specified scenarios, following the example in
-     https://docs.fairmodel.net/en/latest/examples/cmip6_ssp_emissions_run.html
+     https://docs.fairmodel.net/en/latest/examples/cmip6_ssp_emissions_run.html.
+
+    Batch size and number are optional arguments used for sensitivity runs.
     """
     print("Setting up FaIR model...")
 
@@ -86,7 +97,7 @@ def set_up_fair(scenarios):
     df_volcanic = pd.read_csv('../tests/test_data/volcanic_ERF_monthly_175001-201912.csv', index_col='year')
     df_volcanic[1750:].head()
 
-    f.fill_from_rcmip()
+    f.fill_from_rcmip(batch_number, batch_size)
 
     # overwrite volcanic, per example scenario
     volcanic_forcing = np.zeros(351)
@@ -145,7 +156,7 @@ def add_zero_scenarios(df, scenarios):
     return striving_scenarios
 
 
-def clean_temp_output(f, vizcon_scenarios):
+def clean_temp_output(f, vizcon_scenarios=None):
     """
     Takes the output from the FaIR model and averages it across all configurations, filter to surface layer,
     and formats it into a clean dataframe.
@@ -162,32 +173,35 @@ def clean_temp_output(f, vizcon_scenarios):
     # Average across all configs
     df_avg = temp.groupby(["timebounds", "scenario"], as_index=False, dropna=False).agg({"temp": "mean"})
 
-    # Add an 'Avoided' column as the difference from ssp119
-    ssp119 = df_avg[df_avg['scenario'] == 'ssp119'].copy()
-    df_avg = df_avg.merge(ssp119, on='timebounds', suffixes=('', '_ssp119'))
-    df_avg['Avoided'] = df_avg['temp_ssp119'] - df_avg['temp']
+    # Not all sensitivity scenarios will have SSP119 scenario
+    if not RUN_SENSITIVITY:
+        # Add an 'Avoided' column as the difference from ssp119
+        ssp119 = df_avg[df_avg['scenario'] == 'ssp119'].copy()
+        df_avg = df_avg.merge(ssp119, on='timebounds', suffixes=('', '_ssp119'))
+        df_avg['Avoided'] = df_avg['temp_ssp119'] - df_avg['temp']
 
-    # Add a column to indicate SLCP or Kyoto
-    # If scneario name contains 'CO2', 'CH4', or 'N2O', label 'Kyoto; otherwise 'SLCP'
-    # Label 'Pollutant' based on scenario
-    df_avg['Pollutant'] = np.where(df_avg['scenario'].str.contains('CO2'), 'CO2', 'non-CO2')
+        # Add a column to indicate SLCP or Kyoto
+        # If scneario name contains 'CO2', 'CH4', or 'N2O', label 'Kyoto; otherwise 'SLCP'
+        # Label 'Pollutant' based on scenario
+        df_avg['Pollutant'] = np.where(df_avg['scenario'].str.contains('CO2'), 'CO2', 'non-CO2')
 
-    df_avg['Actual Pollutant'] = df_avg['scenario'].str.split('_', expand=True)[1]
+        df_avg['Actual Pollutant'] = df_avg['scenario'].str.split('_', expand=True)[1]
 
-    # Remove the Pollutant values for 'ssp119', 'ssp119_striving', and 'ssp119_zero_tra'
-    df_avg.loc[df_avg['scenario'].isin(['ssp119', 'ssp119_striving', 'ssp119_zero_tra']), 'Pollutant'] = np.nan
-    df_avg.loc[df_avg['scenario'].isin(['ssp119', 'ssp119_striving', 'ssp119_zero_tra']), 'Actual Pollutant'] = np.nan
+        # Remove the Pollutant values for 'ssp119', 'ssp119_striving', and 'ssp119_zero_tra'
+        df_avg.loc[df_avg['scenario'].isin(['ssp119', 'ssp119_striving', 'ssp119_zero_tra']), 'Pollutant'] = np.nan
+        df_avg.loc[df_avg['scenario'].isin(['ssp119', 'ssp119_striving', 'ssp119_zero_tra']), 'Actual Pollutant'] = np.nan
 
-    df_avg = add_zero_scenarios(df_avg, vizcon_scenarios)
 
-    # Add 'Vizcon Scenario' Column
-    for scen in vizcon_scenarios:
-        df_avg.loc[df_avg['scenario'].str.contains(scen), 'Vizcon Scenario'] = scen
+        df_avg = add_zero_scenarios(df_avg, vizcon_scenarios)
 
-    # Rename BAU scenario to Baseline
-    df_avg.loc[df_avg['Vizcon Scenario'] == 'BAU', 'Vizcon Scenario'] = BASE_SCEN
+        # Add 'Vizcon Scenario' Column
+        for scen in vizcon_scenarios:
+            df_avg.loc[df_avg['scenario'].str.contains(scen), 'Vizcon Scenario'] = scen
 
-    df_avg = df_avg.rename(columns={'Striving_temp_attribution': 'Attributable Warming', 'temp': 'Global Temperature Anomaly'})
+        # Rename BAU scenario to Baseline
+        df_avg.loc[df_avg['Vizcon Scenario'] == 'BAU', 'Vizcon Scenario'] = BASE_SCEN
+
+        df_avg = df_avg.rename(columns={'Striving_temp_attribution': 'Attributable Warming', 'temp': 'Global Temperature Anomaly'})
 
     return df_avg
 
@@ -320,57 +334,89 @@ def postprocess_levers(temp):
     return temp
 
 
+def run_fair_with_sensitivity():
+    print(f"Running FaIR in sensitivity mode with batch size {BATCH_SIZE}. Ensure this is consistent with preprocessing.")
+    # Ensure 'Results/sens/{batch_size}' exists
+    if not os.path.exists(f'Results/sens/{BATCH_SIZE}'):
+        os.makedirs(f'Results/sens/{BATCH_SIZE}')
+    # Run in batches
+    for i in range(0, TOTAL_SCENARIO_SIZE, BATCH_SIZE):
+        batch_number = round(i/BATCH_SIZE)
+        # Only read in contrails
+        df_forc = pd.read_csv(f'../inputs/final/batches/{BATCH_SIZE}/rcmip-radiative-forcing-annual-means-v5-1-0_{batch_number}.csv')
+
+        # Get the scenarios for this batch
+        scenarios = list(df_forc['Scenario'].unique())
+
+        # Set up FaIR
+        f = set_up_fair(scenarios, batch_number, BATCH_SIZE)
+
+        # Run the model
+        f.run()
+
+        # Retrieve the temperature results in a clean format
+        temp = clean_temp_output(f, '')
+
+        # Save the results
+        temp.to_csv(f'Results/sens/{BATCH_SIZE}/temperature_{batch_number}.csv', index=False)
+
+
 def main():
     """Set up FaIR, run it, and save results."""
 
     st = time.time()
-    # Read input data
-    forcing = pd.read_csv(FORCING_IN)
-    ems = pd.read_csv(EMS_IN)
-    conc = pd.read_csv(CONC_IN)
 
-    # Define full set of scenarios
-    scenarios = list(set(pd.concat([forcing['Scenario'], ems['Scenario'], conc['Scenario']]).unique()))
+    if RUN_SENSITIVITY:
+        # Run a special setup for sensitivity runs
+        run_fair_with_sensitivity()
+    else:
+        # Read input data
+        forcing = pd.read_csv(FORCING_IN)
+        ems = pd.read_csv(EMS_IN)
+        conc = pd.read_csv(CONC_IN)
 
-    # Replace '_upper' with ' upper' and '_lower' with ' lower' to avoid "_" delimiter issues
-    scenarios = [s.replace('_upper', ' upper').replace('_lower', ' lower') for s in scenarios]
+        # Define full set of scenarios
+        scenarios = list(set(pd.concat([forcing['Scenario'], ems['Scenario'], conc['Scenario']]).unique()))
 
-    vizcon_scenarios =  np.unique([s.split('_')[-1] if '_' in s else s for s in scenarios])
-    # Drop 'ssp119', 'tra', 'zero'
-    vizcon_scenarios = [name for name in vizcon_scenarios if name not in ['ssp119', 'tra']]
-    vizcon_scenarios = list(map(str, vizcon_scenarios))
+        # Replace '_upper' with ' upper' and '_lower' with ' lower' to avoid "_" delimiter issues
+        scenarios = [s.replace('_upper', ' upper').replace('_lower', ' lower') for s in scenarios]
 
-    # Set up FaIR
-    f = set_up_fair(scenarios)
+        vizcon_scenarios =  np.unique([s.split('_')[-1] if '_' in s else s for s in scenarios])
+        # Drop 'ssp119', 'tra', 'zero'
+        vizcon_scenarios = [name for name in vizcon_scenarios if name not in ['ssp119', 'tra']]
+        vizcon_scenarios = list(map(str, vizcon_scenarios))
 
-    # Run the model
-    print("Running FaIR...")
-    f.run()
+        # Set up FaIR
+        f = set_up_fair(scenarios)
 
-    # Retrieve the temperature results in a clean format
-    temp = clean_temp_output(f, vizcon_scenarios)
+        # Run the model
+        print("Running FaIR...")
+        f.run()
 
-    # Rename 'Pollutant' to 'Pollutant Group'
-    temp = temp.rename(columns={'Pollutant': 'Pollutant Group'})
-    temp = temp[['timebounds', 'scenario', 'Vizcon Scenario', 'Pollutant Group',
-                 'Actual Pollutant', 'Attributable Warming', 'Global Temperature Anomaly']]
-    if POSTPROCESS_LEVERS:
-        # Save an intermediate output without lever renormalization
-        temp.to_csv(INTERMEDIATE_OUT, index=False)
-        print(f"Saved intermediate results to {INTERMEDIATE_OUT}")
+        # Retrieve the temperature results in a clean format
+        temp = clean_temp_output(f, vizcon_scenarios)
 
-    temp = postprocess_levers(temp)
+        # Rename 'Pollutant' to 'Pollutant Group'
+        temp = temp.rename(columns={'Pollutant': 'Pollutant Group'})
+        temp = temp[['timebounds', 'scenario', 'Vizcon Scenario', 'Pollutant Group',
+                     'Actual Pollutant', 'Attributable Warming', 'Global Temperature Anomaly']]
+        if POSTPROCESS_LEVERS:
+            # Save an intermediate output without lever renormalization
+            temp.to_csv(INTERMEDIATE_OUT, index=False)
+            print(f"Saved intermediate results to {INTERMEDIATE_OUT}")
 
-    # Save the results
-    temp.to_csv(TEMP_OUT, index=False)
+        temp = postprocess_levers(temp)
 
-    # Save a summary output with just the total attributable warming for each scenario
-    scenario_totals = temp[temp['Actual Pollutant'] == 'All'].copy()
-    scenario_totals = scenario_totals[['timebounds', 'Vizcon Scenario', 'Attributable Warming']]
-    # Pivot 'Vizcon Scenario' to columns
-    scenario_totals = scenario_totals.pivot(index='timebounds', columns='Vizcon Scenario',
-                                            values='Attributable Warming').reset_index()
-    scenario_totals.to_csv(CLEAN_OUT, index=False)
+        # Save the results
+        temp.to_csv(TEMP_OUT, index=False)
+
+        # Save a summary output with just the total attributable warming for each scenario
+        scenario_totals = temp[temp['Actual Pollutant'] == 'All'].copy()
+        scenario_totals = scenario_totals[['timebounds', 'Vizcon Scenario', 'Attributable Warming']]
+        # Pivot 'Vizcon Scenario' to columns
+        scenario_totals = scenario_totals.pivot(index='timebounds', columns='Vizcon Scenario',
+                                                values='Attributable Warming').reset_index()
+        scenario_totals.to_csv(CLEAN_OUT, index=False)
 
     print(f"Ran in {(time.time() - st)/60:.2f} minutes")
 
