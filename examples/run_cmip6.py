@@ -18,15 +18,15 @@ MIN_YEAR = 1940
 MAX_YEAR = 2050
 BASE_SCEN = 'Historical Trends'
 
-# Define output paths. NOTE: "lever" and "sense", if included in the TEMP_OUT filename, are a special keywords that
+# Define output paths. NOTE: "lever" and "sens", if included in the TEMP_OUT filename, are a special keywords that
 # triggers lever attribution postprocessing (renormalization) or sensitivity run processing. If running a lever-based
 # scenario, ensure that "lever" is in the filename and INTERMEDIATE_OUT is additionally defined
 TEMP_OUT = 'Results/temperature_sens_Sep17_2025.csv' # 'Results/temperature_lever_Sep17_2025.csv' # 'Results/temperature_sens_Sep17_2025.csv'
 # INTERMEDIATE_OUT = 'Results/temperature_Sep17_2025_no_normalization.csv'
 CLEAN_OUT = 'Results/temperature_Sep17_2025_summary.csv'
 
-BATCH_SIZE = 10 # Must be defined if running a sensitivity run and must be consistent with preprocessing
-TOTAL_SCENARIO_SIZE = 200 # Must be defined if running a sensitivity run and must be consistent with preprocessing # 100000
+BATCH_SIZE = 100 # Must be defined if running a sensitivity run and must be consistent with preprocessing
+TOTAL_SCENARIO_SIZE = 100000 # Must be defined if running a sensitivity run and must be consistent with preprocessing # 100000
 
 if 'lever' in TEMP_OUT or 'Lever' in TEMP_OUT:
     POSTPROCESS_LEVERS = True

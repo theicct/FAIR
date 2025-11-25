@@ -14,7 +14,7 @@ END_YR = 2050
 # EMS_IN = 'preprocessing/final/PACE_inventory_long.csv'
 # EMS_IN = 'preprocessing/final/PACE_inventory_levers_long.csv'
 EMS_IN = 'preprocessing/final/PACE_inventory_long_sens.csv' # Triggers special handling for sensitivity runs
-BATCH_SIZE = 10
+BATCH_SIZE = 100
 
 if EMS_IN == 'preprocessing/final/PACE_inventory_long_sens.csv':
     RUNNING_SENS = True

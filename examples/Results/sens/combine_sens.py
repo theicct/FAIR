@@ -42,21 +42,13 @@ def collect_data(batch_size):
     # Convert to long with 'Scenario'
     avg_and_quantiles_long = avg_and_quantiles.melt(id_vars=['timebounds'], var_name='scenario', value_name='temp')
 
-    # Concatenate
-    # all = pd.concat([avg_and_quantiles_long, all], ignore_index=True)
-
-    # avg_and_quantiles = avg_and_quantiles.drop(columns=['lower_95th', 'upper_95th'])
-
-    # Merge the two dataframes
-    # all = all.merge(avg_and_quantiles, on='timebounds', how='left')
-
-    return all, avg_and_quantiles
+    return all, avg_and_quantiles_long
 
 
 
 def main():
     """Read all input data from the 'sens' directory, combine them, and save the results."""
-    batch_size = 10
+    batch_size = 100
 
     all, avg_and_quantiles = collect_data(batch_size)
 
