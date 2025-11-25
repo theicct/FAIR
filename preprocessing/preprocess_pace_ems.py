@@ -14,7 +14,7 @@ EMS_OUT = 'final/PACE_inventory_long.csv' # If SENSITIVITY_FNAME is not None, th
 
 # Optional: If a sensitivity runs file is provided, then only the baseline scenario will be included and
 # all sensitivity runs will be added from the provided file.
-SENSITIVITY_FNAME = 'PACE/pace_baseline_erf_projection_samples.csv'
+SENSITIVITY_FNAME = None #'PACE/pace_baseline_erf_projection_samples.csv'
 
 # Use a separate filename to indicate that the output includes sensitivity runs, which changes the handling in later scripts
 if SENSITIVITY_FNAME is not None:

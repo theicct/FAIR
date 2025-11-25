@@ -11,11 +11,12 @@ pd.set_option('display.max_columns', 100000)
 # User inputs
 BASE_YR = 1940
 END_YR = 2050
-# EMS_IN = 'preprocessing/final/PACE_inventory_long.csv'
+EMS_IN = 'preprocessing/final/PACE_inventory_long.csv'
 # EMS_IN = 'preprocessing/final/PACE_inventory_levers_long.csv'
-EMS_IN = 'preprocessing/final/PACE_inventory_long_sens.csv' # Triggers special handling for sensitivity runs
+# EMS_IN = 'preprocessing/final/PACE_inventory_long_sens.csv' # Triggers special handling for sensitivity runs
 BATCH_SIZE = 100
 
+RUNNING_SENS = False
 if EMS_IN == 'preprocessing/final/PACE_inventory_long_sens.csv':
     RUNNING_SENS = True
 
@@ -205,9 +206,8 @@ def adjust_forc(slcp_ems, forc, scenarios):
             ct_val = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'contrails')][scen].values[0]
 
             forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_{scen}'), str(yr)] = ct_val
-            if scen != BASELINE_SCEN:
-                forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_contrails_Aviation_{scen}'), str(
-                    yr)] = ct_val
+            forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_contrails_Aviation_{scen}'), str(
+                yr)] = ct_val
 
         # Set to 0 in zero-out scenarios, because contrails come from no other source
         forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_zero_tra'), str(yr)] = 0
