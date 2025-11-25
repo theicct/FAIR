@@ -146,16 +146,20 @@ dmypy.json
 .pyre/
 
 .idea
-Archive
 *.twbx
 *.twb
-CMIP6/rcmip-emissions-annual-means-v5-1-0_long.csv
 
 examples/Results/sens/100/*
 CMIP6/batches/100/*
-Preprocessing/final/*
+preprocessing/final/*
+!preprocessing/final/README.md
 inputs/final/*
 !inputs/final/README.md
-examples/Results/*
+
+examples/Results/**
+!examples/Results/README.md
+!examples/Results/sens/
+!examples/Results/sens/combine_sens.py
+
 examples/diagnostic/*
 examples/Results/temperature_all.csv

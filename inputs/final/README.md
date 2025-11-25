@@ -1,1 +1,1 @@
-Repository to store the modified SSP emissions.
+Directory to store final inputs.
