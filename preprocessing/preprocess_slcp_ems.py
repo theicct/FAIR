@@ -131,7 +131,7 @@ def remove_domestic_aviation(off_road_ems, other_ems):
     # Filter to relevant pollutants (co2, ch4, bc)
     aviation_bau = aviation_bau[aviation_bau['Species'].isin(['co2', 'ch4', 'bc'])].copy()
     # Assume only TTW emissions
-    aviation_bau = aviation_bau[aviation_bau['Source'] == 'TTW'].copy()
+    # aviation_bau = aviation_bau[aviation_bau['Source'] == 'TTW'].copy()
     # Calculate the domestic aviation emissions by multiplying by 40%
     aviation_bau['ems'] = aviation_bau['ems'] * 0.4
 
@@ -187,6 +187,25 @@ def interp_reductions(reductions):
     )
 
     return reductions
+
+
+def add_aviation(df_long, pace):
+    """
+    Add aviation emissions from the PACE inventory to the main inventory. This is necessary since the PACE inventory
+    includes contrails, which are not included in the main inventory.
+    """
+    # Rename "Historical Trends" scenario to "BAU" and "Full Breakthrough" to "Striving"
+    pace = pace.rename(columns={'Historical Trends': 'BAU', 'Full Breakthrough': 'Striving'})
+    pace = pace[pace['Scenario'].isin(['BAU', 'Striving'])]
+    # Filter PACE to after 2020
+    pace = pace[pace['Year'] >= 2020].copy()
+
+    # Drop Aviation from existing inventory since we will replace with the PACE inventory
+    df_long = df_long[df_long['Sector'] != 'Aviation'].copy()
+
+    df_long = pd.concat([df_long, pace], ignore_index=True)
+
+    return df_long
 
 
 def calc_off_road(off_road_ems, other_ems):
@@ -385,15 +404,15 @@ def convert_units(df_long):
 
     # For CO2, convert from Mt to Gt
     # Assert CO2 units are Mt
-    assert df_long.loc[df_long['Species'] == 'co2', 'Units'].unique() == ['Mt']
-    df_long.loc[df_long['Species'] == 'co2', 'ems'] = df_long['ems'] * 0.001
-    df_long.loc[df_long['Species'] == 'co2', 'Units'] = 'Gt'
+    df_long.loc[(df_long['Species'] == 'co2') & (df_long['Units'] == 'Mt'), 'ems'] = df_long['ems'] * 0.001
+    df_long.loc[(df_long['Species'] == 'co2') & (df_long['Units'] == 'Mt'), 'Units'] = 'Gt'
+    assert df_long.loc[df_long['Species'] == 'co2', 'Units'].unique() == ['Gt']
 
     # Contrails are in units of mW/m2, convert to W/m2
-    if 'contrails' in df_long['Species'].unique():
-        assert df_long.loc[df_long['Species'] == 'contrails', 'Units'].unique() == ['mW/m2']
+    if ('contrails' in df_long['Species'].unique()) & (df_long.loc[df_long['Species'] == 'contrails', 'Units'].unique() == 'mW/m2'):
         df_long.loc[df_long['Species'] == 'contrails', 'ems'] = df_long['ems'] * 0.001
         df_long.loc[df_long['Species'] == 'contrails', 'Units'] = 'W/m2'
+    assert df_long.loc[df_long['Species'] == 'contrails', 'Units'].unique() == ['W/m2']
 
     return df_long
 
@@ -422,6 +441,7 @@ def run():
     TODO: add on-road, off-road, and calculate WTT emissions for sectors missing them.
     """
     df = pd.read_csv('SLCP_inventory.csv')
+    pace = pd.read_csv('PACE_inventory_long.csv')
 
     # Drop where 'Scenario' is nan
     df = df.dropna(subset=['Scenario'])
@@ -432,6 +452,7 @@ def run():
         value_name='ems'
     )
 
+    df_long = add_aviation(df_long, pace)
     off_road = pd.read_csv('off-road/off-road_BAU_IIASA.csv')
     df_long = calc_off_road(off_road, df_long)
 
