@@ -195,6 +195,59 @@ def clean_temp_output(f):
     return df_avg
 
 
+def add_vizcon_ems(temp, vizcon):
+    """
+    Takes the output from the FaIR model and adds the Vizcon emissions to it.
+    """
+    vizcon = vizcon.rename(columns={'Global Temperature Anomaly': 'temp_ssp119', 'Pollutant Group': 'Pollutant'})
+    vizcon['Sector'] = 'Aviation'
+
+    # Pivot Vizcon Scenario wide
+    vizcon = vizcon[vizcon['Vizcon Scenario'].isin(['Historical Trends', 'Full Breakthrough'])].copy()
+    # Replace 'Full Breakthrough' with 'Striving' in scenario names
+    vizcon['scenario'] = vizcon['scenario'].str.replace('Full Breakthrough', 'striving')
+    vizcon['scenario'] = vizcon['scenario'].str.replace('BAU', 'striving')
+
+    vizcon = vizcon.pivot_table(index=['timebounds', 'scenario', 'Pollutant', 'Actual Pollutant', 'Sector'],
+                                columns='Vizcon Scenario', values='Attributable Warming').reset_index()
+    vizcon = vizcon.rename(columns={'Historical Trends': 'BAU_temp_attribution', 'Full Breakthrough': 'Striving_temp_attribution'})
+    vizcon['Avoided'] = vizcon['BAU_temp_attribution'] - vizcon['Striving_temp_attribution']
+
+    vizcon['scenario_ssp119'] = 'ssp119'
+
+
+    temp = temp[temp['Sector']!='Aviation'].copy()
+    temp = pd.concat([temp, vizcon], ignore_index=True)
+
+    return temp
+
+def add_arctic_bc_multiplier(temp):
+    """
+    Takes the output from the FaIR model and adds a multiplier to the Arctic BC emissions.
+    """
+    ARCTIC_BC_POTENCY = 5
+
+    # Pull out marine arctic emissions separately
+    marine_arctic = temp[(temp['Sector'] == 'Marine')].copy()
+    marine_arctic['Arctic Fraction'] = marine_arctic['timebounds'].apply(lambda x: (0.02) + (0.07 - 0.02) * (x - 2020) / (2050 - 2020) if 2020 <= x <= 2050 else (1.00))
+    marine_arctic['Avoided'] *= marine_arctic['Arctic Fraction']
+    marine_arctic['BAU_temp_attribution'] *= marine_arctic['Arctic Fraction']
+    marine_arctic['Striving_temp_attribution'] *= marine_arctic['Arctic Fraction']
+
+    marine_arctic.loc[(temp['Actual Pollutant'] == 'BC'), 'Avoided'] *= ARCTIC_BC_POTENCY
+    marine_arctic.loc[(temp['Actual Pollutant'] == 'BC'), 'BAU_temp_attribution'] *= ARCTIC_BC_POTENCY
+    marine_arctic.loc[(temp['Actual Pollutant'] == 'BC'), 'Striving_temp_attribution'] *= ARCTIC_BC_POTENCY
+
+    # Linearly interpolate 2-7% from 2020 to 2050
+    temp['BC Multiplier'] = temp['timebounds'].apply(lambda x: 1 + (0.02*ARCTIC_BC_POTENCY) + ARCTIC_BC_POTENCY*(0.07 - 0.02) * (x - 2020) / (2050 - 2020) if 2020 <= x <= 2050 else (1.00))
+    # Add a multiplier to the Arctic BC emissions
+    temp.loc[(temp['Actual Pollutant'] == 'BC') & (temp['Sector'] == 'Marine'), 'Avoided'] *= temp['BC Multiplier']
+    temp.loc[(temp['Actual Pollutant'] == 'BC') & (temp['Sector'] == 'Marine'), 'BAU_temp_attribution'] *= temp['BC Multiplier']
+    temp.loc[(temp['Actual Pollutant'] == 'BC') & (temp['Sector'] == 'Marine'), 'Striving_temp_attribution'] *= temp['BC Multiplier']
+
+    return temp, marine_arctic
+
+
 def main():
     """Set up FaIR, run it, and save results."""
     # Read input data
@@ -214,8 +267,15 @@ def main():
     # Retrieve the temperature results in a clean format
     temp = clean_temp_output(f)
 
+    # Concatenate the Vizcon results
+    vizcon = pd.read_csv('../preprocessing/Vizcon_final_temperature_Sep17_2025.csv')
+    temp = add_vizcon_ems(temp, vizcon)
+
+    temp, marine_arctic = add_arctic_bc_multiplier(temp)
+
     # Save the results
     temp.to_csv('Results/temperature_all.csv', index=False)
+    marine_arctic.to_csv('Results/marine_arctic.csv', index=False)
 
 
 if __name__ == "__main__":
