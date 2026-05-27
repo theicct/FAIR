@@ -149,6 +149,9 @@ dmypy.json
 *.twbx
 *.twb
 
+# Claude Code
+.claude/
+
 examples/Results/sens/100/*
 CMIP6/batches/100/*
 preprocessing/final/*
