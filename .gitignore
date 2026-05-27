@@ -154,10 +154,15 @@ dmypy.json
 
 examples/Results/sens/100/*
 CMIP6/batches/100/*
+CMIP6/rcmip-concentrations-annual-means-v5-1-0.csv
+CMIP6/rcmip-emissions-annual-means-v5-1-0.csv
+CMIP6/rcmip-radiative-forcing-annual-means-v5-1-0.csv
+CMIP6/rcmip-forcing-annual-means-v5-1-0_long.csv
 preprocessing/final/*
 !preprocessing/final/README.md
 inputs/final/*
 !inputs/final/README.md
+preprocessing/diagnostic/*
 
 examples/Results/**
 !examples/Results/README.md
