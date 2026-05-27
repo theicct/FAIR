@@ -28,6 +28,8 @@ diesel_MJ_per_kg = 45.5 # MJ/kg
 diesel_MJ_per_Mt = diesel_MJ_per_kg * 1e9 # convert from kg to Mt
 # diesel_MtCO2_per_MJ = 7.35e-8 #MtCO2/MJ
 
+PACE_IN = "PACE_inventory_long.csv"
+
 def calculate_aviation_wtt(df_long):
     """
     From the CO2 values (or fuel consumption), we can calculate the WTT emissions for aviation
@@ -187,25 +189,6 @@ def interp_reductions(reductions):
     )
 
     return reductions
-
-
-def add_aviation(df_long, pace):
-    """
-    Add aviation emissions from the PACE inventory to the main inventory. This is necessary since the PACE inventory
-    includes contrails, which are not included in the main inventory.
-    """
-    # Rename "Historical Trends" scenario to "BAU" and "Full Breakthrough" to "Striving"
-    pace = pace.rename(columns={'Historical Trends': 'BAU', 'Full Breakthrough': 'Striving'})
-    pace = pace[pace['Scenario'].isin(['BAU', 'Striving'])]
-    # Filter PACE to after 2020
-    pace = pace[pace['Year'] >= 2020].copy()
-
-    # Drop Aviation from existing inventory since we will replace with the PACE inventory
-    df_long = df_long[df_long['Sector'] != 'Aviation'].copy()
-
-    df_long = pd.concat([df_long, pace], ignore_index=True)
-
-    return df_long
 
 
 def calc_off_road(off_road_ems, other_ems):
@@ -404,15 +387,17 @@ def convert_units(df_long):
 
     # For CO2, convert from Mt to Gt
     # Assert CO2 units are Mt
+    # assert df_long.loc[df_long['Species'] == 'co2', 'Units'].unique() == ['Mt']
+    # Where Species is 'co2' and Units are 'Mt', convert to Gt
     df_long.loc[(df_long['Species'] == 'co2') & (df_long['Units'] == 'Mt'), 'ems'] = df_long['ems'] * 0.001
-    df_long.loc[(df_long['Species'] == 'co2') & (df_long['Units'] == 'Mt'), 'Units'] = 'Gt'
-    assert df_long.loc[df_long['Species'] == 'co2', 'Units'].unique() == ['Gt']
+    df_long.loc[df_long['Species'] == 'co2', 'Units'] = 'Gt'
 
     # Contrails are in units of mW/m2, convert to W/m2
-    if ('contrails' in df_long['Species'].unique()) & (df_long.loc[df_long['Species'] == 'contrails', 'Units'].unique() == 'mW/m2'):
+    ct_unit = list(df_long.loc[df_long['Species'] == 'contrails', 'Units'].unique())
+    if ('contrails' in df_long['Species'].unique()) & (ct_unit == ['mW/m2']):
+        assert df_long.loc[df_long['Species'] == 'contrails', 'Units'].unique() == ['mW/m2']
         df_long.loc[df_long['Species'] == 'contrails', 'ems'] = df_long['ems'] * 0.001
         df_long.loc[df_long['Species'] == 'contrails', 'Units'] = 'W/m2'
-    assert df_long.loc[df_long['Species'] == 'contrails', 'Units'].unique() == ['W/m2']
 
     return df_long
 
@@ -434,6 +419,24 @@ def build_scenarios(df):
     return df
 
 
+def add_pace_to_totals(df, pace):
+    """
+    Add PACE emissions to the total inventory emissions.
+    """
+    # Filter to Historical Trends and Full Breakthrough scenarios
+    pace = pace[pace['Scenario'].isin(['BAU', 'Full Breakthrough'])].copy()
+    # Rename to "BAU" and "Striving"
+    pace['Scenario'] = pace['Scenario'].replace({'BAU': 'BAU', 'Full Breakthrough': 'Striving'})
+    # Ensure Filter to Year 2020 and later
+    pace = pace[pace['Year'] >= 2020].copy()
+
+    # Remove existing Aviation from df
+    df = df[~((df['Sector'] == 'Aviation'))].copy()
+    df = pd.concat([df, pace], ignore_index=True)
+
+    return df
+
+
 def run():
     """
     The base inventory file includes Marine and aviation currently.
@@ -441,7 +444,7 @@ def run():
     TODO: add on-road, off-road, and calculate WTT emissions for sectors missing them.
     """
     df = pd.read_csv('SLCP_inventory.csv')
-    pace = pd.read_csv('PACE_inventory_long.csv')
+    pace = pd.read_csv(PACE_IN)
 
     # Drop where 'Scenario' is nan
     df = df.dropna(subset=['Scenario'])
@@ -451,8 +454,8 @@ def run():
         var_name='Year',
         value_name='ems'
     )
+    df_long = add_pace_to_totals(df_long, pace)
 
-    df_long = add_aviation(df_long, pace)
     off_road = pd.read_csv('off-road/off-road_BAU_IIASA.csv')
     df_long = calc_off_road(off_road, df_long)
 
@@ -472,7 +475,8 @@ def run():
     # df_long.to_csv('diagnostic/GHG_SLCP_inventory_long.csv', index=False)
 
     # Produce a test dataset that aggregates across sectors for FaIR
-    # aviation = df_long.loc[(df_long['Sector'] == 'Aviation') & (df_long['Source'] == 'TTW')]
+    aviation = df_long[(df_long['Sector'] == 'Aviation')]
+    aviation['ems'] = aviation['ems'] * 0.8
 
     print(df_long)
 

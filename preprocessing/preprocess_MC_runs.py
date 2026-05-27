@@ -118,7 +118,8 @@ def run():
 
     TODO: add on-road, off-road, and calculate WTT emissions for sectors missing them.
     """
-    df = pd.read_csv('pace_vizcon_summary_apr23.csv')
+    # df = pd.read_csv('pace_vizcon_summary_apr23.csv')
+    df = pd.read_csv('PACE/summary_sept16_historical_and_slcp_uq.csv')
 
     # Drop where 'Scenario' is nan
     df = df.dropna(subset=['Scenario'])
@@ -129,7 +130,7 @@ def run():
     df['Scenario'] = df['Scenario'].replace('Baseline', 'BAU')
 
     # Rename 'nvPM' to 'BC'
-    df = df.rename(columns={'nvPM': 'BC', 'ConEF': 'contrails', 'CY': 'Year', 'SO2': 'SOx'})
+    df = df.rename(columns={'nvPM_mass': 'BC', 'ConERF': 'contrails', 'CY': 'Year', 'SO2': 'SOx'})
 
     CLIMATE_FORCERS = ['CO2', 'H2O', 'SOx', 'NOx', 'CH4', 'N2O', 'BC', 'contrails']
     ID_COLS = ['Scenario', 'Sector', 'Year', 'Source']
@@ -147,6 +148,21 @@ def run():
     df_long = convert_units(df_long)
 
     df_long['Species'] = df_long['Species'].str.lower()
+    df_long['Scenario'] = df_long['Scenario'].replace({
+        'Full Breakthrough': 'Striving',
+        'Historical Trends': 'BAU'
+    })
+
+    # filter to 2020+
+    df_long = df_long[df_long['Year'] >= 2020].reset_index(drop=True)
+    # Filter to "BAU" and "Striving" scenarios only
+    df_long = df_long[df_long['Scenario'].isin(['BAU', 'Striving'])].reset_index(drop=True)
+    # Pivot the data wide with Year as columns and ems as values
+    df_wide = df_long.pivot_table(
+        index=['Scenario', 'Sector', 'Source', 'Species', 'Units'],
+        columns='Year',
+        values='ems'
+    ).reset_index()
 
     # Add the BAU scenario to the mc_simulations
     bau_contrails = df_long[(df_long['Species'] == 'contrails') & (df_long['Scenario'] == 'BAU')].copy()
