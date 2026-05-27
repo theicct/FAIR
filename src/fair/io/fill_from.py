@@ -203,6 +203,13 @@ def fill_from_csv(
                         )
                         data = interpolator(mode_options[mode]["time"])
 
+                        print(df.loc[
+                            (df["scenario"] == scenario)
+                            & (df["variable"] == specie)
+                            & (df["region"].str.lower() == "world"),
+                            "unit",
+                        ])
+
                         # Parse and possibly convert unit in input to what FaIR wants
                         unit = df.loc[
                             (df["scenario"] == scenario)
