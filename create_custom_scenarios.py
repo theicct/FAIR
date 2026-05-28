@@ -8,19 +8,15 @@ import pandas as pd
 pd.set_option('display.width', 1000000)
 pd.set_option('display.max_columns', 100000)
 
-# User inputs
-BASE_YR = 1940
-END_YR = 2050
-EMS_IN = 'preprocessing/final/PACE_inventory_long.csv'
-# EMS_IN = 'preprocessing/final/PACE_inventory_levers_long.csv'
-# EMS_IN = 'preprocessing/final/PACE_inventory_long_sens.csv' # Triggers special handling for sensitivity runs
-BATCH_SIZE = 100
+# User inputs — set in examples/run_all.py when running the full pipeline, or override here for standalone use
+BASE_YR       = int(os.environ.get('FAIR_BASE_YR',       1940))
+END_YR        = int(os.environ.get('FAIR_END_YR',        2050))
+BASELINE_SCEN = os.environ.get(    'FAIR_BASELINE_SCEN', 'BAU')
+BATCH_SIZE    = int(os.environ.get('FAIR_BATCH_SIZE',    100))
+EMS_IN        = os.environ.get(    'FAIR_EMS_IN',        'preprocessing/final/PACE_inventory_long.csv')
+# For a sensitivity run, set EMS_IN to 'preprocessing/final/PACE_inventory_long_sens.csv'
 
-RUNNING_SENS = False
-if EMS_IN == 'preprocessing/final/PACE_inventory_long_sens.csv':
-    RUNNING_SENS = True
-
-BASELINE_SCEN = 'BAU'
+RUNNING_SENS = EMS_IN.endswith('_sens.csv')
 NOX_VAR = 'NOx aviation'
 SSPs = ['ssp119']  # Currently hardcoded to only handle ssp119
 
@@ -199,10 +195,10 @@ def adjust_forc(slcp_ems, forc, scenarios):
     # Use ICCT estimates for contrail BAU and striving under SSP119. Set as contrail total forcing since
     # contrails come from no other source
     # Contrails ---------------------------------------------------------------------------------------------------
-    for yr in range(BASE_YR, END_YR+1):
+    contrail_years = sorted(slcp_ems[slcp_ems['Species'] == 'contrails']['Year'].unique())
+    for yr in contrail_years:
         # Adjust the BAU for intervention scenarios
         for scen in scenarios:
-            # Set the striving scenario
             ct_val = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'contrails')][scen].values[0]
 
             forc.loc[(forc['Variable'] == ct_var) & (forc['Scenario'] == f'{SSP}_{scen}'), str(yr)] = ct_val
@@ -219,12 +215,12 @@ def adjust_forc(slcp_ems, forc, scenarios):
         return forc
 
     # Stratospheric H2O ----------------------------------------------------------------------------------------------
-    for yr in range(BASE_YR, END_YR+1):
+    h2o_years = sorted(slcp_ems[slcp_ems['Species'] == 'Stratospheric water vapour']['Year'].unique())
+    for yr in h2o_years:
         bau_h2o = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'Stratospheric water vapour')][BASELINE_SCEN].values[0]
 
         # Adjust the BAU for contrail scenarios
         for striving_scen in [s for s in scenarios if s!=BASELINE_SCEN]:
-            # Set the striving scenario
             striving_h2o = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == 'Stratospheric water vapour')][striving_scen].values[0]
 
             forc.loc[(forc['Variable'] == h2o_var) & (forc['Scenario'] == f'{SSP}_{striving_scen}'), str(yr)] += -1*(bau_h2o - striving_h2o)
@@ -239,12 +235,12 @@ def adjust_forc(slcp_ems, forc, scenarios):
 
     # Run NOx as an additional perturbation to H2O in the model because there is no valid NOx aviation forcing input
     # NOx ---------------------------------------------------------------------------------------------------------
-    for yr in range(BASE_YR, END_YR+1):
+    nox_years = sorted(slcp_ems[slcp_ems['Species'] == NOX_VAR]['Year'].unique())
+    for yr in nox_years:
         bau_h2o = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == NOX_VAR)][BASELINE_SCEN].values[0]
 
         # Adjust the BAU for contrail scenarios
         for striving_scen in [s for s in scenarios if s!=BASELINE_SCEN]:
-            # Set the striving scenario
             striving_h2o = slcp_ems[(slcp_ems['Year'] == yr) & (slcp_ems['Species'] == NOX_VAR)][striving_scen].values[0]
 
             forc.loc[(forc['Variable'] == h2o_var) & (forc['Scenario'] == f'{SSP}_{striving_scen}'), str(yr)] += -1*(bau_h2o - striving_h2o)

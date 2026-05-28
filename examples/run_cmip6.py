@@ -13,10 +13,12 @@ from fair.interface import fill, initialise
 pd.set_option('display.width', None)
 pd.set_option('display.max_columns', None)
 
-# Define user parameters consistent with time bounds and baseline scenario names
-MIN_YEAR = 1940
-MAX_YEAR = 2050
-BASE_SCEN = 'Historical Trends'
+# Shared parameters — set in examples/run_all.py when running the full pipeline, or override here for standalone use
+MIN_YEAR      = int(os.environ.get('FAIR_BASE_YR',       1940))
+MAX_YEAR      = int(os.environ.get('FAIR_END_YR',        2050))
+BASELINE_SCEN = os.environ.get(    'FAIR_BASELINE_SCEN', 'BAU')
+BASE_SCEN     = os.environ.get(    'FAIR_BASE_SCEN',     'Historical Trends')
+BATCH_SIZE    = int(os.environ.get('FAIR_BATCH_SIZE',    100))
 
 # Define output paths. NOTE: "lever" and "sens", if included in the TEMP_OUT filename, are a special keywords that
 # triggers lever attribution postprocessing (renormalization) or sensitivity run processing. If running a lever-based
@@ -199,7 +201,7 @@ def clean_temp_output(f, vizcon_scenarios=None):
             df_avg.loc[df_avg['scenario'].str.contains(scen), 'Vizcon Scenario'] = scen
 
         # Rename BAU scenario to Baseline
-        df_avg.loc[df_avg['Vizcon Scenario'] == 'BAU', 'Vizcon Scenario'] = BASE_SCEN
+        df_avg.loc[df_avg['Vizcon Scenario'] == BASELINE_SCEN, 'Vizcon Scenario'] = BASE_SCEN
 
         df_avg = df_avg.rename(columns={'Striving_temp_attribution': 'Attributable Warming', 'temp': 'Global Temperature Anomaly'})
 
