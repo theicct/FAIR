@@ -21,9 +21,11 @@ BASE_SCEN = 'Historical Trends'
 # Define output paths. NOTE: "lever" and "sens", if included in the TEMP_OUT filename, are a special keywords that
 # triggers lever attribution postprocessing (renormalization) or sensitivity run processing. If running a lever-based
 # scenario, ensure that "lever" is in the filename and INTERMEDIATE_OUT is additionally defined
-TEMP_OUT = 'Results/temperature_Sep17_2025.csv' # 'Results/temperature_lever_Sep17_2025.csv' # 'Results/temperature_sens_Sep17_2025.csv'
+TEMP_OUT = 'Results/levers_temperature_Nov24_2026.csv' # 'Results/temperature_lever_Sep17_2025.csv' # 'Results/temperature_sens_Sep17_2025.csv'
 # INTERMEDIATE_OUT = 'Results/temperature_Sep17_2025_no_normalization.csv'
-CLEAN_OUT = 'Results/temperature_Sep17_2025_summary.csv'
+CLEAN_OUT = 'Results/levers_temperature_Nov24_2026_summary.csv'
+
+INTERMEDIATE_OUT = "Results/levers_intermediate_Nov24_26.csv"
 
 BATCH_SIZE = 100 # Must be defined if running a sensitivity run and must be consistent with preprocessing
 TOTAL_SCENARIO_SIZE = 100000 # Must be defined if running a sensitivity run and must be consistent with preprocessing # 100000
@@ -302,7 +304,12 @@ def normalize_lever_attribution(temp):
 
     # Merge back to get shares
     temp = temp.merge(lever_totals, on=['timebounds', 'Actual Pollutant', 'Pollutant Group'], how='left')
-    temp['Share of Avoided Warming'] = temp['Avoided Warming'] / temp['Total_Individual_Levers']
+    # When Total_Individual_Levers == 0 (no lever has yet diverged from BAU), assign share = 0 to avoid 0/0 = NaN
+    temp['Share of Avoided Warming'] = np.where(
+        temp['Total_Individual_Levers'].abs() < 1e-15,
+        0.0,
+        temp['Avoided Warming'] / temp['Total_Individual_Levers']
+    )
 
     # Set the share to 1 for 'FB all levers' scenario
     temp.loc[temp['Vizcon Scenario'] == 'FB all levers', 'Share of Avoided Warming'] = 1.0
@@ -314,7 +321,36 @@ def normalize_lever_attribution(temp):
 
     temp['Normalized Attributable Warming'] = temp['Attributable Warming_bau'] + temp['Normalized Avoided Warming']
 
+    # Compute normalized 'All' pollutant values for each lever scenario by summing across pollutants.
+    # 'All' rows were excluded from individual_levers above, so their normalized values are still NaN.
+    all_norm = (
+        temp[temp['Actual Pollutant'] != 'All']
+        .groupby(['timebounds', 'Vizcon Scenario'])['Normalized Avoided Warming']
+        .sum()
+        .reset_index()
+        .rename(columns={'Normalized Avoided Warming': '_norm_avoided_all'})
+    )
+    bau_all = (
+        temp[(temp['Vizcon Scenario'] == BASE_SCEN) & (temp['Actual Pollutant'] == 'All')]
+        [['timebounds', 'Attributable Warming']]
+        .rename(columns={'Attributable Warming': '_bau_all_attr'})
+    )
+    temp = temp.merge(all_norm, on=['timebounds', 'Vizcon Scenario'], how='left')
+    temp = temp.merge(bau_all, on='timebounds', how='left')
+    all_mask = (temp['Actual Pollutant'] == 'All') & (~temp['Vizcon Scenario'].isin([BASE_SCEN, 'zero']))
+    temp.loc[all_mask, 'Normalized Avoided Warming'] = temp.loc[all_mask, '_norm_avoided_all']
+    temp.loc[all_mask, 'Normalized Attributable Warming'] = (
+        temp.loc[all_mask, '_bau_all_attr'] + temp.loc[all_mask, '_norm_avoided_all']
+    )
+    temp = temp.drop(columns=['_norm_avoided_all', '_bau_all_attr'])
+
     test_normalization(temp)
+
+    # Historical Trends rows are excluded from the share computation and the all_mask fill above.
+    # Set all of them directly: BAU has zero avoided warming so Normalized equals Attributable.
+    ht_mask = temp['Vizcon Scenario'] == BASE_SCEN
+    temp.loc[ht_mask, 'Normalized Avoided Warming'] = 0.0
+    temp.loc[ht_mask, 'Normalized Attributable Warming'] = temp.loc[ht_mask, 'Attributable Warming']
 
     return temp[original_cols + ['Normalized Attributable Warming', 'Avoided Warming', 'Normalized Avoided Warming']]
 

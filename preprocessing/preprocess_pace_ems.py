@@ -9,7 +9,7 @@ import numpy as np
 pd.set_option('display.width', 1000)
 pd.set_option('display.max_columns', 500)
 
-FNAME_IN = 'PACE/summary_sept16_historical_and_slcp_uq.csv'
+FNAME_IN = 'PACE/levers_summary_with_historical_PACE_v2.2.csv'
 EMS_OUT = 'final/PACE_inventory_long.csv' # If SENSITIVITY_FNAME is not None, this will be replaced to include "_sens"
 
 # Optional: If a sensitivity runs file is provided, then only the baseline scenario will be included and
@@ -43,7 +43,7 @@ def clean_pace_output(df):
     # Rename 'nvPM' to 'BC'
     df = df.rename(columns={'nvPM_mass': 'BC', CONTRAILS_VAR_NAME: 'contrails', 'CY': 'Year', 'SO2': 'SOx'})
 
-    CLIMATE_FORCERS = ['CO2', 'H2OERF', 'SOx', 'NOxERF', 'CH4', 'N2O', 'BC', 'contrails']
+    CLIMATE_FORCERS = ['CO2', 'H2O', 'SOx', 'NOx', 'CH4', 'N2O', 'BC', 'contrails']
     ID_COLS = ['Scenario', 'Sector', 'Year', 'Source']
 
     df_long = df[ID_COLS + CLIMATE_FORCERS].melt(
@@ -125,13 +125,9 @@ def convert_units(df_long):
     if 'NOx' in df_long['Species'].unique():
         # Two conversions are needed:
         # 1. Convert from NOx to N using molecular weight conversion (*14/46)
-        # 2. Convert from mass emissions to radiative forcing (3.6 mW m−2 (Tg (N) yr−1)−1)
-        df_long.loc[df_long['Species'] == 'NOx', 'ems'] *= 14/46 * 3.6 / 1000
+        # 2. Convert from mass emissions to radiative forcing (12.25 mW m−2 (Tg (N) yr−1)−1, Lee et al., PACE 2025)
+        df_long.loc[df_long['Species'] == 'NOx', 'ems'] *= 14/46 * 12.25 / 1000
         df_long.loc[df_long['Species'] == 'NOx', 'Units'] = 'W/m2'
-
-    # Rename 'NOXERF' to 'NOx' and 'H2OERF' to 'H2O'
-    df_long.loc[df_long['Species'] == 'NOxERF', 'Species'] = 'NOx'
-    df_long.loc[df_long['Species'] == 'H2OERF', 'Species'] = 'H2O'
 
     return df_long
 
